@@ -49,23 +49,21 @@ These tags will be of the following types (sample JSON given below):
 
 ### If the Information is Available
 
-References for similar implementations:
-* 
-
 Let's talk about the features first:
 1. Title
 2. Author Name
 3. Summary
 4. Cover Page
 5. Published Date
+6. Publisher Name
 
 Now for the possible ideas:
 * Feed to the Stanford Classifier (k-means): http://cs229.stanford.edu/proj2015/127_report.pdf. This seems good for the title. Believe we will need to get a **sparse explanatory feature embedding** for the titles, before we feed into the classifier. 
 * Use a Decision Tree, again over some specified features.
-* 
 
-### If the book is unseen
+### The Vector Space Embeddings
+
+*If we don't have enough data or if we want to do more complex inferences*.
 
 ### More complex feature tags
 
-### 

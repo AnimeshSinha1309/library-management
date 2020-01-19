@@ -7,22 +7,25 @@ def getBookDetails(isbn):
 	results = response.json()
 
 	if results["totalItems"]:
+		bookInfo = {}
 		book = results["items"][0]
-		title = book["volumeInfo"]["title"]
-		categories = book["volumeInfo"]["categories"]
-		authors = book["volumeInfo"]["authors"]
-		printType = book["volumeInfo"]["printType"]
-		pageCount = book["volumeInfo"]["pageCount"]
-		ratingsCount = book["volumeInfo"]["ratingsCount"]
-		averageRating = book["volumeInfo"]["averageRating"]
-		publisher = book["volumeInfo"]["publisher"]
-		publishedDate = book["volumeInfo"]["publishedDate"]
-		previewLink = book["volumeInfo"]["previewLink"]
-		thumbnail = book["volumeInfo"]["imageLinks"]["thumbnail"]
-		language = book["volumeInfo"]["language"]
-		description = book["volumeInfo"]["description"]
-		webReaderLink = book["accessInfo"]["webReaderLink"]
-
+		bookInfo['title'] = book["volumeInfo"]["title"]
+		bookInfo['categories'] = book["volumeInfo"]["categories"]
+		bookInfo['authors'] = book["volumeInfo"]["authors"]
+		bookInfo['printType'] = book["volumeInfo"]["printType"]
+		bookInfo['pageCount'] = book["volumeInfo"]["pageCount"]
+		bookInfo['ratingsCount'] = book["volumeInfo"]["ratingsCount"]
+		bookInfo['averageRating'] = book["volumeInfo"]["averageRating"]
+		bookInfo['publisher'] = book["volumeInfo"]["publisher"]
+		bookInfo['publishedDate'] = book["volumeInfo"]["publishedDate"]
+		bookInfo['previewLink'] = book["volumeInfo"]["previewLink"]
+		bookInfo['thumbnail'] = book["volumeInfo"]["imageLinks"]["thumbnail"]
+		bookInfo['language'] = book["volumeInfo"]["language"]
+		bookInfo['description'] = book["volumeInfo"]["description"]
+		bookInfo['webReaderLink'] = book["accessInfo"]["webReaderLink"]
+		return bookInfo
+	else:
+		return None
 
 if __name__ == '__main__':
 	# isbn = input

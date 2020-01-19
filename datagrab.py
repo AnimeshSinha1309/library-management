@@ -48,7 +48,7 @@ class WikiData:
 
     def _get_all_books_with_genre_tagged(self):
         """
-        Returns the tagged genre.
+        Returns books with the tagged genre.
         """
 
         query = """SELECT ?book ?bookLabel ?genre_label ?series_label ?publicationDate
@@ -96,7 +96,13 @@ class WikiData:
         """
         response = requests.get(
             self.url, params={'format': 'json', 'query': query})
-        return response.json()
+        result = ""
+        try:
+            result = response.json()
+        except:
+            result = False
+        finally:
+            return result
 
     def book_list(self, genre_tagged=False):
         """
@@ -121,14 +127,36 @@ class WikiData:
         :returns: dict, information on the book
         """
         facts = self._get_info_on_book(book_id)
+        if facts is False:
+            return False
         info = {fact['wdLabel']['value']: fact['ps_Label']['value']
                 for fact in facts['results']['bindings']}
         return info
 
+    def full_data(self, count_limit=99999):
+        book_list = self.book_list(genre_tagged=True)
+        full_frame = []
+        count = 0
+        print('{0:5} Books available. Starting DataGrab.'.format(len(book_list['URI Object'])))
+        for book in book_list['URI Object']:
+            book_id = book.split('/')[-1]
+            data = self.book_data(book_id)
+            if data is not False:
+                full_frame.append(data)
+            count += 1
+            print('{0:5} data points complete.'.format(count))
+            if count >= count_limit:
+                break
+        df = pd.DataFrame(full_frame)
+        return df
+
 
 if __name__ == '__main__':
     WK = WikiData()
-    BOOK_LIST = WK.book_list(True)
-    print(BOOK_LIST)
-    BOOK_DATA = WK.book_data('Q287838')
-    print(BOOK_DATA)
+    # BOOK_LIST = WK.book_list()
+    # print(BOOK_LIST)
+    # BOOK_DATA = WK.book_data('Q287838')
+    # print(BOOK_DATA)
+    res = WK.full_data()
+    with open('wikidata.csv', 'w') as f:
+        f.write(res.to_csv())

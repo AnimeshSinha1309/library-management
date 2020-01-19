@@ -1,0 +1,28 @@
+<html>
+
+<head>
+    <title>Book Search</title>
+    <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+        crossorigin="anonymous">
+</head>
+
+
+<body class="container">
+    <h1 class="display-2">LibMate Book Search</h1>
+
+    <form action="/submit/" method="post">
+        <div class="form-group">
+            {% csrf_token %}
+            <label for="ISBNLABEL">ISBN</label>
+            <input type="text" class="form-control" id="ISBNLABEL"
+                aria-describedby="isbnHelp" name="isbn"
+                placeholder="9781451648546">
+            <small id="isbnHelp" class="form-text text-muted">You can find the
+                number on the barcode of the book cover.</small>
+        </div>
+        <button type="submit" value="Submit"
+            class="btn btn-primary">Submit</button>
+    </form>
+</body>

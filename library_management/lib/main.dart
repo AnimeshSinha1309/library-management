@@ -7,7 +7,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'LibMate',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -20,7 +20,10 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'LibMate Home'),
+      routes: <String, WidgetBuilder> {
+        '/home': (BuildContext context) => new MyHomePage(),
+      }
     );
   }
 }
@@ -95,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
               'You have pushed the button this many times:',
             ),
             Text(
-              '$_counter',
+              'You Pressed $_counter Times',
               style: Theme.of(context).textTheme.display1,
             ),
           ],

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import './drawer.dart';
+
 class LibcardPage extends StatefulWidget {
   @override
   _LibcardPageState createState() => _LibcardPageState();
@@ -12,6 +14,7 @@ class _LibcardPageState extends State<LibcardPage> {
       appBar: new AppBar(
         title: new Text('Libcard Page'),
       ),
+      drawer: AppDrawer(),
     );
   }
 }

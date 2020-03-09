@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import './drawer.dart';
+
 class RequestPage extends StatefulWidget {
   @override
   _RequestPageState createState() => _RequestPageState();
@@ -12,6 +14,7 @@ class _RequestPageState extends State<RequestPage> {
       appBar: new AppBar(
         title: new Text('Request Page'),
       ),
+      drawer: AppDrawer(),
     );
   }
 }

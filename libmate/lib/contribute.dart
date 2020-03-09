@@ -1,4 +1,7 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:barcode_scan/barcode_scan.dart';
+import 'package:flutter/services.dart';
 
 import './drawer.dart';
 
@@ -8,11 +11,32 @@ class ContributePage extends StatefulWidget {
 }
 
 class _ContributePageState extends State<ContributePage> {
-//  Future _scanBarcode() async {
-//    String barcode = await FlutterBarcodeScanner.scanBarcode(
-//        '#000000', 'Cancel', true, ScanMode.BARCODE);
-//    return barcode;
-//  }
+  String barcode = "";
+
+  Future _scanBarcode() async {
+    try {
+      String barcode = await BarcodeScanner.scan();
+      setState(() { this.barcode = barcode; });
+    } on PlatformException catch(e) {
+      if (e.code == BarcodeScanner.CameraAccessDenied) {
+        setState(() {
+          this.barcode = 'Camera Permission Not Granted';
+        });
+      } else {
+        setState(() {
+          this.barcode = 'Unknown Error: $e';
+        });
+      }
+    } on FormatException {
+      setState(() {
+        this.barcode = 'User pressed the Back Button';
+      });
+    } catch (e) {
+      setState(() {
+        this.barcode = 'Unknown Error $e';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +45,23 @@ class _ContributePageState extends State<ContributePage> {
         title: new Text('Contribute Page'),
       ),
       drawer: AppDrawer(),
-//      floatingActionButton: FloatingActionButton.extended(
-//        icon: Icon(Icons.camera_alt),
-//        label: Text("Scan"),
-//        onPressed: _scanBarcode,
-//      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'The read in BarCode is:',
+            ),
+            Text('$barcode',
+                style: Theme.of(context).textTheme.headline4),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        icon: Icon(Icons.camera_alt),
+        label: Text("Scan"),
+        onPressed: _scanBarcode,
+      ),
     );
   }
 }

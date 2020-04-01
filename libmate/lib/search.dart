@@ -24,6 +24,9 @@ class _SearchPageState extends State<SearchPage> {
             author: "Enid Blyton",
             isbn: "9785389130692",
             image: "https://upload.wikimedia.org/wikipedia/en/e/ed/FiveOnATreasureIsland.jpg",
+            subject: "Novel",
+            series: "Famous Five",
+            genre: "Fiction",
           );
         }),
         childAspectRatio: 0.67,

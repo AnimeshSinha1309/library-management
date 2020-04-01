@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import './drawer.dart';
+import './bookcard.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -14,46 +15,18 @@ class _SearchPageState extends State<SearchPage> {
       appBar: new AppBar(
         title: new Text('Search Page'),
       ),
-      body: new ListView.builder(
-        padding: const EdgeInsets.all(16),
-        /// Scrolling List of results
-        itemBuilder: (context, i) {
-          return Container(
-            height: 130,
-            child: Card(
-              elevation: 3,
-              child: Row(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        return;
-                      },
-                      child: Container(
-                        width: 100.0,
-                        height: 100.0,
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      return;
-                    },
-                    child: Container(
-                        padding: EdgeInsets.all(30.0),
-                        child: Chip(
-                          label: Text('@book'),
-                          backgroundColor: Colors.yellow,
-                          elevation: 2,
-                          autofocus: true,
-                        )),
-                  ),
-                ],
-              ),
-            ),
+      body: GridView.count(
+        crossAxisCount: 2,
+        children: List.generate(100, (index) {
+          return new BookCard(
+            key: ValueKey(index.toString()),
+            title: "Five on a Treasure Island",
+            author: "Enid Blyton",
+            isbn: "9785389130692",
+            image: "https://upload.wikimedia.org/wikipedia/en/e/ed/FiveOnATreasureIsland.jpg",
           );
-        },
+        }),
+        childAspectRatio: 0.67,
       ),
       drawer: new AppDrawer(),
     );

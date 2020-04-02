@@ -38,63 +38,67 @@ class _BookCardState extends State<BookCard> {
           ),
         ),
         child: Align(
-            alignment: Alignment.bottomLeft,
-            child: FractionallySizedBox(
+          alignment: Alignment.bottomLeft,
+          child: FractionallySizedBox(
               heightFactor: 0.6,
               widthFactor: 1.0,
-              child: InkWell(
-                splashColor: Colors.white,
-                onTap: () {
-                  Scaffold.of(context).showSnackBar(new SnackBar(
-                      backgroundColor: Colors.green,
-                      content: Text("Receiving Tap Event on Card!")));
-                },
-                child: Container(
-                  padding: EdgeInsets.all(8),
-                  color: Color.fromRGBO(0, 0, 0, 0.9),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        widget.title,
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
+              child: Material(
+                color: Color.fromRGBO(0, 0, 0, 0.9),
+                child: InkWell(
+                  splashFactory: InkRipple.splashFactory,
+                  splashColor: Colors.white,
+                  onTap: () {
+                    Scaffold.of(context).showSnackBar(new SnackBar(
+                        backgroundColor: Colors.green,
+                        content: Text("Receiving Tap Event on Card!")));
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(8),
+                    color: Color.fromRGBO(0, 0, 0, 0.9),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          widget.title,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      Text(
-                        widget.series,
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          color: Colors.white,
+                        Text(
+                          widget.series,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                      Spacer(),
-                      Text(
-                        widget.author,
-                        style: TextStyle(
-                          color: Colors.white,
+                        Spacer(),
+                        Text(
+                          widget.author,
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                      Spacer(),
-                      Text(
-                        "Genre: " + widget.genre,
-                        style: TextStyle(
-                          color: Colors.white,
+                        Spacer(),
+                        Text(
+                          "Genre: " + widget.genre,
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                      Text(
-                        "ISBN: " + widget.isbn,
-                        style: TextStyle(
-                          color: Colors.white,
+                        Text(
+                          "ISBN: " + widget.isbn,
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            )),
+              )),
+        ),
       ),
     );
   }

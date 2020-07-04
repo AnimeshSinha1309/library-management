@@ -67,19 +67,21 @@ class _RequestPageState extends State<RequestPage> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: RaisedButton(
-                  color: Colors.pinkAccent,
-                  onPressed: () {
-                    // Validate returns true if the form is valid, or false
-                    // otherwise.
-                    if (_formKey.currentState.validate()) {
-                      // If the form is valid, display a Snackbar.
-                      Scaffold.of(context).showSnackBar(SnackBar(
-                        content: Text('Backend for the App is not Ready'))
-                      );
-                    }
-                  },
-                  child: Text('Submit'),
+                child: Center(
+                  child: RaisedButton(
+                    color: Colors.pinkAccent,
+                    onPressed: () {
+                      // Validate returns true if the form is valid, or false
+                      // otherwise.
+                      if (_formKey.currentState.validate()) {
+                        // If the form is valid, display a Snackbar.
+                        Scaffold.of(context).showSnackBar(SnackBar(
+                          content: Text('Backend for the App is not Ready'))
+                        );
+                      }
+                    },
+                    child: Text('Submit'),
+                  ),
                 ),
               ),
             ],

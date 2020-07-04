@@ -34,6 +34,7 @@ class MyApp extends StatelessWidget {
           '/request': (BuildContext context) => new RequestPage(),
           '/about': (BuildContext context) => new AboutPage(),
           '/accounts': (BuildContext context) => new AccountsPage(),
+//          '/recommendedBooks': (BuildContext context) => new RecommenderPage(),
         });
   }
 }
@@ -58,26 +59,53 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('LibMate Home'),
+        title: Text('LibMate'),
+        centerTitle: true,
       ),
       drawer: AppDrawer(),
-      body: Center(
+      body: Container(
+        padding: EdgeInsets.all(10),
+        margin: EdgeInsets.all(5),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              'You have pushed the button this many times:',
+                  "Your Personalized Library Buddy",
+                  style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 2.0,
+                  color: Colors.grey[600],
+                  ),
+              ),
+          Image.asset('assets/bgbook.jpg'),
+          Text("My books"),
+          Center(
+            child: FlatButton(
+              onPressed: (){},
+              color: Colors.amber,
+              child: Text("Resume Reading")
+
             ),
-            Text('You Pressed $_counter Times',
-                style: Theme.of(context).textTheme.headline4),
-          ],
+          ),
+        FloatingActionButton(
+          onPressed: () {},
+          tooltip: 'Increment',
+          child: Text('Issue book'),
+          backgroundColor: Colors.pink,
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.android),
-      ),
+        ],
+        )
+
+
+
+//
+      )
+
     );
   }
 }
+
+
+

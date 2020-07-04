@@ -19,7 +19,9 @@
 // SOFTWARE.
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -68,4 +70,76 @@ void signOutGoogle() async {
   await googleSignIn.signOut();
 
   print("User Sign Out");
+}
+
+
+/* The Visual Elements used for the Auth pages */
+
+class SignOutButton extends StatelessWidget {
+  const SignOutButton({this.callback});
+
+  final VoidCallback callback;
+
+  @override
+  Widget build(BuildContext context) {
+    return RaisedButton(
+      onPressed: () {
+        signOutGoogle();
+        this.callback();
+      },
+      color: Colors.deepPurple,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          'Sign Out',
+          style: TextStyle(fontSize: 25, color: Colors.white),
+        ),
+      ),
+      elevation: 5,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(40)),
+    );
+  }
+}
+
+class SignInButton extends StatelessWidget {
+  const SignInButton({this.callback});
+
+  final VoidCallback callback;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(16.0),
+      child: OutlineButton(
+        splashColor: Colors.grey,
+        onPressed: () {
+          signInWithGoogle().whenComplete(this.callback);
+        },
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+        highlightElevation: 0,
+        borderSide: BorderSide(color: Colors.grey),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image(image: AssetImage("assets/logo-google.png"), height: 35.0),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Text(
+                  'Sign in with Google',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.grey,
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

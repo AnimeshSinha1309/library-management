@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-
-import './drawer.dart';
-import './search.dart';
-import './guide.dart';
-import './contribute.dart';
-import './friends.dart';
-import './goals.dart';
-import './libcard.dart';
-import './request.dart';
-import './about.dart';
-import './accounts.dart';
+import 'package:libmate/views/about.dart';
+import 'package:libmate/views/accounts.dart';
+import 'package:libmate/views/contribute.dart';
+import 'package:libmate/views/drawer.dart';
+import 'package:libmate/views/friends.dart';
+import 'package:libmate/views/goals.dart';
+import 'package:libmate/views/guide.dart';
+import 'package:libmate/views/libcard.dart';
+import 'package:libmate/views/request.dart';
+import 'package:libmate/views/search.dart';
 
 void main() => runApp(MyApp());
 

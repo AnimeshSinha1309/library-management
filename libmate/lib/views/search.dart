@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import './drawer.dart';
-import './bookcard.dart';
+import 'package:libmate/views/drawer.dart';
+import 'package:libmate/widgets/bookcard.dart';
 
 class SearchPage extends StatefulWidget {
   @override

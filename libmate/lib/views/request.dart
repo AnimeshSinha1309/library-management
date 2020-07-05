@@ -56,7 +56,7 @@ class _RequestPageState extends State<RequestPage> {
                   TextFormField(
                     keyboardType: TextInputType.text,
                     decoration:
-                        InputDecoration(hintText: "Reasons, Cosigners, etc."),
+                    InputDecoration(hintText: "Reasons, Cosigners, etc."),
                     maxLines: 3,
                   ),
                   Padding(
@@ -80,21 +80,23 @@ class _RequestPageState extends State<RequestPage> {
                           ),
                         ),
                         Spacer(),
-                        RaisedButton(
-                          color: Colors.redAccent,
-                          onPressed: () {
-                            // Validate returns true if the form is valid, or false
-                            // otherwise.
-                            if (_formKey.currentState.validate()) {
-                              // If the form is valid, display a Snackbar.
-                              Scaffold.of(context).showSnackBar(SnackBar(
-                                  content: Text(
-                                      'Backend for the App is not Ready')));
-                            }
-                          },
-                          child: Text(
-                            'Broadcast Request',
-                            style: TextStyle(color: Colors.white),
+                        Center(
+                          child: RaisedButton(
+                            color: Colors.redAccent,
+                            onPressed: () {
+                              // Validate returns true if the form is valid, or false
+                              // otherwise.
+                              if (_formKey.currentState.validate()) {
+                                // If the form is valid, display a Snackbar.
+                                Scaffold.of(context).showSnackBar(SnackBar(
+                                    content: Text(
+                                        'Backend for the App is not Ready')));
+                              }
+                            },
+                            child: Text(
+                              'Broadcast Request',
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                         ),
                       ])),

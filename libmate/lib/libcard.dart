@@ -8,6 +8,7 @@ class LibcardPage extends StatefulWidget {
 }
 
 class _LibcardPageState extends State<LibcardPage> {
+  int booksRead = 100;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,6 +18,7 @@ class _LibcardPageState extends State<LibcardPage> {
         centerTitle: true,
 
       ),
+        drawer: AppDrawer(),
       body: Padding(
         padding: EdgeInsets.fromLTRB(30.0,40.0,30.0,0.0),
         child: Column(
@@ -61,7 +63,7 @@ class _LibcardPageState extends State<LibcardPage> {
             ),
             SizedBox(height:10.0),
             Text(
-                '150',
+                '$booksRead',
                 style: TextStyle(
                     color: Colors.pinkAccent,
                     letterSpacing: 2.0,

@@ -53,13 +53,16 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _counter++;
     });
+
   }
+  Icon cusIcon = Icon(Icons.search);
+  Widget cusSearchBar = Text("LibMate");
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('LibMate'),
+        title: cusSearchBar,
         centerTitle: true,
       ),
       drawer: AppDrawer(),

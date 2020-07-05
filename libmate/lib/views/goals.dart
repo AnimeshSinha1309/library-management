@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import './drawer.dart';
-import './toRead.dart';
+import '../widgets/toRead.dart';
 
 class GoalsPage extends StatefulWidget {
   @override

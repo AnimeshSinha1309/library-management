@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 import './drawer.dart';
 
-class LibcardPage extends StatefulWidget {
+class BookerzcardPage extends StatefulWidget {
   @override
-  _LibcardPageState createState() => _LibcardPageState();
+  _BookerzcardPageState createState() => _BookerzcardPageState();
 }
 
-class _LibcardPageState extends State<LibcardPage> {
+class _BookerzcardPageState extends State<BookerzcardPage> {
   int booksRead = 100;
   @override
   Widget build(BuildContext context) {

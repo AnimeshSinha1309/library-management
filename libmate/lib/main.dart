@@ -6,10 +6,11 @@ import './guide.dart';
 import './contribute.dart';
 import './friends.dart';
 import './goals.dart';
-import './libcard.dart';
+import './bookerzCard.dart';
 import './request.dart';
 import './about.dart';
 import './accounts.dart';
+import './libCard.dart';
 
 void main() => runApp(MyApp());
 
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
           '/contribute': (BuildContext context) => new ContributePage(),
           '/friends': (BuildContext context) => new FriendsPage(),
           '/goals': (BuildContext context) => new GoalsPage(),
+          '/bookerzcard': (BuildContext context) => new BookerzcardPage(),
           '/libcard': (BuildContext context) => new LibcardPage(),
           '/request': (BuildContext context) => new RequestPage(),
           '/about': (BuildContext context) => new AboutPage(),

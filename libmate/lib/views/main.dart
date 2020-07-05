@@ -52,31 +52,76 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter++;
     });
   }
+  Icon cusIcon = Icon(Icons.search);
+  Widget cusSearchBar = Text("LibMate");
 
   @override
   Widget build(BuildContext context) {
+    List<String> books = [
+      "Linear Algebra: Strang",
+      "To Kill a Mockingbird",
+      "Algorithms: Cormen"
+    ];
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text('LibMate Home'),
-      ),
-      drawer: AppDrawer(),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text('You Pressed $_counter Times',
-                style: Theme.of(context).textTheme.headline4),
-          ],
+        appBar: AppBar(
+          title: cusSearchBar,
+          centerTitle: true,
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.android),
-      ),
+        drawer: AppDrawer(),
+        body: Container(
+          padding: EdgeInsets.all(2),
+          margin: EdgeInsets.all(5),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  "Your Personalized Library Buddy",
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 2.0,
+                    color: Colors.grey[600],
+                  ),
+                ),
+//                Image.asset("assets/bgbook.jpg"),
+                Image(image: AssetImage("assets/bgbook.png")),
+                Center(
+                  child: Text(
+                    "My books",
+                    style: TextStyle(
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 2.0,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ),
+                Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: books.map((book){
+                      return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Text("$book"),
+                            Center(
+                              child: RaisedButton.icon(
+                                onPressed: (){},
+                                color: Colors.amber,
+                                icon: Icon(Icons.launch),
+                                label: Text('Resume'),
+                              ),
+                            ),
+
+                          ]);
+                    }).toList()),
+              ]),
+        )
     );
+
   }
 }
+

@@ -60,6 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    String curBook = "Gilbert Strang Linear Algebra";
     return Scaffold(
       appBar: AppBar(
         title: cusSearchBar,
@@ -83,21 +84,37 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
               ),
           Image.asset('assets/bgbook.jpg'),
-          Text("My books"),
-          Center(
-            child: FlatButton(
-              onPressed: (){},
-              color: Colors.amber,
-              child: Text("Resume Reading")
-
-            ),
+          Text(
+            "My books",
+            style: TextStyle(
+            fontSize: 15.0,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 2.0,
+            color: Colors.grey[600],
           ),
-        FloatingActionButton(
-          onPressed: () {},
-          tooltip: 'Increment',
-          child: Text('Issue book'),
-          backgroundColor: Colors.pink,
-        ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text("$curBook"),
+              Center(
+                child: FlatButton(
+                    onPressed: (){},
+                    color: Colors.amber,
+                    child: Text("Resume Reading")
+
+                ),
+              ),
+//              FloatingActionButton(
+//                onPressed: () {},
+//                tooltip: 'Increment',
+//                child: Text('Issue book'),
+//                backgroundColor: Colors.pink,
+//              ),
+
+              ]),
+
         ],
         )
 

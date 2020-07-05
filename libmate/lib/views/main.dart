@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:libmate/user/database.dart';
 import 'package:libmate/views/about.dart';
 import 'package:libmate/views/accounts.dart';
 import 'package:libmate/views/contribute.dart';
@@ -48,6 +49,9 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
   void _incrementCounter() {
+    DatabaseService db = DatabaseService("users");
+    db.getData();
+
     setState(() {
       _counter++;
     });

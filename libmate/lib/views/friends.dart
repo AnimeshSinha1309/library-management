@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import './drawer.dart';
+import 'package:libmate/views/drawer.dart';
 
 class FriendsPage extends StatefulWidget {
   @override

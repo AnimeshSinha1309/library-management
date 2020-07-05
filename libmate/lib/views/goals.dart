@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import './drawer.dart';
-import './toRead.dart';
+import 'package:libmate/views/drawer.dart';
+import 'package:libmate/widgets/toread.dart';
 
 class GoalsPage extends StatefulWidget {
   @override
@@ -9,9 +9,9 @@ class GoalsPage extends StatefulWidget {
 
 class _GoalsPageState extends State<GoalsPage> {
   List <ToRead> books = [
-    ToRead(book:"Three men in a Boat",date:"28/7"),
-    ToRead(book:"Three men in a Boat",date:"28/7"),
-    ToRead(book:"Three men in a Boat",date:"28/7"),
+    ToRead(book:"Three men in a Boat", date:"28/7"),
+    ToRead(book:"Three men in a Boat", date:"28/7"),
+    ToRead(book:"Three men in a Boat", date:"28/7"),
   ];
   int numBooks = 3;
   @override

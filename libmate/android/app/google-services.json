@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "842844863088",
+    "firebase_url": "https://librarymanagement-366ac.firebaseio.com",
+    "project_id": "librarymanagement-366ac",
+    "storage_bucket": "librarymanagement-366ac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:842844863088:android:2000bc563b57046fe9d2b5",
+        "android_client_info": {
+          "package_name": "iiit.occamsrazor.libmate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "842844863088-ni7a8sh6grefii6sl9c46rieit1q9ah1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "iiit.occamsrazor.libmate",
+            "certificate_hash": "d9e5266227f8d3b5d5d84ecd9033519e0273934a"
+          }
+        },
+        {
+          "client_id": "842844863088-ai5u82i0bgm597k5rton7h45a4id5s4a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCztdYvqY9XdJLypbGFleYKWu_naw04X0c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "842844863088-ai5u82i0bgm597k5rton7h45a4id5s4a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

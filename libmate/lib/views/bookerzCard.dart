@@ -26,7 +26,7 @@ class _BookerzcardPageState extends State<BookerzcardPage> {
                 children: <Widget>[
                   Center(
                     child: CircleAvatar(
-                      backgroundImage: AssetImage('assets/dekisugi.jpg'),
+                      backgroundImage: NetworkImage('https://i.pravatar.cc/300'),
                       radius: 60.0,
 
                     ),
@@ -44,7 +44,7 @@ class _BookerzcardPageState extends State<BookerzcardPage> {
                   ),
                   SizedBox(height:10.0),
                   Text(
-                      'Dekisugi',
+                      'John Doe',
                       style: TextStyle(
                           color: Colors.black87,
                           letterSpacing: 2.0,

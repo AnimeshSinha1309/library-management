@@ -32,7 +32,7 @@ class _LibcardPageState extends State<LibcardPage> {
                 children: <Widget>[
                   Center(
                     child: CircleAvatar(
-                      backgroundImage: AssetImage('assets/dekisugi.jpg'),
+                      backgroundImage: NetworkImage('https://i.pravatar.cc/300'),
                       radius: 60.0,
 
                     ),
@@ -50,7 +50,7 @@ class _LibcardPageState extends State<LibcardPage> {
                   ),
                   SizedBox(height:10.0),
                   Text(
-                      'Dekisugi Daga',
+                      'John Doe',
                       style: TextStyle(
                           color: Colors.black87,
                           letterSpacing: 2.0,

@@ -7,6 +7,7 @@ import 'package:libmate/views/friends.dart';
 import 'package:libmate/views/goals.dart';
 import 'package:libmate/views/guide.dart';
 import 'package:libmate/views/libcard.dart';
+import 'package:libmate/views/bookerzCard.dart';
 import 'package:libmate/views/request.dart';
 import 'package:libmate/views/search.dart';
 
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
           '/friends': (BuildContext context) => new FriendsPage(),
           '/goals': (BuildContext context) => new GoalsPage(),
           '/libcard': (BuildContext context) => new LibcardPage(),
+          '/bookerzcard': (BuildContext context) => new BookerzcardPage(),
           '/request': (BuildContext context) => new RequestPage(),
           '/about': (BuildContext context) => new AboutPage(),
           '/accounts': (BuildContext context) => new AccountsPage(),

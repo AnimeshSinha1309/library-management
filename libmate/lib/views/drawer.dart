@@ -68,6 +68,13 @@ class _AppDrawerState extends State<AppDrawer> {
             Navigator.pushReplacementNamed(context, '/libcard');
           }),
       new ListTile(
+              leading: Icon(Icons.stars),
+              title: new Text('Bookerz Card'),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.pushReplacementNamed(context, '/bookerzcard');
+              }),
+      new ListTile(
           leading: Icon(Icons.library_add),
           title: new Text('Request Book'),
           onTap: () {

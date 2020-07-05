@@ -13,6 +13,32 @@ class _GoalsPageState extends State<GoalsPage> {
     ToRead(book:"Three men in a Boat",date:"28/7"),
     ToRead(book:"Three men in a Boat",date:"28/7"),
   ];
+  Widget ToReadTemplate(book)
+  {
+    return Card(
+      margin: EdgeInsets.fromLTRB(2,2,2,0),
+      child: Column(
+        children: <Widget>[
+          Text(
+            book.book,
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.grey[800],
+            )
+          ),
+          SizedBox(height:4),
+          Text(
+            book.date,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey[1000],
+              )
+          )
+        ]
+      )
+
+    );
+  }
   int numBooks = 3;
   @override
   Widget build(BuildContext context) {
@@ -76,7 +102,8 @@ class _GoalsPageState extends State<GoalsPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
-                              Text("${b.book} : ${b.date}"),
+//                              Text("${b.book} : ${b.date}"),
+                            ToReadTemplate(b),
                               Center(
                                 child: RaisedButton.icon(
                                   onPressed: (){},

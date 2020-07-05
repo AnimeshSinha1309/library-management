@@ -60,7 +60,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    String curBook = "Gilbert Strang Linear Algebra";
+    List<String> books = [
+    "Linear Algebra: Strang",
+      "To Kill a Mockingbird",
+      "Algorithms: Cormen"
+    ];
+
     return Scaffold(
       appBar: AppBar(
         title: cusSearchBar,
@@ -68,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       drawer: AppDrawer(),
       body: Container(
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.all(2),
         margin: EdgeInsets.all(5),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -84,46 +89,41 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
               ),
           Image.asset('assets/bgbook.jpg'),
-          Text(
-            "My books",
-            style: TextStyle(
-            fontSize: 15.0,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 2.0,
-            color: Colors.grey[600],
+          Center(
+            child: Text(
+              "My books",
+              style: TextStyle(
+              fontSize: 15.0,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 2.0,
+              color: Colors.grey[600],
+            ),
+            ),
           ),
-          ),
-          Row(
+          Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Text("$curBook"),
-              Center(
-                child: FlatButton(
-                    onPressed: (){},
-                    color: Colors.amber,
-                    child: Text("Resume Reading")
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: books.map((book){
+              return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                  Text("$book"),
+                  Center(
+                  child: RaisedButton.icon(
+                  onPressed: (){},
+                  color: Colors.amber,
+                  icon: Icon(Icons.launch),
+                  label: Text('Resume'),
+                  ),
+                  ),
 
-                ),
-              ),
-//              FloatingActionButton(
-//                onPressed: () {},
-//                tooltip: 'Increment',
-//                child: Text('Issue book'),
-//                backgroundColor: Colors.pink,
-//              ),
-
-              ]),
-
-        ],
+              ]);
+              }).toList()),
+            ]),
         )
-
-
-
-//
-      )
-
     );
+
   }
 }
 

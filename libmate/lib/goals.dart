@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
 import './drawer.dart';
+import './toRead.dart';
 
 class GoalsPage extends StatefulWidget {
   @override
@@ -8,8 +8,12 @@ class GoalsPage extends StatefulWidget {
 }
 
 class _GoalsPageState extends State<GoalsPage> {
-  List <String> books = ["Three men in a Boat"];
-  int numBooks = 0;
+  List <ToRead> books = [
+    ToRead(book:"Three men in a Boat",date:"28/7"),
+    ToRead(book:"Three men in a Boat",date:"28/7"),
+    ToRead(book:"Three men in a Boat",date:"28/7"),
+  ];
+  int numBooks = 3;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +25,7 @@ class _GoalsPageState extends State<GoalsPage> {
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             setState((){
-              books.add("Dummy book");
+              books.add(ToRead(book:"New Book",date:"28/7"));
               numBooks += 1;
             });
 
@@ -45,7 +49,7 @@ class _GoalsPageState extends State<GoalsPage> {
 
                         ),
                         Text(
-                            'SAVED BOOKS :',
+                            'To Read :',
                             style: TextStyle(
                               color: Colors.grey,
                               letterSpacing: 2.0,
@@ -64,16 +68,26 @@ class _GoalsPageState extends State<GoalsPage> {
                   ),
 
                   SizedBox(height:30.0),
-                  Text(
-                      'Three men in a boat',
-                      style: TextStyle(
-                          color: Colors.pinkAccent,
-                          letterSpacing: 2.0,
-                          fontSize: 28.0,
-                          fontWeight: FontWeight.bold
+                  Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: books.map((b){
+                        return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Text("${b.book} : ${b.date}"),
+                              Center(
+                                child: RaisedButton.icon(
+                                  onPressed: (){},
+                                  color: Colors.amber,
+                                  icon: Icon(Icons.add_shopping_cart),
+                                  label: Text('issue'),
+                                ),
+                              ),
 
-                      )
-                  ),
+                            ]);
+                      }).toList()),
                   SizedBox(height:30.0),
 
                 ]

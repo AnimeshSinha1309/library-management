@@ -13,6 +13,7 @@ import 'package:libmate/views/libcard.dart';
 import 'package:libmate/views/request.dart';
 import 'package:libmate/views/search.dart';
 import 'package:redux/redux.dart';
+import 'package:redux_thunk/redux_thunk.dart';
 
 void main() => runApp(MyApp());
 
@@ -22,7 +23,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final Store<AppState> store = Store<AppState>(
         appStateReducer,
-        initialState: AppState.initialState()
+      initialState: AppState.initialState(),
+      middleware: [thunkMiddleware],
     );
     return StoreProvider<AppState>(
         store: store,

@@ -39,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          "Your Personalized Library Buddy " + model.name,
+                          "Your Personalized Library Buddy",
                           style: TextStyle(
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold,

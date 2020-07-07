@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 
 class UserModel {
   // Basic Features of the user
+  final String uid;
   final String name;
   final String email;
   final String photoUrl;
@@ -21,7 +22,8 @@ class UserModel {
     @required this.name,
     @required this.email,
     this.photoUrl,
-    this.birthYear
+    this.birthYear,
+    this.uid
   });
 }
 
@@ -55,6 +57,7 @@ class AppState {
   List<BookModel> recommendedBooks;
   List<BookModel> searchResults;
 
-  AppState.initialState()
-      : user = UserModel(name: 'Jesse Doe', email: 'test@test.iiit.ac.in');
+  AppState({this.user, this.recommendedBooks, this.searchResults});
+
+  AppState.initialState() : user = UserModel(name: '', email: '');
 }

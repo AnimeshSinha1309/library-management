@@ -1,8 +1,10 @@
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:libmate/datastore/model.dart';
 
-final GoogleSignIn googleSignIn = GoogleSignIn();
+class LogInAction {
+  UserModel userModel;
 
-class LogInAction {}
+  LogInAction(this.userModel);
+}
 
 class SearchBooksAction {
   String searchString;

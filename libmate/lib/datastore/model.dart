@@ -17,11 +17,12 @@ class UserModel {
   List<BookModel> pastReads;
   List<UserModel> friends;
 
-  UserModel(
-      {@required this.name,
-      @required this.email,
-      this.photoUrl,
-      this.birthYear});
+  UserModel({
+    @required this.name,
+    @required this.email,
+    this.photoUrl,
+    this.birthYear
+  });
 }
 
 class BookModel {
@@ -55,5 +56,5 @@ class AppState {
   List<BookModel> searchResults;
 
   AppState.initialState()
-      : user = UserModel(name: 'John Doe', email: 'test@test.iiit.ac.in');
+      : user = UserModel(name: 'Jesse Doe', email: 'test@test.iiit.ac.in');
 }

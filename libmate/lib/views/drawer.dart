@@ -16,81 +16,68 @@ class _AppDrawerState extends State<AppDrawer> {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _DrawerViewModel>(
         converter: (Store<AppState> store) => _DrawerViewModel.create(store),
-        builder: (BuildContext context, _DrawerViewModel model) =>
-            Drawer(
-                child: ListView(children: <Widget>[
-                  model.email != ''
-                      ? UserAccountsDrawerHeader(
-                    accountName: Text(model.name),
-                    accountEmail: Text(model.email),
-                    currentAccountPicture: CircleAvatar(
-                      backgroundImage: NetworkImage(model.photoUrl),
-                    ),
-                  )
-                      : DrawerHeader(
-                    decoration: BoxDecoration(
-                        color: Theme
-                            .of(context)
-                            .primaryColor
-                    ),
-                    child: Padding(
-                        padding: EdgeInsets.fromLTRB(16.0, 70.0, 16.0, 16.0),
-                        child: GAuthButton(callback: () {
-                          model.login();
-                        },)
-                    ),
-                  ),
-                ] + (model.email != ''
-                    ? loggedInDrawerList()
-                    : loggedOutDrawerList())
-                )
-            )
-    );
+        builder: (BuildContext context, _DrawerViewModel model) {
+          final isLoggedIn = model.email != "";
+
+          var firstChild;
+          if (isLoggedIn) {
+            firstChild = UserAccountsDrawerHeader(
+              accountName: Text(model.name),
+              accountEmail: Text(model.email),
+              currentAccountPicture: CircleAvatar(
+                backgroundImage: NetworkImage(model.photoUrl),
+              ),
+            );
+          } else {
+            firstChild = DrawerHeader(
+              decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+              child: Padding(
+                  padding: EdgeInsets.fromLTRB(16.0, 70.0, 16.0, 16.0),
+                  child: GAuthButton(
+                    callback: () {
+                      model.login();
+                    },
+                  )),
+            );
+          }
+
+          final secondChild =
+              isLoggedIn ? loggedInDrawerList() : loggedOutDrawerList();
+
+          return Drawer(
+              child: ListView(children: <Widget>[firstChild] + secondChild));
+        });
   }
 
   List<Widget> loggedInDrawerList() {
     return <Widget>[
-      _DrawerViewItem(Icons.home, 'Home', '/home')
-          .build(context),
-      _DrawerViewItem(Icons.search, 'Search', '/search')
-          .build(context),
-      _DrawerViewItem(Icons.location_on, 'Guide', '/guide')
-          .build(context),
+      _DrawerViewItem(Icons.home, 'Home', '/home').build(context),
+      _DrawerViewItem(Icons.search, 'Search', '/search').build(context),
+      _DrawerViewItem(Icons.location_on, 'Guide', '/guide').build(context),
       _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute')
           .build(context),
-      _DrawerViewItem(Icons.people, 'Friends', '/friends')
-          .build(context),
+      _DrawerViewItem(Icons.people, 'Friends', '/friends').build(context),
       _DrawerViewItem(Icons.library_books, 'Reading Goals', '/goals')
           .build(context),
       _DrawerViewItem(Icons.card_membership, 'Library Card', '/libcard')
           .build(context),
       _DrawerViewItem(Icons.library_add, 'Request Books', '/request')
           .build(context),
-      Divider(
-          color: Colors.grey,
-          thickness: 0.5
-      ),
+      Divider(color: Colors.grey, thickness: 0.5),
       _DrawerViewItem(Icons.account_circle, 'Accounts', '/accounts')
           .build(context),
-      _DrawerViewItem(Icons.info, 'About', '/about')
-          .build(context),
+      _DrawerViewItem(Icons.info, 'About', '/about').build(context),
     ];
   }
 
   List<Widget> loggedOutDrawerList() {
     return <Widget>[
-      _DrawerViewItem(Icons.search, 'Search', '/search')
-          .build(context),
-      _DrawerViewItem(Icons.location_on, 'Guide', '/guide')
-          .build(context),
+      _DrawerViewItem(Icons.search, 'Search', '/search').build(context),
+      _DrawerViewItem(Icons.location_on, 'Guide', '/guide').build(context),
       _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute')
           .build(context),
-      Divider(
-          color: Colors.grey,
-          thickness: 0.5
-      ),
-      _DrawerViewItem(Icons.info, 'About', '/about')
-          .build(context),
+      Divider(color: Colors.grey, thickness: 0.5),
+      _DrawerViewItem(Icons.info, 'About', '/about').build(context),
     ];
   }
 }

@@ -32,6 +32,11 @@ dependencies:
   cloud_firestore: ^0.11.0+2
   google_sign_in: ^4.4.4
 
+  # Redux and state management
+  redux: ^4.0.0
+  flutter_redux: ^0.6.0
+  redux_thunk: ^0.3.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

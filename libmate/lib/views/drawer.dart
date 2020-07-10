@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:libmate/datastore/actions.dart';
+import 'package:libmate/datastore/auth.dart';
+import 'package:libmate/datastore/model.dart';
+import 'package:libmate/widgets/gauth.dart';
+import 'package:redux/redux.dart';
 
 class AppDrawer extends StatefulWidget {
   @override
@@ -8,90 +14,114 @@ class AppDrawer extends StatefulWidget {
 class _AppDrawerState extends State<AppDrawer> {
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-        child: new ListView(children: <Widget>[
-      new UserAccountsDrawerHeader(
-        accountName: new Text('John Doe'),
-        accountEmail: new Text('test@mail.com'),
-        currentAccountPicture: new CircleAvatar(
-          backgroundImage: new NetworkImage('https://i.pravatar.cc/300'),
-        ),
-      ),
-      new ListTile(
-          leading: Icon(Icons.home),
-          title: new Text('Home'),
-          onTap: () {
-            Navigator.of(context).pop();
-            Navigator.pushReplacementNamed(context, '/home');
-          }),
-      new ListTile(
-          leading: Icon(Icons.search),
-          title: new Text('Search'),
-          onTap: () {
-            Navigator.of(context).pop();
-            Navigator.pushReplacementNamed(context, '/search');
-          }),
-      new ListTile(
-          leading: Icon(Icons.location_on),
-          title: new Text('Guide'),
-          onTap: () {
-            Navigator.of(context).pop();
-            Navigator.pushReplacementNamed(context, '/guide');
-          }),
-      new ListTile(
-          leading: Icon(Icons.file_upload),
-          title: new Text('Contribute Info'),
-          onTap: () {
-            Navigator.of(context).pop();
-            Navigator.pushReplacementNamed(context, '/contribute');
-          }),
-      new ListTile(
-          leading: Icon(Icons.people),
-          title: new Text('Friends'),
-          onTap: () {
-            Navigator.of(context).pop();
-            Navigator.pushReplacementNamed(context, '/friends');
-          }),
-      new ListTile(
-          leading: Icon(Icons.library_books),
-          title: new Text('Reading Goals'),
-          trailing: Chip(label: Text('13')),
-          onTap: () {
-            Navigator.of(context).pop();
-            Navigator.pushReplacementNamed(context, '/goals');
-          }),
-      new ListTile(
-          leading: Icon(Icons.card_membership),
-          title: new Text('Library Card'),
-          onTap: () {
-            Navigator.of(context).pop();
-            Navigator.pushReplacementNamed(context, '/libcard');
-          }),
-      new ListTile(
-          leading: Icon(Icons.library_add),
-          title: new Text('Request Book'),
-          onTap: () {
-            Navigator.of(context).pop();
-            Navigator.pushReplacementNamed(context, '/request');
-          }),
-      new Divider(
-        color: Colors.grey,
-        thickness: 0.5,
-      ),
-      new ListTile(
-          leading: Icon(Icons.account_circle),
-          title: new Text('Accounts'),
-          onTap: () {
-            Navigator.of(context).pop();
-            Navigator.pushReplacementNamed(context, '/accounts');
-          }),
-      new ListTile(
-          leading: Icon(Icons.info),
-          title: new Text('About'),
-          onTap: () {
-            Navigator.of(context).pop();
-            Navigator.pushReplacementNamed(context, '/about');
-          }),
-    ]));
+    return StoreConnector<AppState, _DrawerViewModel>(
+        converter: (Store<AppState> store) => _DrawerViewModel.create(store),
+        builder: (BuildContext context, _DrawerViewModel model) {
+          final isLoggedIn = model.email != "";
+
+          var firstChild;
+          if (isLoggedIn) {
+            firstChild = UserAccountsDrawerHeader(
+              accountName: Text(model.name),
+              accountEmail: Text(model.email),
+              currentAccountPicture: CircleAvatar(
+                backgroundImage: NetworkImage(model.photoUrl),
+              ),
+            );
+          } else {
+            firstChild = DrawerHeader(
+              decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+              child: Padding(
+                  padding: EdgeInsets.fromLTRB(16.0, 70.0, 16.0, 16.0),
+                  child: GAuthButton(
+                    callback: () {
+                      model.login();
+                    },
+                  )),
+            );
+          }
+
+          final secondChild =
+              isLoggedIn ? loggedInDrawerList() : loggedOutDrawerList();
+
+          return Drawer(
+              child: ListView(children: <Widget>[firstChild] + secondChild));
+        });
+  }
+
+  List<Widget> loggedInDrawerList() {
+    return <Widget>[
+      _DrawerViewItem(Icons.home, 'Home', '/home').build(context),
+      _DrawerViewItem(Icons.search, 'Search', '/search').build(context),
+      _DrawerViewItem(Icons.location_on, 'Guide', '/guide').build(context),
+      _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute')
+          .build(context),
+      _DrawerViewItem(Icons.people, 'Friends', '/friends').build(context),
+      _DrawerViewItem(Icons.library_books, 'Reading Goals', '/goals')
+          .build(context),
+      _DrawerViewItem(Icons.card_membership, 'Library Card', '/libcard')
+          .build(context),
+      _DrawerViewItem(Icons.library_add, 'Request Books', '/request')
+          .build(context),
+      Divider(color: Colors.grey, thickness: 0.5),
+      _DrawerViewItem(Icons.account_circle, 'Accounts', '/accounts')
+          .build(context),
+      _DrawerViewItem(Icons.info, 'About', '/about').build(context),
+    ];
+  }
+
+  List<Widget> loggedOutDrawerList() {
+    return <Widget>[
+      _DrawerViewItem(Icons.search, 'Search', '/search').build(context),
+      _DrawerViewItem(Icons.location_on, 'Guide', '/guide').build(context),
+      _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute')
+          .build(context),
+      Divider(color: Colors.grey, thickness: 0.5),
+      _DrawerViewItem(Icons.info, 'About', '/about').build(context),
+    ];
+  }
+}
+
+class _DrawerViewItem {
+  IconData icon;
+  String name;
+  String path;
+
+  _DrawerViewItem(this.icon, this.name, this.path);
+
+  Widget build(BuildContext context) {
+    return ListTile(
+        leading: Icon(this.icon),
+        title: Text(this.name),
+        onTap: () {
+          Navigator.of(context).pop();
+          Navigator.pushReplacementNamed(context, this.path);
+        });
+  }
+}
+
+class _DrawerViewModel {
+  String name;
+  String email;
+  String photoUrl;
+
+  final Function() login;
+
+  _DrawerViewModel({this.name, this.email, this.photoUrl, this.login});
+
+  factory _DrawerViewModel.create(Store<AppState> store) {
+    void logInThunk(Store<AppState> store) async {
+      final UserModel userModel = await googleSignIn(true);
+      store.dispatch(LogInAction(userModel));
+    }
+
+    return _DrawerViewModel(
+      name: store.state.user.name,
+      email: store.state.user.email,
+      photoUrl: store.state.user.photoUrl,
+      login: () {
+        logInThunk(store);
+      },
+    );
   }
 }

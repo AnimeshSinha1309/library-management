@@ -226,6 +226,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.0"
+  redux_persist:
+    dependency: "direct main"
+    description:
+      name: redux_persist
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.8.4"
   redux_thunk:
     dependency: "direct main"
     description:
@@ -266,6 +273,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.5"
+  synchronized:
+    dependency: transitive
+    description:
+      name: synchronized
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.0+1"
   term_glyph:
     dependency: transitive
     description:
@@ -295,5 +309,5 @@ packages:
     source: hosted
     version: "2.0.8"
 sdks:
-  dart: ">=2.7.0 <3.0.0"
+  dart: ">=2.8.0 <3.0.0"
   flutter: ">=1.12.13+hotfix.4 <2.0.0"

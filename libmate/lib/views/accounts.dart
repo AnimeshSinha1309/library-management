@@ -25,7 +25,7 @@ class _AccountsPageState extends State<AccountsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
-        title: new Text('Accounts Page'),
+        title: new Text('Accounts'),
       ),
       drawer: AppDrawer(),
       body: Container(
@@ -39,10 +39,38 @@ class _AccountsPageState extends State<AccountsPage> {
     return StoreConnector<AppState, _AccountsViewModel>(
         converter: (Store<AppState> store) => _AccountsViewModel.create(store),
         builder: (BuildContext context, _AccountsViewModel model) =>
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
+            Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Container(
+                            width: 75.0,
+                            height: 75.0,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image: NetworkImage(model.photoUrl)))),
+                        Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Text(model.name, textScaleFactor: 1.5),
+                                Text(model.email, textScaleFactor: 1.0),
+                              ],
+                            )
+                        )
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      child: Divider(
+                        color: Colors.grey[300],
+                        thickness: 3,
+                      ),
+                    ),
                 GAuthButton(
                   callback: () {
                     model.logout();
@@ -50,7 +78,7 @@ class _AccountsPageState extends State<AccountsPage> {
                   text: 'Sign Out',
                 ),
               ],
-            ));
+                )));
   }
 }
 

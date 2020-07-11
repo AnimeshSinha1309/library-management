@@ -1,5 +1,5 @@
 name: libmate
-description: A new Flutter project.
+description: Your favorite library assistant.
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -36,6 +36,7 @@ dependencies:
   redux: ^4.0.0
   flutter_redux: ^0.6.0
   redux_thunk: ^0.3.0
+  redux_persist: ^0.8.4
 
 dev_dependencies:
   flutter_test:

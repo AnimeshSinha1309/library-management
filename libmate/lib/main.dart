@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:libmate/datastore/model.dart';
@@ -14,18 +15,31 @@ import 'package:libmate/views/request.dart';
 import 'package:libmate/views/search.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+import 'package:redux_persist/redux_persist.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  final persistor = Persistor<AppState>(
+    storage: FileStorage(File("state.json")), // Or use other engines
+    serializer: JsonSerializer<AppState>(AppState.fromJson), // Or use other serializers
+  );
+  final initialState = await persistor.load();
+
+  return runApp(MyApp(initialState, persistor.createMiddleware()));
+}
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    final Store<AppState> store = Store<AppState>(
-        appStateReducer,
+  final Store<AppState> store;
+
+  MyApp(initialState, persistMiddleware) :
+    store = Store<AppState>(
+      appStateReducer,
       initialState: AppState.initialState(),
       middleware: [thunkMiddleware],
     );
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
     return StoreProvider<AppState>(
         store: store,
         child: MaterialApp(

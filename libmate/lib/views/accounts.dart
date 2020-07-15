@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_tags/flutter_tags.dart';
 import 'package:libmate/datastore/actions.dart';
-import 'package:libmate/datastore/auth.dart';
+import 'package:libmate/services/auth.dart';
 import 'package:libmate/datastore/model.dart';
 import 'package:libmate/views/drawer.dart';
 import 'package:libmate/widgets/gauth.dart';

@@ -3,7 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:libmate/datastore/model.dart';
 import 'package:libmate/views/drawer.dart';
 import 'package:redux/redux.dart';
-
+import 'package:libmate/services/auth.dart';
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key}) : super(key: key);
 
@@ -14,6 +14,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   Icon cusIcon = Icon(Icons.search);
   Widget cusSearchBar = Text("LibMate");
+  final AuthService _auth = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +28,16 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: AppBar(
           title: cusSearchBar,
           centerTitle: true,
+          elevation: 0.0,
+          actions: <Widget>[
+            FlatButton.icon(
+              icon: Icon(Icons.person),
+              label: Text('logout'),
+              onPressed: () async {
+                await _auth.signOut();
+              },
+            )
+          ]
         ),
         drawer: AppDrawer(),
         body: StoreConnector<AppState, _HomeViewModel>(

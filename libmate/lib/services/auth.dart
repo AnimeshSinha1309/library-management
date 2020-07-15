@@ -1,7 +1,37 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:libmate/datastore/model.dart';
+import 'package:libmate/views/sign_in.dart';
+
+
+class AuthService{
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  //signin anon
+  Future signInAnon() async{
+    try{
+      AuthResult result = await _auth.signInAnonymously();
+      FirebaseUser user = result.user;
+      return user;
+    }
+    catch(e){
+      print(e.toString());
+      return null;
+    }
+  }
+  Future signOut() async{
+    try{
+      return await _auth.signOut();
+    }catch(e){
+      print(e.toSting());
+      return null;
+
+    }
+
+  }
+
+}
 
 
 Future<UserModel> googleSignIn(bool login) async {
@@ -45,6 +75,8 @@ Future<UserModel> googleSignIn(bool login) async {
 
 class AuthDataService {
 
+
+  //sign in with google
   void createEntry(data) async {
     var firebaseUser = await FirebaseAuth.instance.currentUser();
     Firestore.instance.collection("users")
@@ -63,5 +95,7 @@ class AuthDataService {
         .then((value) {
       print("User Data was successfully Committed to the servers");
     });
+    //sign in with email password
+
   }
 }

@@ -12,6 +12,7 @@ import 'package:libmate/views/home.dart';
 import 'package:libmate/views/libcard.dart';
 import 'package:libmate/views/request.dart';
 import 'package:libmate/views/search.dart';
+import 'package:libmate/views/authenticate.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
         home: MyHomePage(),
         routes: <String, WidgetBuilder>{
           '/home': (BuildContext context) => new MyHomePage(),
+          '/authenticate': (BuildContext context) => new Authenticate(),
           '/search': (BuildContext context) => new SearchPage(),
           '/guide': (BuildContext context) => new GuidePage(),
           '/contribute': (BuildContext context) => new ContributePage(),

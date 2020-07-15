@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:libmate/datastore/actions.dart';
-import 'package:libmate/datastore/auth.dart';
+import 'package:libmate/services/auth.dart';
 import 'package:libmate/datastore/model.dart';
 import 'package:libmate/widgets/gauth.dart';
 import 'package:redux/redux.dart';
+
 
 class AppDrawer extends StatefulWidget {
   @override
@@ -70,10 +71,11 @@ class _AppDrawerState extends State<AppDrawer> {
 
   List<Widget> loggedOutDrawerList() {
     return <Widget>[
+      _DrawerViewItem(Icons.person, 'Sign in', '/authenticate').build(context),
+      _DrawerViewItem(Icons.home, 'Home', '/home').build(context),
       _DrawerViewItem(Icons.search, 'Search', '/search').build(context),
       _DrawerViewItem(Icons.location_on, 'Guide', '/guide').build(context),
-      _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute')
-          .build(context),
+      _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute').build(context),
       Divider(color: Colors.grey, thickness: 0.5),
       _DrawerViewItem(Icons.info, 'About', '/about').build(context),
     ];

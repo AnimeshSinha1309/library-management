@@ -10,6 +10,7 @@ import 'package:libmate/views/goals.dart';
 import 'package:libmate/views/guide.dart';
 import 'package:libmate/views/home.dart';
 import 'package:libmate/views/libcard.dart';
+import 'package:libmate/views/bookerzCard.dart';
 import 'package:libmate/views/request.dart';
 import 'package:libmate/views/search.dart';
 import 'package:redux/redux.dart';
@@ -22,30 +23,30 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Store<AppState> store = Store<AppState>(
-        appStateReducer,
+      appStateReducer,
       initialState: AppState.initialState(),
       middleware: [thunkMiddleware],
     );
     return StoreProvider<AppState>(
         store: store,
         child: MaterialApp(
-        title: 'LibMate',
-        theme: ThemeData(
-          primarySwatch: Colors.pink,
-        ),
-        home: MyHomePage(),
-        routes: <String, WidgetBuilder>{
-          '/home': (BuildContext context) => new MyHomePage(),
-          '/search': (BuildContext context) => new SearchPage(),
-          '/guide': (BuildContext context) => new GuidePage(),
-          '/contribute': (BuildContext context) => new ContributePage(),
-          '/friends': (BuildContext context) => new FriendsPage(),
-          '/goals': (BuildContext context) => new GoalsPage(),
-          '/libcard': (BuildContext context) => new LibcardPage(),
-          '/request': (BuildContext context) => new RequestPage(),
-          '/about': (BuildContext context) => new AboutPage(),
-          '/accounts': (BuildContext context) => new AccountsPage(),
-        })
-    );
+            title: 'LibMate',
+            theme: ThemeData(
+              primarySwatch: Colors.pink,
+            ),
+            home: MyHomePage(),
+            routes: <String, WidgetBuilder>{
+              '/home': (BuildContext context) => new MyHomePage(),
+              '/search': (BuildContext context) => new SearchPage(),
+              '/guide': (BuildContext context) => new GuidePage(),
+              '/contribute': (BuildContext context) => new ContributePage(),
+              '/friends': (BuildContext context) => new FriendsPage(),
+              '/goals': (BuildContext context) => new GoalsPage(),
+              '/libcard': (BuildContext context) => new LibcardPage(),
+              '/bookerzcard': (BuildContext context) => new BookerzcardPage(),
+              '/request': (BuildContext context) => new RequestPage(),
+              '/about': (BuildContext context) => new AboutPage(),
+              '/accounts': (BuildContext context) => new AccountsPage(),
+            }));
   }
 }

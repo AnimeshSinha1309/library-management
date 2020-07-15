@@ -39,8 +39,9 @@ class _AppDrawerState extends State<AppDrawer> {
             );
           }
 
-          final secondChild =
-          model.email != null ? loggedInDrawerList() : loggedOutDrawerList();
+          final secondChild = model.email != null
+              ? loggedInDrawerList()
+              : loggedOutDrawerList();
 
           return Drawer(
               child: ListView(children: <Widget>[firstChild] + secondChild));

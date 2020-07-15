@@ -5,6 +5,8 @@ import 'package:libmate/services/auth.dart';
 import 'package:libmate/datastore/model.dart';
 import 'package:libmate/widgets/gauth.dart';
 import 'package:redux/redux.dart';
+//import 'package:provider/provider.dart';
+//import 'package:libmate/models/user.dart';
 
 
 class AppDrawer extends StatefulWidget {
@@ -39,7 +41,8 @@ class _AppDrawerState extends State<AppDrawer> {
                   )),
             );
           }
-
+//          final user = Provider.of<User>(context);
+          
           final secondChild =
           model.email != null ? loggedInDrawerList() : loggedOutDrawerList();
 
@@ -72,8 +75,6 @@ class _AppDrawerState extends State<AppDrawer> {
   List<Widget> loggedOutDrawerList() {
     return <Widget>[
       _DrawerViewItem(Icons.person, 'Sign in', '/authenticate').build(context),
-      _DrawerViewItem(Icons.home, 'Home', '/home').build(context),
-      _DrawerViewItem(Icons.search, 'Search', '/search').build(context),
       _DrawerViewItem(Icons.location_on, 'Guide', '/guide').build(context),
       _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute').build(context),
       Divider(color: Colors.grey, thickness: 0.5),
@@ -81,6 +82,8 @@ class _AppDrawerState extends State<AppDrawer> {
     ];
   }
 }
+
+
 
 class _DrawerViewItem {
   IconData icon;

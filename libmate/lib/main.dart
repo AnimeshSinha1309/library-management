@@ -12,6 +12,7 @@ import 'package:libmate/views/home.dart';
 import 'package:libmate/views/libcard.dart';
 import 'package:libmate/views/request.dart';
 import 'package:libmate/views/search.dart';
+import 'package:libmate/views/register.dart';
 import 'package:libmate/views/authenticate.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';

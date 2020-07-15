@@ -37,7 +37,7 @@ class _SignInState extends State<SignIn>
             )
           ]
       ),
-
+      drawer: AppDrawer(),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
         child: RaisedButton(
@@ -68,7 +68,11 @@ class _SignInState extends State<SignIn>
                           style: TextStyle(color: Colors.white),
                     ),                  onPressed: () async {
                     if (_formKey.currentState.validate()) {
-                      print("valid");
+                      dynamic result = await _auth.registerWithEmailAndPassword(
+                          email, password);
+                      if (result == null) {
+                        setState(() => error = 'Please supply a valid email');
+                      }
                     }
                   }),
                   SizedBox(height: 20.0),

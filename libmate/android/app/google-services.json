@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "842844863088-uq399arc6gqaf9ud91iar056tvl1q5qs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "iiit.occamsrazor.libmate",
+            "certificate_hash": "de816c8eb98863f50c7b7ec7bf875b5888ecfcd6"
+          }
+        },
+        {
           "client_id": "842844863088-ni7a8sh6grefii6sl9c46rieit1q9ah1.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

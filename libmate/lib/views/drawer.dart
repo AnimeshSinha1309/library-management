@@ -5,8 +5,8 @@ import 'package:libmate/services/auth.dart';
 import 'package:libmate/datastore/model.dart';
 import 'package:libmate/widgets/gauth.dart';
 import 'package:redux/redux.dart';
-//import 'package:provider/provider.dart';
-//import 'package:libmate/models/user.dart';
+import 'package:provider/provider.dart';
+import 'package:libmate/models/user.dart';
 
 
 class AppDrawer extends StatefulWidget {

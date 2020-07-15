@@ -17,6 +17,7 @@ class UserModel {
   List<BookModel> wishList;
   List<BookModel> pastReads;
   List<UserModel> friends;
+  List<String> likedTags = <String>[];
 
   UserModel({
     @required this.name,
@@ -59,5 +60,5 @@ class AppState {
 
   AppState({this.user, this.recommendedBooks, this.searchResults});
 
-  AppState.initialState() : user = UserModel(name: '', email: '');
+  AppState.initialState() : user = UserModel(name: null, email: null);
 }

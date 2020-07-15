@@ -17,10 +17,8 @@ class _AppDrawerState extends State<AppDrawer> {
     return StoreConnector<AppState, _DrawerViewModel>(
         converter: (Store<AppState> store) => _DrawerViewModel.create(store),
         builder: (BuildContext context, _DrawerViewModel model) {
-          final isLoggedIn = model.email != "";
-
           var firstChild;
-          if (isLoggedIn) {
+          if (model.email != null) {
             firstChild = UserAccountsDrawerHeader(
               accountName: Text(model.name),
               accountEmail: Text(model.email),
@@ -42,7 +40,7 @@ class _AppDrawerState extends State<AppDrawer> {
           }
 
           final secondChild =
-              isLoggedIn ? loggedInDrawerList() : loggedOutDrawerList();
+          model.email != null ? loggedInDrawerList() : loggedOutDrawerList();
 
           return Drawer(
               child: ListView(children: <Widget>[firstChild] + secondChild));

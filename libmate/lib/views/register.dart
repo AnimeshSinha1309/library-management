@@ -34,7 +34,6 @@ class _RegisterState extends State<Register> {
             )
           ]
       ),
-      drawer: AppDrawer(),
 
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
@@ -74,7 +73,12 @@ class _RegisterState extends State<Register> {
                         setState(() => error = 'Please supply a valid email');
                       }
                     }
-                  })
+                  }),
+                SizedBox(height: 20.0),
+                Text(
+                  error,
+                  style: TextStyle(color: Colors.red, fontSize: 14.0),
+                )
               ],
             ),
           ),

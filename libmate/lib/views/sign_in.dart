@@ -14,6 +14,9 @@ class _SignInState extends State<SignIn>
   final AuthService _auth = AuthService();
   String email = "";
   String password = "";
+  String error = "";
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context){
@@ -21,7 +24,7 @@ class _SignInState extends State<SignIn>
     return Scaffold(
       backgroundColor : Colors.white,
       appBar: AppBar(
-          title: Text("Sign in"),
+          title: Text("Sign in to Libmate"),
           centerTitle: true,
           elevation: 0.0,
           actions: <Widget>[
@@ -34,24 +37,26 @@ class _SignInState extends State<SignIn>
             )
           ]
       ),
-      drawer: AppDrawer(),
 
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
         child: RaisedButton(
           child: Form(
+            key: _formKey,
             child: Column(
                 children: <Widget>[
                   SizedBox(height: 20.0),
                   TextFormField(
+                    validator: (val) => val.isEmpty ? "Enter an email" : null,
                     onChanged: (val){
                         setState(() => email = val);
                     }
                   ),
                   SizedBox(height: 20.0),
                   TextFormField(
+                    validator: (val) => val.length < 6 ? "Enter a password 6+ chars long" : null,
                     obscureText: true,
-                      onChanged: (val){
+                    onChanged: (val){
                         setState(() => password = val);
                       }
                   ),
@@ -61,24 +66,19 @@ class _SignInState extends State<SignIn>
                     child: Text(
                          "Sign in",
                           style: TextStyle(color: Colors.white),
-                    ),
-                    onPressed: () async{
-                      print(email);
-                      print(password);
-
-                    },
-
+                    ),                  onPressed: () async {
+                    if (_formKey.currentState.validate()) {
+                      print("valid");
+                    }
+                  }),
+                  SizedBox(height: 20.0),
+                  Text(
+                    error,
+                    style: TextStyle(color: Colors.red, fontSize: 14.0),
                   )
-
-
                 ],
-
             ),
-
-
-
           ),
-
         ),
       ),
     );

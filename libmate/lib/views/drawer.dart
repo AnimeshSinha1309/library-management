@@ -17,6 +17,12 @@ class AppDrawer extends StatefulWidget {
 class _AppDrawerState extends State<AppDrawer> {
   @override
   Widget build(BuildContext context) {
+//    final user = Provider.of<User>(context);
+//    print(user);
+//    final Child =
+//    user != null ? loggedInDrawerList() : loggedOutDrawerList();
+//    return Drawer(child: ListView(children: Child));
+//  }
     return StoreConnector<AppState, _DrawerViewModel>(
         converter: (Store<AppState> store) => _DrawerViewModel.create(store),
         builder: (BuildContext context, _DrawerViewModel model) {
@@ -42,10 +48,11 @@ class _AppDrawerState extends State<AppDrawer> {
             );
           }
 //          final user = Provider.of<User>(context);
-          
+//          print(user);
           final secondChild =
           model.email != null ? loggedInDrawerList() : loggedOutDrawerList();
-
+//          final secondChild =
+//          user != null ? loggedInDrawerList() : loggedOutDrawerList();
           return Drawer(
               child: ListView(children: <Widget>[firstChild] + secondChild));
         });
@@ -75,10 +82,9 @@ class _AppDrawerState extends State<AppDrawer> {
   List<Widget> loggedOutDrawerList() {
     return <Widget>[
       _DrawerViewItem(Icons.person, 'Sign in', '/authenticate').build(context),
+      _DrawerViewItem(Icons.search, 'Search', '/search').build(context),
       _DrawerViewItem(Icons.location_on, 'Guide', '/guide').build(context),
-      _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute').build(context),
       Divider(color: Colors.grey, thickness: 0.5),
-      _DrawerViewItem(Icons.info, 'About', '/about').build(context),
     ];
   }
 }

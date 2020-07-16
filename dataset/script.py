@@ -5,6 +5,8 @@ import csv
 base_url = './topics'
 book_list = []
 
+label = 0
+
 for folder in os.listdir(base_url):
     folder_path = os.path.join(base_url, folder)
     for file in os.listdir(folder_path):
@@ -13,12 +15,20 @@ for folder in os.listdir(base_url):
             books = json.load(f)
             for book in books:
                 book = book['volumeInfo']
-                if 'description' in book:
-                    description = book['description']
+                title = book['title'] if 'title' in book else ""
+                description = book['description'] if 'description' in book else ""
+                if 'authors' in book:
+                    for author in book['authors']:
+                        authors += author + ", "
+                    authors = authors.strip(', ')
                 else:
-                    description = ''
-                book_list.append({'label': folder + " " + file.split('.')[0], 'text': book['title'] + " " + description })
-                
+                    authors = ''
+                text = title + " " + authors + " " description
+                text = text.strip(' ')
+                book_list.append({'label': label, 'category': folder, 'subcategory': file.split('.')[0], 'text': text })
+        label += 1
+        
 with open('book_dataset.csv', 'w') as f:
     w = csv.DictWriter(f, book_list[0].keys())
+    w.writeheader()
     w.writerows(book_list)

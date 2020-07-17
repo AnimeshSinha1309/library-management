@@ -1,4 +1,4 @@
-import 'package:libmate/datastore/appState.dart';
+import 'package:libmate/datastore/model.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';

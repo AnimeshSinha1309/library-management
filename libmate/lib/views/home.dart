@@ -17,7 +17,7 @@ class Home extends StatelessWidget {
   }
 
   Widget getLoggedOutBody() {
-    return GAuthButton();
+    return GAuth();
   }
 
   Widget getBody() {

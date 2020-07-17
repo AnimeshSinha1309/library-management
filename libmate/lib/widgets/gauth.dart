@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:libmate/datastore/auth.dart';
+import 'package:libmate/datastore/model.dart';
 
 class GAuthButton extends StatelessWidget {
   const GAuthButton({
@@ -39,5 +42,17 @@ class GAuthButton extends StatelessWidget {
           ),
         )
     );
+  }
+}
+
+class GAuth extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return GAuthButton(callback: () async {
+      final data = await googleSignIn(true);
+      // find a usermodel held by any ancestor provider
+      // and call its methods
+      Provider.of<UserModel>(context, listen: false).loginUser(data);
+    });
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:libmate/datastore/actions.dart';
-import 'package:libmate/datastore/appState.dart';
+import 'package:libmate/datastore/model.dart';
 import 'package:libmate/datastore/auth.dart';
 import 'package:libmate/datastore/model.dart';
 import 'package:libmate/widgets/gauth.dart';
@@ -28,17 +28,13 @@ class AppDrawer extends StatelessWidget {
           decoration: BoxDecoration(color: Theme.of(context).primaryColor),
           child: Padding(
               padding: EdgeInsets.fromLTRB(16.0, 70.0, 16.0, 16.0),
-              child: GAuthButton(
-                callback: () {
-                  print("objecthello");
-                  // model.login();
-                },
-              )),
+              child: GAuth()),
         );
       }
 
-      final secondChild =
-          model.isLoggedIn() ? loggedInDrawerList(context) : loggedOutDrawerList(context);
+      final secondChild = model.isLoggedIn()
+          ? loggedInDrawerList(context)
+          : loggedOutDrawerList(context);
 
       return Drawer(
           child: ListView(children: <Widget>[firstChild] + secondChild));
@@ -95,4 +91,3 @@ class _DrawerViewItem {
         });
   }
 }
-

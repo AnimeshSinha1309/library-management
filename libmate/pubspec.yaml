@@ -39,6 +39,8 @@ dependencies:
   redux_thunk: ^0.3.0
   redux_persist: ^0.8.4
 
+  provider: ^4.0.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -25,9 +25,9 @@ class MyApp extends StatelessWidget {
                   theme: ThemeData(
                     primarySwatch: Colors.pink,
                   ),
-                  home: Home(loggedIn: usermodel.isLoggedIn()),
+                  initialRoute: "/home",
                   routes: <String, WidgetBuilder>{
-                    '/home': (BuildContext context) => new Home(),
+                    '/home': (BuildContext context) => new Home(loggedIn: usermodel.isLoggedIn()),
                     '/search': (BuildContext context) => new SearchPage(),
                     '/guide': (BuildContext context) => new GuidePage(),
                     '/contribute': (BuildContext context) =>

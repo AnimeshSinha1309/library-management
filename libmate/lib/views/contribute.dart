@@ -60,14 +60,21 @@ class _ContributePageState extends State<ContributePage> {
         initialValue: this.barcode
     );
 
-    var bookText = TextFormField(
-        decoration: InputDecoration(
-          labelText: "Book name",
-        ),
-        validator: (String value) {
-          return value == null ? "Value incorrect" : null;
-        },
-        initialValue: ""
+    var bookText = SimpleTextField(hint: "Book name");
+
+    var submitBtn = RaisedButton(
+      onPressed: () {
+        // Validate returns true if the form is valid, otherwise false.
+        if (_formKey.currentState.validate()) {
+          // If the form is valid, display a snackbar. In the real world,
+          // you'd often call a server or save the information in a database.
+
+          Scaffold
+              .of(context)
+              .showSnackBar(SnackBar(content: Text('Processing Data')));
+        }
+      },
+      child: Text('Submit'),
     );
 
     return Scaffold(
@@ -81,10 +88,29 @@ class _ContributePageState extends State<ContributePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             barcodeText,
-            bookText
+            bookText,
+            submitBtn
           ],
         ),
       ),
+    );
+  }
+}
+
+class SimpleTextField extends StatelessWidget {
+  String hint;
+  SimpleTextField({this.hint});
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+        decoration: InputDecoration(
+          labelText: this.hint,
+        ),
+        validator: (String value) {
+          return value == null ? "Value incorrect" : null;
+        },
+        initialValue: ""
     );
   }
 }

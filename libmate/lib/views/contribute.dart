@@ -11,13 +11,17 @@ class ContributePage extends StatefulWidget {
 }
 
 class _ContributePageState extends State<ContributePage> {
+  final _formKey = GlobalKey<FormState>();
+
   String barcode = "";
 
   Future _scanBarcode() async {
     try {
       String barcode = await BarcodeScanner.scan();
-      setState(() { this.barcode = barcode; });
-    } on PlatformException catch(e) {
+      setState(() {
+        this.barcode = barcode;
+      });
+    } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
         setState(() {
           this.barcode = 'Camera Permission Not Granted';
@@ -40,27 +44,46 @@ class _ContributePageState extends State<ContributePage> {
 
   @override
   Widget build(BuildContext context) {
+    var barcodeText = TextFormField(
+        decoration: InputDecoration(
+            labelText: "Barcode value",
+            suffixIcon: new IconButton(onPressed: () async {
+              await _scanBarcode();
+            }, icon: Icon(Icons.camera))
+        ),
+        validator: (String value) {
+          RegExp re = new RegExp(r"^\d+$");
+          return value == null || !re.hasMatch(value)
+              ? "Value incorrect"
+              : null;
+        },
+        initialValue: this.barcode
+    );
+
+    var bookText = TextFormField(
+        decoration: InputDecoration(
+          labelText: "Book name",
+        ),
+        validator: (String value) {
+          return value == null ? "Value incorrect" : null;
+        },
+        initialValue: ""
+    );
+
     return Scaffold(
       appBar: new AppBar(
         title: new Text('Contribute Page'),
       ),
       drawer: AppDrawer(),
-      body: Center(
+      body: Form(
+        key: _formKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'The read in BarCode is:',
-            ),
-            Text('$barcode',
-                style: Theme.of(context).textTheme.headline4),
+            barcodeText,
+            bookText
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        icon: Icon(Icons.camera_alt),
-        label: Text("Scan"),
-        onPressed: _scanBarcode,
       ),
     );
   }

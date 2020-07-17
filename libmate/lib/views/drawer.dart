@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:libmate/datastore/actions.dart';
 import 'package:libmate/datastore/model.dart';
 import 'package:libmate/datastore/auth.dart';
 import 'package:libmate/datastore/model.dart';
 import 'package:libmate/widgets/gauth.dart';
 import 'package:provider/provider.dart';
-import 'package:redux/redux.dart';
 
 class AppDrawer extends StatelessWidget {
   @override

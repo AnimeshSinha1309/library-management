@@ -26,7 +26,7 @@ for folder in os.listdir(base_url):
 					authors = ''
 				text = title + " " + authors + " " + description
 				text = text.strip(' ')
-				book_list.append({'label': label, 'category': folder, 'subcategory': file.split('.')[0], 'text': text })
+				book_list.append({'label': label, 'category': folder + ' ' + file.split('.')[0], 'text': text })
 		label += 1
 		
 with open('book_dataset.csv', 'w') as f:

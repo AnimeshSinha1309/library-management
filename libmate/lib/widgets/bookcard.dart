@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class BookCard extends StatefulWidget {
+class BookCard extends StatelessWidget {
   final String title;
   final String author;
   final String isbn;
@@ -21,27 +21,25 @@ class BookCard extends StatefulWidget {
       : super(key: key);
 
   @override
-  _BookCardState createState() => _BookCardState();
-}
-
-class _BookCardState extends State<BookCard> {
-  @override
   Widget build(BuildContext context) {
+    final double height = 200;
+
     return Card(
-      elevation: 5,
-      child: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage(widget.image),
-            fit: BoxFit.fitWidth,
-            alignment: Alignment.topCenter,
+        elevation: 5,
+        child: Row(children: [
+          Expanded(
+            flex: 3,
+            child: Container(
+                height: height,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage(image),
+                    fit: BoxFit.fitHeight,
+                  ),
+                )),
           ),
-        ),
-        child: Align(
-          alignment: Alignment.bottomLeft,
-          child: FractionallySizedBox(
-              heightFactor: 0.6,
-              widthFactor: 1.0,
+          Expanded(
+              flex: 4,
               child: Material(
                 color: Color.fromRGBO(0, 0, 0, 0.9),
                 child: InkWell(
@@ -53,13 +51,14 @@ class _BookCardState extends State<BookCard> {
                         content: Text("Receiving Tap Event on Card!")));
                   },
                   child: Container(
+                    height: height,
                     padding: EdgeInsets.all(8),
                     color: Color.fromRGBO(0, 0, 0, 0.9),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          widget.title,
+                          title,
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             color: Colors.white,
@@ -67,7 +66,7 @@ class _BookCardState extends State<BookCard> {
                           ),
                         ),
                         Text(
-                          widget.series,
+                          series,
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             color: Colors.white,
@@ -75,20 +74,20 @@ class _BookCardState extends State<BookCard> {
                         ),
                         Spacer(),
                         Text(
-                          widget.author,
+                          author,
                           style: TextStyle(
                             color: Colors.white,
                           ),
                         ),
                         Spacer(),
                         Text(
-                          "Genre: " + widget.genre,
+                          "Genre: " + genre,
                           style: TextStyle(
                             color: Colors.white,
                           ),
                         ),
                         Text(
-                          "ISBN: " + widget.isbn,
+                          "ISBN: " + isbn,
                           style: TextStyle(
                             color: Colors.white,
                           ),
@@ -98,8 +97,6 @@ class _BookCardState extends State<BookCard> {
                   ),
                 ),
               )),
-        ),
-      ),
-    );
+        ]));
   }
 }

@@ -4,6 +4,7 @@ import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:libmate/views/drawer.dart';
+import 'package:libmate/widgets/fields.dart';
 
 class ContributePage extends StatefulWidget {
   @override
@@ -97,20 +98,3 @@ class _ContributePageState extends State<ContributePage> {
   }
 }
 
-class SimpleTextField extends StatelessWidget {
-  String hint;
-  SimpleTextField({this.hint});
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-        decoration: InputDecoration(
-          labelText: this.hint,
-        ),
-        validator: (String value) {
-          return value == null ? "Value incorrect" : null;
-        },
-        initialValue: ""
-    );
-  }
-}

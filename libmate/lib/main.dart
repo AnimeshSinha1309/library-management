@@ -1,4 +1,5 @@
 import 'package:libmate/datastore/model.dart';
+import 'package:libmate/views/login_signup.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:libmate/views/about.dart';
@@ -11,7 +12,7 @@ import 'package:libmate/views/home.dart';
 import 'package:libmate/views/libcard.dart';
 import 'package:libmate/views/request.dart';
 import 'package:libmate/views/search.dart';
-
+import 'package:libmate/views/loginsignupview.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
@@ -65,9 +66,11 @@ class _MyAppState extends State<MyApp> {
               ),
               initialRoute: "/home",
               routes: <String, WidgetBuilder>{
+
                 '/home': (BuildContext context) =>
                     new Home(loggedIn: usermodel.isLoggedIn()),
                 '/search': (BuildContext context) => new SearchPage(),
+                '/login': (BuildContext context) => new LoginSignupPage(),
                 '/guide': (BuildContext context) => new GuidePage(),
                 '/contribute': (BuildContext context) => new ContributePage(),
                 '/friends': (BuildContext context) => new FriendsPage(),

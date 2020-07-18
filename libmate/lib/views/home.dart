@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:libmate/datastore/model.dart';
 import 'package:libmate/views/drawer.dart';
 import 'package:libmate/widgets/gauth.dart';
-import 'package:redux/redux.dart';
 
 class Home extends StatelessWidget {
   final Icon customIcon = Icon(Icons.search);

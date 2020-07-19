@@ -1,32 +1,75 @@
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class UserModel {
+class UserModel extends ChangeNotifier {
   // Basic Features of the user
-  final String uid;
-  final String name;
-  final String email;
-  final String photoUrl;
-
-  // Other MetaData
-  final int birthYear;
-
-  // For the library card
-  List<BorrowedBookModel> borrowed;
-
-  // For the wish list and recommendations
-  List<BookModel> wishList;
-  List<BookModel> pastReads;
-  List<UserModel> friends;
-  List<String> likedTags = <String>[];
+  String uid, name, email, photoUrl, role;
 
   UserModel({
-    @required this.name,
-    @required this.email,
+    this.name,
+    this.email,
     this.photoUrl,
-    this.birthYear,
-    this.uid
-  });
+    this.uid,
+  }) {
+    this.role = "student";
+  }
+
+  void loginUser(UserModel userData) {
+    this.name = userData.name;
+    this.email = userData.email;
+    this.photoUrl = userData.photoUrl;
+    this.uid = userData.uid;
+
+    toSharedPrefs();
+    notifyListeners();
+  }
+
+  void logoutUser() {
+    uid = null;
+    toSharedPrefs();
+    notifyListeners();
+  }
+
+  bool isLoggedIn() {
+    return uid != null;
+  }
+
+  static String LOGGED_IN = "logged_in";
+  static List<String> props = [ "name", "email", "photoUrl", "uid"];
+
+  static Future<UserModel> fromSharedPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    UserModel model = new UserModel();
+    print(model.uid);
+
+    if (prefs.getBool(LOGGED_IN) ?? false) {
+      model.uid = prefs.getString("uid");
+      model.name = prefs.getString("name");
+      model.email = prefs.getString("email");
+      model.photoUrl = prefs.getString("photoUrl");
+    }
+
+    return model;
+  }
+
+  void toSharedPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("name", this.name);
+    prefs.setString("email", this.email);
+    prefs.setString("photoUrl", this.photoUrl);
+    prefs.setString("uid", this.uid);
+    prefs.setBool(LOGGED_IN, this.isLoggedIn());
+  }
 }
+//// For the library card
+//List<BorrowedBookModel> borrowed;
+//
+//// For the wish list and recommendations
+//// TODO: these should NOT be models?
+//List<BookModel> wishList;
+//List<BookModel> pastReads;
+//List<UserModel> friends;
+//List<String> likedTags = <String>[];
 
 class BookModel {
   // Basic book identifiers
@@ -37,6 +80,7 @@ class BookModel {
   BookModel({@required this.name, this.author, this.isbn});
 
   // List of books in library
+  // TODO: what is the String representing?
   Map<String, BookModelBorrowState> copies;
   int issueCount, starCount;
 }
@@ -50,15 +94,12 @@ class BorrowedBookModel extends BookModel {
   BorrowedBookModel({this.accessionNumber, this.dueDate});
 }
 
-// Now moving to the overarching state of the app
+class BookList {
+  List<BookModel> books;
+}
 
-class AppState {
-  UserModel user;
+class SearchResults extends BookList {
+}
 
-  List<BookModel> recommendedBooks;
-  List<BookModel> searchResults;
-
-  AppState({this.user, this.recommendedBooks, this.searchResults});
-
-  AppState.initialState() : user = UserModel(name: null, email: null);
+class RecommendedBooks extends BookList {
 }

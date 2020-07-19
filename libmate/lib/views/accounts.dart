@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_tags/flutter_tags.dart';
-import 'package:libmate/datastore/actions.dart';
-import 'package:libmate/services/auth.dart';
+import 'package:libmate/datastore/auth.dart';
 import 'package:libmate/datastore/model.dart';
 import 'package:libmate/views/drawer.dart';
 import 'package:libmate/widgets/gauth.dart';
-import 'package:redux/redux.dart';
+import 'package:provider/provider.dart';
 
 class AccountsPage extends StatefulWidget {
   @override
@@ -27,17 +25,15 @@ class _AccountsPageState extends State<AccountsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(
-        title: new Text('Accounts'),
-      ),
-      drawer: AppDrawer(),
-      body: Container(
-        color: Colors.white,
-        child: StoreConnector<AppState, _AccountsViewModel>(
-          converter: (Store<AppState> store) =>
-              _AccountsViewModel.create(store),
-          builder: (BuildContext context, _AccountsViewModel model) =>
-              Center(
+        appBar: new AppBar(
+          title: new Text('Accounts'),
+        ),
+        drawer: AppDrawer(),
+        body: Consumer<UserModel>(
+          builder: (context, model, child) {
+            return Container(
+              color: Colors.white,
+              child: Center(
                 // SCREEN PORTION: Account Header
                   child: Padding(
                       padding: EdgeInsets.all(10.0),
@@ -77,20 +73,22 @@ class _AccountsPageState extends State<AccountsPage> {
                           ),
                           GAuthButton(
                             callback: () {
-                              model.logout();
+                              model.logoutUser();
                             },
                             text: 'Sign Out',
                           ),
-                          buildTagInput(model),
+                          // TODO: buildTagInput(model),
                         ],
                       ))),
-          // SCREEN PORTION: Account Header
-        ),
-      ),
+              // SCREEN PORTION: Account Header
+            );
+          },
+        )
     );
   }
 
-  Widget buildTagInput(_AccountsViewModel model) {
+  /*
+  Widget buildTagInput(UserModel model) {
     return Tags(
       key: _tagStateKey,
       textField: TagsTextField(
@@ -121,44 +119,7 @@ class _AccountsPageState extends State<AccountsPage> {
       },
     );
   }
+   */
 
   final GlobalKey<TagsState> _tagStateKey = GlobalKey<TagsState>();
-}
-
-class _AccountsViewModel {
-  String name;
-  String email;
-  String photoUrl;
-  List<String> tags = <String>[];
-
-  final Function() logout;
-  final Function(String st) addTag;
-  final Function(int index) removeTag;
-
-  _AccountsViewModel({this.name, this.email, this.photoUrl, this.tags,
-    this.logout, this.addTag, this.removeTag});
-
-  factory _AccountsViewModel.create(Store<AppState> store) {
-    void logOutThunk(Store<AppState> store) async {
-      final UserModel userModel = await googleSignIn(false);
-      store.dispatch(LogInAction(userModel));
-    }
-
-    return _AccountsViewModel(
-      name: store.state.user.name,
-      email: store.state.user.email,
-      photoUrl: store.state.user.photoUrl,
-      tags: store.state.user.likedTags,
-
-      logout: () {
-        logOutThunk(store);
-      },
-      addTag: (String st) {
-        store.dispatch(AddUserTagAction(st));
-      },
-      removeTag: (int index) {
-        store.dispatch(RemoveUserTagAction(index));
-      },
-    );
-  }
 }

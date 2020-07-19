@@ -4,6 +4,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 class UserModel extends ChangeNotifier {
   // Basic Features of the user
   String uid, name, email, photoUrl, role;
+  List<BookModel> wishList;
+
+//// For the library card
+//List<BorrowedBookModel> borrowed;
+//
+//// For the wish list and recommendations
+//// TODO: these should NOT be models?
+//List<BookModel> pastReads;
+//List<UserModel> friends;
+//List<String> likedTags = <String>[];
 
   UserModel({
     this.name,
@@ -34,13 +44,14 @@ class UserModel extends ChangeNotifier {
     return uid != null;
   }
 
+  void addReadingList(BookModel book) {}
+
   static String LOGGED_IN = "logged_in";
   static List<String> props = ["name", "email", "photoUrl", "uid"];
 
   static Future<UserModel> fromSharedPrefs() async {
     final prefs = await SharedPreferences.getInstance();
     UserModel model = new UserModel();
-    print(model.uid);
 
     if (prefs.getBool(LOGGED_IN) ?? false) {
       model.uid = prefs.getString("uid");
@@ -61,32 +72,27 @@ class UserModel extends ChangeNotifier {
     prefs.setBool(LOGGED_IN, this.isLoggedIn());
   }
 }
-//// For the library card
-//List<BorrowedBookModel> borrowed;
-//
-//// For the wish list and recommendations
-//// TODO: these should NOT be models?
-//List<BookModel> wishList;
-//List<BookModel> pastReads;
-//List<UserModel> friends;
-//List<String> likedTags = <String>[];
+
+const String def = "not found";
+const String defImage =
+    "http://assets.stickpng.com/images/5847f289cef1014c0b5e486b.png";
 
 class BookModel {
   // Basic book identifiers
   final String name;
-  final String author;
-  final String isbn;
-  final String image;
-  final String subject;
-  final String genre;
+  String author;
+  String isbn;
+  String image;
+  String subject;
+  String genre;
 
   BookModel(
       {@required this.name,
-      this.author,
-      this.isbn,
-      this.image,
-      this.subject,
-      this.genre});
+      this.author = def,
+      this.isbn = def,
+      this.image = defImage,
+      this.subject = def,
+      this.genre = def});
 
   // List of books in library
   // TODO: what is the String representing?

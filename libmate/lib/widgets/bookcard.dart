@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:libmate/datastore/model.dart';
+import 'package:libmate/views/drawer.dart';
 
 Route _createRoute(BookModel model) {
   return PageRouteBuilder(
@@ -27,7 +28,8 @@ class BookCard extends StatelessWidget {
   BookModel model;
   bool shouldOpenPage;
 
-  BookCard({Key key, @required this.model, this.shouldOpenPage}) : super(key: key) {
+  BookCard({Key key, @required this.model, this.shouldOpenPage})
+      : super(key: key) {
     shouldOpenPage = shouldOpenPage ?? false;
   }
 
@@ -112,10 +114,16 @@ class BookPage extends StatelessWidget {
         appBar: new AppBar(
           title: new Text("Book"),
         ),
-        drawer: Drawer(),
+        drawer: AppDrawer(),
         body: Column(children: [
           BookCard(model: model),
-          Text("Copies: available 5, total 10")
+          Text("Copies: available 5, total 10"),
+          RaisedButton(
+            onPressed: () {
+              print("Added");
+            },
+            child: Text("Add to reading list"),
+          )
         ]));
   }
 }

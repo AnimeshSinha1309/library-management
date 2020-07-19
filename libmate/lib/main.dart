@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:libmate/datastore/model.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -6,11 +7,11 @@ import 'package:libmate/views/accounts.dart';
 import 'package:libmate/views/contribute.dart';
 import 'package:libmate/views/friends.dart';
 import 'package:libmate/views/goals.dart';
-import 'package:libmate/views/guide.dart';
 import 'package:libmate/views/home.dart';
 import 'package:libmate/views/libcard.dart';
 import 'package:libmate/views/request.dart';
 import 'package:libmate/views/search.dart';
+import 'package:fuzzy/fuzzy.dart';
 
 void main() => runApp(MyApp());
 
@@ -22,6 +23,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   bool loaded;
   UserModel model;
+  var fuse;
+  List<BookModel> books;
 
   @override
   void initState() {
@@ -30,9 +33,27 @@ class _MyAppState extends State<MyApp> {
     loadState();
   }
 
+  void loadBookData() {
+    Firestore.instance.collection('books').getDocuments().then((snapshot) {
+      final documents = snapshot.documents;
+      books = List<BookModel>();
+
+      for (var document in documents) {
+        final name = document.data["name"];
+        books.add(BookModel(name: name));
+      }
+    }).then((some_res) {
+      final wk = WeightedKey(name: "keyer", getter: (obj) => obj.name, weight: 1);
+      final fo = FuzzyOptions(keys: [wk]);
+      fuse = Fuzzy(books, options: fo);
+      // in fuse.search, score of 0 is fullmatch, 1 is complete mismatch
+    });
+  }
+
   void loadState() async {
     model = await UserModel.fromSharedPrefs();
-    print(model.uid);
+
+    loadBookData();
 
     setState(() {
       loaded = true;
@@ -67,8 +88,7 @@ class _MyAppState extends State<MyApp> {
               routes: <String, WidgetBuilder>{
                 '/home': (BuildContext context) =>
                     new Home(loggedIn: usermodel.isLoggedIn()),
-                '/search': (BuildContext context) => new SearchPage(),
-                '/guide': (BuildContext context) => new GuidePage(),
+                '/search': (BuildContext context) => new SearchPage(fuse: fuse),
                 '/contribute': (BuildContext context) => new ContributePage(),
                 '/friends': (BuildContext context) => new FriendsPage(),
                 '/goals': (BuildContext context) => new GoalsPage(),

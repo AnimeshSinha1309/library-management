@@ -24,8 +24,7 @@ class _SearchPageState extends State<SearchPage> {
               title: "$index on a Treasure Island",
               author: "Enid Blyton",
               isbn: "9785389130692",
-              image:
-                  "https://upload.wikimedia.org/wikipedia/en/e/ed/FiveOnATreasureIsland.jpg",
+              image: "https://upload.wikimedia.org/wikipedia/en/e/ed/FiveOnATreasureIsland.jpg",
               subject: "Novel",
               series: "Famous Five",
               genre: "Fiction",
@@ -44,7 +43,7 @@ class _SearchPageState extends State<SearchPage> {
         searchBarStyle: SearchBarStyle(),
         onSearch: onSearch,
         searchBarController: _searchBarController,
-        placeHolder: Text("Placeholder"),
+        placeHolder: Text("Please type at least three characters"),
         emptyWidget: Text("No results found"),
         onItemFound: (BookCard book, int index) {
           return book;

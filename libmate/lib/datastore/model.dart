@@ -75,14 +75,19 @@ class BookModel {
   // Basic book identifiers
   final String name;
   final String author;
-  final int isbn;
+  final String isbn;
+  final String image;
+  final String subject;
+  final String genre;
 
-  BookModel({@required this.name, this.author, this.isbn});
+  BookModel({@required this.name, this.author, this.isbn, this.image, this.subject, this.genre});
 
   // List of books in library
   // TODO: what is the String representing?
   Map<String, BookModelBorrowState> copies;
   int issueCount, starCount;
+
+  static final String placeholder = "../../assets/bgbook.jpg";
 }
 
 enum BookModelBorrowState { BORROWED, RESERVED, AVAILABLE }

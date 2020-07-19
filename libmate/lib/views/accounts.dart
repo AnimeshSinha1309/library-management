@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tags/flutter_tags.dart';
-import 'package:libmate/datastore/auth.dart';
 import 'package:libmate/datastore/model.dart';
 import 'package:libmate/views/drawer.dart';
 import 'package:libmate/widgets/gauth.dart';
@@ -33,58 +32,53 @@ class _AccountsPageState extends State<AccountsPage> {
           builder: (context, model, child) {
             return Container(
               color: Colors.white,
-              child: Center(
-                // SCREEN PORTION: Account Header
-                  child: Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: Column(
+              alignment: Alignment.center,
+              padding: EdgeInsets.all(10.0),
+              // SCREEN PORTION: Account Header
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Container(
+                          width: 75.0,
+                          height: 75.0,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: NetworkImage(model.photoUrl ??
+                                      "https://i.pravatar.cc/300")))),
+                      Expanded(
+                          child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Container(
-                                  width: 75.0,
-                                  height: 75.0,
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: DecorationImage(
-                                          fit: BoxFit.fill,
-                                          image: NetworkImage(model.photoUrl ??
-                                              "https://i.pravatar.cc/300")))),
-                              Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment
-                                        .center,
-                                    children: <Widget>[
-                                      Text(model.name ?? "John Doe",
-                                          textScaleFactor: 1.5),
-                                      Text(model.email ??
-                                          "test@libmate.iiit.ac.in",
-                                          textScaleFactor: 1.0),
-                                    ],
-                                  ))
-                            ],
-                          ),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                            child: Divider(
-                              color: Colors.grey[300],
-                              thickness: 3,
-                            ),
-                          ),
-                          GAuthButton(
-                            callback: () {
-                              model.logoutUser();
-                            },
-                            text: 'Sign Out',
-                          ),
-                          // TODO: buildTagInput(model),
+                          Text(model.name ?? "John Doe", textScaleFactor: 1.5),
+                          Text(model.email ?? "test@libmate.iiit.ac.in",
+                              textScaleFactor: 1.0),
                         ],
-                      ))),
+                      ))
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    child: Divider(
+                      color: Colors.grey[300],
+                      thickness: 3,
+                    ),
+                  ),
+                  GAuthButton(
+                    callback: () {
+                      model.logoutUser();
+                    },
+                    text: 'Sign Out',
+                  ),
+                  // TODO: buildTagInput(model),
+                ],
+              ),
               // SCREEN PORTION: Account Header
             );
           },
-        )
-    );
+        ));
   }
 
   /*

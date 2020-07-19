@@ -1,10 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:libmate/datastore/model.dart';
 
-class BookCard extends StatelessWidget {
-  final BookModel model;
+Route _createRoute(BookModel model) {
+  return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          BookPage(model: model),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        var begin = Offset(0.0, 1.0);
+        var end = Offset.zero;
+        var curve = Curves.ease;
 
-  const BookCard({Key key, this.model}) : super(key: key);
+        var tween = Tween(begin: begin, end: end);
+        var curvedAnimation = CurvedAnimation(
+          parent: animation,
+          curve: curve,
+        );
+
+        return SlideTransition(
+          position: tween.animate(curvedAnimation),
+          child: child,
+        );
+      });
+}
+
+class BookCard extends StatelessWidget {
+  BookModel model;
+  bool shouldOpenPage;
+
+  BookCard({Key key, @required this.model, this.shouldOpenPage}) : super(key: key) {
+    shouldOpenPage = shouldOpenPage ?? false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +41,7 @@ class BookCard extends StatelessWidget {
           splashFactory: InkRipple.splashFactory,
           splashColor: Colors.white,
           onTap: () {
-            Scaffold.of(context).showSnackBar(new SnackBar(
-                backgroundColor: Colors.green,
-                content: Text("Receiving Tap Event on Card!")));
+            if (shouldOpenPage) Navigator.of(context).push(_createRoute(model));
           },
           child: Row(children: [
             Expanded(
@@ -75,5 +98,24 @@ class BookCard extends StatelessWidget {
             ),
           ])),
     );
+  }
+}
+
+class BookPage extends StatelessWidget {
+  BookModel model;
+
+  BookPage({@required this.model});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: new AppBar(
+          title: new Text("Book"),
+        ),
+        drawer: Drawer(),
+        body: Column(children: [
+          BookCard(model: model),
+          Text("Copies: available 5, total 10")
+        ]));
   }
 }

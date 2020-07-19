@@ -21,6 +21,7 @@ class _SearchPageState extends State<SearchPage> {
     return List.generate(
         5,
         (index) => new BookCard(
+            shouldOpenPage: true,
             key: ValueKey(index.toString()),
             model: new BookModel(
               name: "$index on a Treasure Island",

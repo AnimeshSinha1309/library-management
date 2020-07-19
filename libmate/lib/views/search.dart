@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:libmate/datastore/model.dart';
 import 'package:libmate/views/drawer.dart';
 import 'package:libmate/widgets/bookcard.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
@@ -20,16 +21,16 @@ class _SearchPageState extends State<SearchPage> {
     return List.generate(
         5,
         (index) => new BookCard(
-              key: ValueKey(index.toString()),
-              title: "$index on a Treasure Island",
+            key: ValueKey(index.toString()),
+            model: new BookModel(
+              name: "$index on a Treasure Island",
               author: "Enid Blyton",
               isbn: "9785389130692",
               image:
                   "https://upload.wikimedia.org/wikipedia/en/e/ed/FiveOnATreasureIsland.jpg",
               subject: "Novel",
-              series: "Famous Five",
               genre: "Fiction",
-            ));
+            )));
   }
 
   @override
@@ -44,7 +45,7 @@ class _SearchPageState extends State<SearchPage> {
         searchBarStyle: SearchBarStyle(),
         onSearch: onSearch,
         searchBarController: _searchBarController,
-        placeHolder: Text("Placeholder"),
+        placeHolder: Text("Please enter minimum three characters"),
         emptyWidget: Text("No results found"),
         onItemFound: (BookCard book, int index) {
           return book;

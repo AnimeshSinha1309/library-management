@@ -35,7 +35,7 @@ class UserModel extends ChangeNotifier {
   }
 
   static String LOGGED_IN = "logged_in";
-  static List<String> props = [ "name", "email", "photoUrl", "uid"];
+  static List<String> props = ["name", "email", "photoUrl", "uid"];
 
   static Future<UserModel> fromSharedPrefs() async {
     final prefs = await SharedPreferences.getInstance();
@@ -75,9 +75,18 @@ class BookModel {
   // Basic book identifiers
   final String name;
   final String author;
-  final int isbn;
+  final String isbn;
+  final String image;
+  final String subject;
+  final String genre;
 
-  BookModel({@required this.name, this.author, this.isbn});
+  BookModel(
+      {@required this.name,
+      this.author,
+      this.isbn,
+      this.image,
+      this.subject,
+      this.genre});
 
   // List of books in library
   // TODO: what is the String representing?
@@ -98,8 +107,6 @@ class BookList {
   List<BookModel> books;
 }
 
-class SearchResults extends BookList {
-}
+class SearchResults extends BookList {}
 
-class RecommendedBooks extends BookList {
-}
+class RecommendedBooks extends BookList {}

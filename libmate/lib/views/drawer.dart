@@ -1,55 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:libmate/datastore/actions.dart';
+import 'package:libmate/datastore/model.dart';
 import 'package:libmate/datastore/auth.dart';
 import 'package:libmate/datastore/model.dart';
 import 'package:libmate/widgets/gauth.dart';
-import 'package:redux/redux.dart';
+import 'package:provider/provider.dart';
 
-class AppDrawer extends StatefulWidget {
-  @override
-  _AppDrawerState createState() => _AppDrawerState();
-}
-
-class _AppDrawerState extends State<AppDrawer> {
+class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, _DrawerViewModel>(
-        converter: (Store<AppState> store) => _DrawerViewModel.create(store),
-        builder: (BuildContext context, _DrawerViewModel model) {
-          final isLoggedIn = model.email != "";
+    return Consumer<UserModel>(
+        builder: (BuildContext context, UserModel model, Widget child) {
+      var firstChild;
 
-          var firstChild;
-          if (isLoggedIn) {
-            firstChild = UserAccountsDrawerHeader(
-              accountName: Text(model.name),
-              accountEmail: Text(model.email),
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: NetworkImage(model.photoUrl),
-              ),
-            );
-          } else {
-            firstChild = DrawerHeader(
-              decoration: BoxDecoration(color: Theme.of(context).primaryColor),
-              child: Padding(
-                  padding: EdgeInsets.fromLTRB(16.0, 70.0, 16.0, 16.0),
-                  child: GAuthButton(
-                    callback: () {
-                      model.login();
-                    },
-                  )),
-            );
-          }
+      if (model.isLoggedIn()) {
+        firstChild = UserAccountsDrawerHeader(
+          accountName: Text(model.name),
+          accountEmail: Text(model.email),
+          currentAccountPicture: CircleAvatar(
+            backgroundImage: NetworkImage(model.photoUrl),
+          ),
+        );
+      } else {
+        firstChild = DrawerHeader(
+          decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+          child: Padding(
+              padding: EdgeInsets.fromLTRB(16.0, 70.0, 16.0, 16.0),
+              child: GAuth()),
+        );
+      }
 
-          final secondChild =
-              isLoggedIn ? loggedInDrawerList() : loggedOutDrawerList();
+      final secondChild = model.isLoggedIn()
+          ? loggedInDrawerList(context)
+          : loggedOutDrawerList(context);
 
-          return Drawer(
-              child: ListView(children: <Widget>[firstChild] + secondChild));
-        });
+      return Drawer(
+          child: ListView(children: <Widget>[firstChild] + secondChild));
+    });
   }
 
-  List<Widget> loggedInDrawerList() {
+  List<Widget> loggedInDrawerList(context) {
     return <Widget>[
       _DrawerViewItem(Icons.home, 'Home', '/home').build(context),
       _DrawerViewItem(Icons.search, 'Search', '/search').build(context),
@@ -57,7 +46,7 @@ class _AppDrawerState extends State<AppDrawer> {
       _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute')
           .build(context),
       _DrawerViewItem(Icons.people, 'Friends', '/friends').build(context),
-      _DrawerViewItem(Icons.library_books, 'Reading Goals', '/goals')
+      _DrawerViewItem(Icons.library_books, 'Reading List', '/goals')
           .build(context),
       _DrawerViewItem(Icons.card_membership, 'Library Card', '/libcard')
           .build(context),
@@ -70,7 +59,7 @@ class _AppDrawerState extends State<AppDrawer> {
     ];
   }
 
-  List<Widget> loggedOutDrawerList() {
+  List<Widget> loggedOutDrawerList(context) {
     return <Widget>[
       _DrawerViewItem(Icons.search, 'Search', '/search').build(context),
       _DrawerViewItem(Icons.location_on, 'Guide', '/guide').build(context),
@@ -97,31 +86,5 @@ class _DrawerViewItem {
           Navigator.of(context).pop();
           Navigator.pushReplacementNamed(context, this.path);
         });
-  }
-}
-
-class _DrawerViewModel {
-  String name;
-  String email;
-  String photoUrl;
-
-  final Function() login;
-
-  _DrawerViewModel({this.name, this.email, this.photoUrl, this.login});
-
-  factory _DrawerViewModel.create(Store<AppState> store) {
-    void logInThunk(Store<AppState> store) async {
-      final UserModel userModel = await googleSignIn(true);
-      store.dispatch(LogInAction(userModel));
-    }
-
-    return _DrawerViewModel(
-      name: store.state.user.name,
-      email: store.state.user.email,
-      photoUrl: store.state.user.photoUrl,
-      login: () {
-        logInThunk(store);
-      },
-    );
   }
 }

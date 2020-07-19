@@ -1,105 +1,129 @@
 import 'package:flutter/material.dart';
+import 'package:libmate/datastore/model.dart';
+import 'package:libmate/views/drawer.dart';
 
-class BookCard extends StatefulWidget {
-  final String title;
-  final String author;
-  final String isbn;
-  final String image;
-  final String subject;
-  final String series;
-  final String genre;
+Route _createRoute(BookModel model) {
+  return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          BookPage(model: model),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        var begin = Offset(0.0, 1.0);
+        var end = Offset.zero;
+        var curve = Curves.ease;
 
-  const BookCard(
-      {Key key,
-      this.title,
-      this.author,
-      this.isbn,
-      this.image,
-      this.subject,
-      this.series,
-      this.genre})
-      : super(key: key);
+        var tween = Tween(begin: begin, end: end);
+        var curvedAnimation = CurvedAnimation(
+          parent: animation,
+          curve: curve,
+        );
 
-  @override
-  _BookCardState createState() => _BookCardState();
+        return SlideTransition(
+          position: tween.animate(curvedAnimation),
+          child: child,
+        );
+      });
 }
 
-class _BookCardState extends State<BookCard> {
+class BookCard extends StatelessWidget {
+  BookModel model;
+  bool shouldOpenPage;
+
+  BookCard({Key key, @required this.model, this.shouldOpenPage})
+      : super(key: key) {
+    shouldOpenPage = shouldOpenPage ?? false;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final double height = 200;
+
     return Card(
       elevation: 5,
-      child: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage(widget.image),
-            fit: BoxFit.fitWidth,
-            alignment: Alignment.topCenter,
-          ),
-        ),
-        child: Align(
-          alignment: Alignment.bottomLeft,
-          child: FractionallySizedBox(
-              heightFactor: 0.6,
-              widthFactor: 1.0,
-              child: Material(
-                color: Color.fromRGBO(0, 0, 0, 0.9),
-                child: InkWell(
-                  splashFactory: InkRipple.splashFactory,
-                  splashColor: Colors.white,
-                  onTap: () {
-                    Scaffold.of(context).showSnackBar(new SnackBar(
-                        backgroundColor: Colors.green,
-                        content: Text("Receiving Tap Event on Card!")));
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(8),
-                    color: Color.fromRGBO(0, 0, 0, 0.9),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          widget.title,
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          widget.series,
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        Spacer(),
-                        Text(
-                          widget.author,
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        Spacer(),
-                        Text(
-                          "Genre: " + widget.genre,
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        Text(
-                          "ISBN: " + widget.isbn,
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
+      child: InkWell(
+          splashFactory: InkRipple.splashFactory,
+          splashColor: Colors.white,
+          onTap: () {
+            if (shouldOpenPage) Navigator.of(context).push(_createRoute(model));
+          },
+          child: Row(children: [
+            Expanded(
+              flex: 3,
+              child: Container(
+                  height: height,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage(model.image),
+                      fit: BoxFit.fitHeight,
                     ),
-                  ),
+                  )),
+            ),
+            Expanded(
+              flex: 4,
+              child: Container(
+                height: height,
+                padding: EdgeInsets.all(8),
+                color: Color.fromRGBO(100, 100, 100, 0.9),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      model.name,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Spacer(),
+                    Text(
+                      model.author,
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    Spacer(),
+                    Text(
+                      "Genre: " + model.genre,
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    Text(
+                      "ISBN: " + model.isbn,
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
                 ),
-              )),
-        ),
-      ),
+              ),
+            ),
+          ])),
     );
+  }
+}
+
+class BookPage extends StatelessWidget {
+  BookModel model;
+
+  BookPage({@required this.model});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: new AppBar(
+          title: new Text("Book"),
+        ),
+        drawer: AppDrawer(),
+        body: Column(children: [
+          BookCard(model: model),
+          Text("Copies: available 5, total 10"),
+          RaisedButton(
+            onPressed: () {
+              print("Added");
+            },
+            child: Text("Add to reading list"),
+          )
+        ]));
   }
 }

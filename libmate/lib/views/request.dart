@@ -56,7 +56,7 @@ class _RequestPageState extends State<RequestPage> {
                   TextFormField(
                     keyboardType: TextInputType.text,
                     decoration:
-                    InputDecoration(hintText: "Reasons, Cosigners, etc."),
+                        InputDecoration(hintText: "Reasons, Cosigners, etc."),
                     maxLines: 3,
                   ),
                   Padding(

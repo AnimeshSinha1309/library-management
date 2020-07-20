@@ -13,6 +13,7 @@ import 'package:libmate/views/libcard.dart';
 import 'package:libmate/views/request.dart';
 import 'package:libmate/views/search.dart';
 import 'package:libmate/views/loginsignupview.dart';
+import 'package:libmate/views/voiceSearch.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
@@ -69,6 +70,7 @@ class _MyAppState extends State<MyApp> {
 
                 '/home': (BuildContext context) =>
                     new Home(loggedIn: usermodel.isLoggedIn()),
+                '/voicesearch': (BuildContext context) => new VoiceSearchPage(),
                 '/search': (BuildContext context) => new SearchPage(),
                 '/login': (BuildContext context) => new LoginSignupPage(),
                 '/guide': (BuildContext context) => new GuidePage(),

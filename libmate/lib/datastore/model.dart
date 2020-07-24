@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,10 +27,16 @@ class UserModel extends ChangeNotifier {
   }
 
   void loginUser(UserModel userData) {
-    this.name = userData.name;
-    this.email = userData.email;
-    this.photoUrl = userData.photoUrl;
-    this.uid = userData.uid;
+    // this.name = userData.name;
+    // this.email = userData.email;
+    // this.photoUrl = userData.photoUrl;
+    // this.uid = userData.uid;
+
+    this.name = "Akshat";
+    this.email = "akshatgoyalak23@gmail.com";
+    this.photoUrl =
+        "http://assets.stickpng.com/images/5847f289cef1014c0b5e486b.png";
+    this.uid = "20102010";
 
     toSharedPrefs();
     notifyListeners();
@@ -41,7 +49,8 @@ class UserModel extends ChangeNotifier {
   }
 
   bool isLoggedIn() {
-    return uid != null;
+    // return uid != null;
+    return true;
   }
 
   void addReadingList(BookModel book) {}
@@ -53,11 +62,19 @@ class UserModel extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     UserModel model = new UserModel();
 
-    if (prefs.getBool(LOGGED_IN) ?? false) {
-      model.uid = prefs.getString("uid");
-      model.name = prefs.getString("name");
-      model.email = prefs.getString("email");
-      model.photoUrl = prefs.getString("photoUrl");
+    // if (prefs.getBool(LOGGED_IN) ?? false) {
+    //   model.uid = prefs.getString("uid");
+    //   model.name = prefs.getString("name");
+    //   model.email = prefs.getString("email");
+    //   model.photoUrl = prefs.getString("photoUrl");
+    // }
+
+    if (true) {
+      model.name = "Akshat";
+      model.email = "akshatgoyalak23@gmail.com";
+      model.photoUrl =
+          "http://assets.stickpng.com/images/5847f289cef1014c0b5e486b.png";
+      model.uid = "20102010";
     }
 
     return model;

@@ -11,6 +11,7 @@ import 'package:libmate/views/home.dart';
 import 'package:libmate/views/libcard.dart';
 import 'package:libmate/views/request.dart';
 import 'package:libmate/views/search.dart';
+import 'package:libmate/views/issued.dart';
 import 'package:fuzzy/fuzzy.dart';
 
 void main() => runApp(MyApp());
@@ -90,6 +91,7 @@ class _MyAppState extends State<MyApp> {
                     new Home(loggedIn: usermodel.isLoggedIn()),
                 '/search': (BuildContext context) => new SearchPage(fuse: fuse),
                 '/contribute': (BuildContext context) => new ContributePage(),
+                '/issued': (BuildContext context) => new IssuedPage(),
                 '/friends': (BuildContext context) => new FriendsPage(),
                 '/goals': (BuildContext context) => new GoalsPage(),
                 '/libcard': (BuildContext context) => new LibcardPage(),

@@ -39,6 +39,8 @@ dependencies:
 
   provider: ^4.0.2
 
+  intl: ^0.16.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

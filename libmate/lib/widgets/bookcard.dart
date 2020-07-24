@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:libmate/datastore/model.dart';
 import 'package:libmate/views/drawer.dart';
+import 'package:libmate/widgets/toread.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
+import 'dart:convert';
 
 Route _createRoute(BookModel model) {
   return PageRouteBuilder(
@@ -108,6 +112,23 @@ class BookPage extends StatelessWidget {
 
   BookPage({@required this.model});
 
+  void saveReadingList(BookModel model) async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> readlist = prefs.getStringList("readingList") ?? [];
+    ToRead rbook = new ToRead();
+    rbook.book = model.name;
+    rbook.date = new DateFormat("dd/MM").format(DateTime.now()).toString();
+    String sbook = json.encode(rbook);
+    if(!readlist.contains(sbook)) {
+      readlist.add(sbook);
+      prefs.setStringList("readingList", readlist);
+    }
+  }
+
+  void addBook(BookModel model) {
+    saveReadingList(model);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -120,6 +141,7 @@ class BookPage extends StatelessWidget {
           Text("Copies: available 5, total 10"),
           RaisedButton(
             onPressed: () {
+              addBook(model);
               print("Added");
             },
             child: Text("Add to reading list"),

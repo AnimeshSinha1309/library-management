@@ -111,14 +111,16 @@ class _GoalsPageState extends State<GoalsPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
-                              Text("${b.book} : ${b.date}"),
-                              Center(
-                                child: RaisedButton.icon(
-                                  onPressed: () {removeBook(b);},
-                                  color: Colors.amber,
-                                  icon: Icon(Icons.remove_shopping_cart),
-                                  label: Text('Remove'),
-                                ),
+                              Expanded(
+                                child: Text("${b.book} : ${b.date}"),
+                              ),
+                              RaisedButton.icon(
+                                onPressed: () {
+                                  removeBook(b);
+                                },
+                                color: Colors.amber,
+                                icon: Icon(Icons.remove_shopping_cart),
+                                label: Text('Remove'),
                               ),
                             ]);
                       }).toList()),

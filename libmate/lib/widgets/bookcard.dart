@@ -109,20 +109,25 @@ class BookCard extends StatelessWidget {
 
 class BookPage extends StatelessWidget {
   BookModel model;
-
+  final int maxBooks = 20;
   BookPage({@required this.model});
 
   void saveReadingList(BookModel model) async {
     final prefs = await SharedPreferences.getInstance();
     List<String> readlist = prefs.getStringList("readingList") ?? [];
+    if(readlist.length > maxBooks) return;
     ToRead rbook = new ToRead();
     rbook.book = model.name;
     rbook.date = new DateFormat("dd/MM").format(DateTime.now()).toString();
     String sbook = json.encode(rbook);
-    if(!readlist.contains(sbook)) {
-      readlist.add(sbook);
-      prefs.setStringList("readingList", readlist);
+    for(var it = 0, name = sbook.split(',')[0]; it < readlist.length; it++) {
+      if(readlist[it].split(',')[0] == name) {
+        readlist[it] = sbook;
+        prefs.setStringList("readingList", readlist); return;
+      }
     }
+    readlist.add(sbook);
+    prefs.setStringList("readingList", readlist);
   }
 
   void addBook(BookModel model) {
@@ -142,7 +147,6 @@ class BookPage extends StatelessWidget {
           RaisedButton(
             onPressed: () {
               addBook(model);
-              print("Added");
             },
             child: Text("Add to reading list"),
           )

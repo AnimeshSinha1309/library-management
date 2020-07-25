@@ -1,10 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:barcode_scan/barcode_scan.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 import 'package:libmate/views/drawer.dart';
-import 'package:libmate/widgets/fields.dart';
 
 class ContributePage extends StatefulWidget {
   @override
@@ -14,65 +15,100 @@ class ContributePage extends StatefulWidget {
 class _ContributePageState extends State<ContributePage> {
   final _formKey = GlobalKey<FormState>();
 
-  String barcode = "";
+  final _barcodeController = TextEditingController();
+  final _titleController = TextEditingController();
+  final _authorController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  final _accNoController = TextEditingController();
+
+  Future _fillInfo() async {
+    String isbn = _barcodeController.text;
+    var raw = await http.get(
+        'https://www.googleapis.com/books/v1/volumes?q=isbn:$isbn&maxResults=1');
+    var data = json.decode(raw.body);
+    setState(() {
+      _titleController.text = data['items'][0]['volumeInfo']['title'];
+      _authorController.text =
+          (data['items'][0]['volumeInfo']['authors']).join('; ');
+      _descriptionController.text =
+      data['items'][0]['volumeInfo']['description'];
+    });
+  }
 
   Future _scanBarcode() async {
     try {
       String barcode = await BarcodeScanner.scan();
       setState(() {
-        this.barcode = barcode;
-      });
-    } on PlatformException catch (e) {
-      if (e.code == BarcodeScanner.CameraAccessDenied) {
-        setState(() {
-          this.barcode = 'Camera Permission Not Granted';
-        });
-      } else {
-        setState(() {
-          this.barcode = 'Unknown Error: $e';
-        });
-      }
-    } on FormatException {
-      setState(() {
-        this.barcode = 'User pressed the Back Button';
+        _barcodeController.text = barcode;
       });
     } catch (e) {
-      setState(() {
-        this.barcode = 'Unknown Error $e';
-      });
+      print('Error: $e');
     }
   }
 
   @override
   Widget build(BuildContext context) {
     var barcodeText = TextFormField(
-        decoration: InputDecoration(
-            labelText: "Barcode value",
-            suffixIcon: new IconButton(onPressed: () async {
-              await _scanBarcode();
-            }, icon: Icon(Icons.camera))
-        ),
-        validator: (String value) {
-          RegExp re = new RegExp(r"^\d+$");
-          return value == null || !re.hasMatch(value)
-              ? "Value incorrect"
-              : null;
-        },
-        initialValue: this.barcode
+      controller: _barcodeController,
+      decoration: InputDecoration(
+          labelText: "Barcode value",
+          suffixIcon: new IconButton(onPressed: () async {
+            await _scanBarcode();
+            await _fillInfo();
+          }, icon: Icon(Icons.camera))
+      ),
+      validator: (String value) {
+        RegExp re = new RegExp(r"^\d+$");
+        return value == null || !re.hasMatch(value)
+            ? "Value incorrect"
+            : null;
+      },
     );
-
-    var bookText = SimpleTextField(hint: "Book name");
+    var accNoText = TextFormField(
+      controller: _accNoController,
+      decoration: InputDecoration(labelText: "Accession Number",),
+      validator: (String value) {
+        RegExp re = new RegExp(r"^[0-9]+$");
+        return value == null || !re.hasMatch(value)
+            ? "Value incorrect"
+            : null;
+      },
+    );
+    var authorText = TextFormField(
+      controller: _authorController,
+      decoration: InputDecoration(labelText: "Author",),
+    );
+    var bookText = TextFormField(
+        decoration: InputDecoration(labelText: "Book Name",),
+        controller: _titleController
+    );
+    var descriptionText = TextFormField(
+        decoration: InputDecoration(labelText: "Description",),
+        controller: _descriptionController
+    );
 
     var submitBtn = RaisedButton(
       onPressed: () {
-        // Validate returns true if the form is valid, otherwise false.
         if (_formKey.currentState.validate()) {
-          // If the form is valid, display a snackbar. In the real world,
-          // you'd often call a server or save the information in a database.
+          try {
+            Firestore.instance
+                .collection("books")
+                .document()
+                .setData({
+              'name': _titleController,
+              'authors': _authorController,
+              'description': _descriptionController,
+              'isbn': _barcodeController,
+              'accNo': _accNoController,
+            }, merge: true);
+          } catch (e) {
+            print(e.toString());
+          }
 
           Scaffold
               .of(context)
-              .showSnackBar(SnackBar(content: Text('Processing Data')));
+              .showSnackBar(
+              SnackBar(content: Text('Book Datails have been Updated')));
         }
       },
       child: Text('Submit'),
@@ -83,18 +119,23 @@ class _ContributePageState extends State<ContributePage> {
         title: new Text('Contribute Page'),
       ),
       drawer: AppDrawer(),
-      body: Form(
-        key: _formKey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            barcodeText,
-            bookText,
-            submitBtn
-          ],
+      body: Padding(
+        padding: EdgeInsets.all(10),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              accNoText,
+              barcodeText,
+              bookText,
+              authorText,
+              descriptionText,
+              submitBtn
+            ],
+          ),
         ),
       ),
     );
   }
 }
-

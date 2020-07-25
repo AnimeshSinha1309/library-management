@@ -93,11 +93,9 @@ class _MyAppState extends State<MyApp> {
 
                 '/home': (BuildContext context) =>
                     new Home(loggedIn: usermodel.isLoggedIn()),
-
                 '/voicesearch': (BuildContext context) => new VoiceSearchPage(),
                 '/search': (BuildContext context) => new SearchPage(),
                 '/login': (BuildContext context) => new LoginSignupPage(),
-                '/guide': (BuildContext context) => new GuidePage(),
                 '/search': (BuildContext context) => new SearchPage(fuse: fuse),
                 '/contribute': (BuildContext context) => new ContributePage(),
                 '/issued': (BuildContext context) => new IssuedPage(),

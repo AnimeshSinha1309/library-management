@@ -1,39 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:libmate/datastore/model.dart';
 import 'package:libmate/views/drawer.dart';
-<<<<<<< HEAD
-=======
 import 'package:libmate/utils/utils.dart';
->>>>>>> 0a75ea8a1f55094253af81a365dcd6b371e1f79b
 import 'package:libmate/widgets/toread.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
-<<<<<<< HEAD
-
-Route _createRoute(BookModel model) {
-  return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) =>
-          BookPage(model: model),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        var begin = Offset(0.0, 1.0);
-        var end = Offset.zero;
-        var curve = Curves.ease;
-
-        var tween = Tween(begin: begin, end: end);
-        var curvedAnimation = CurvedAnimation(
-          parent: animation,
-          curve: curve,
-        );
-
-        return SlideTransition(
-          position: tween.animate(curvedAnimation),
-          child: child,
-        );
-      });
-}
-=======
->>>>>>> 0a75ea8a1f55094253af81a365dcd6b371e1f79b
 
 class BookCard extends StatelessWidget {
   BookModel model;
@@ -119,26 +91,39 @@ class BookPage extends StatelessWidget {
   final int maxBooks = 20;
   BookPage({@required this.model});
 
-  void saveReadingList(BookModel model) async {
+  Future<int> saveReadingList(BookModel model) async {
     final prefs = await SharedPreferences.getInstance();
     List<String> readlist = prefs.getStringList("readingList") ?? [];
-    if(readlist.length > maxBooks) return;
+    if(readlist.length > maxBooks) return 1;
+
     ToRead rbook = new ToRead();
     rbook.book = model.name;
     rbook.date = new DateFormat("dd/MM").format(DateTime.now()).toString();
+
     String sbook = json.encode(rbook);
+    bool found = false;
     for(var it = 0, name = sbook.split(',')[0]; it < readlist.length; it++) {
       if(readlist[it].split(',')[0] == name) {
         readlist[it] = sbook;
-        prefs.setStringList("readingList", readlist); return;
+        found = true;
+        break;
       }
     }
-    readlist.add(sbook);
-    prefs.setStringList("readingList", readlist);
+
+    if (!found) readlist.add(sbook);
+
+    return (await prefs.setStringList("readingList", readlist)) ? 0 : 2;
   }
 
-  void addBook(BookModel model) {
-    saveReadingList(model);
+  Future<String> addBook(BookModel model) async {
+    int res = await saveReadingList(model);
+    if (res == 0) {
+        return "Added to reading list";
+    } else if (res == 1) {
+        return "Exceeded max size of reading list";
+    } else if (res == 2) {
+        return "Error saving reading list!";
+    }
   }
 
   @override
@@ -148,15 +133,18 @@ class BookPage extends StatelessWidget {
           title: new Text("Book"),
         ),
         drawer: AppDrawer(),
-        body: Column(children: [
+        body: Builder(
+        builder: (context) => Column(children: [
           BookCard(model: model),
           Text("Copies: available 5, total 10"),
           RaisedButton(
-            onPressed: () {
-              addBook(model);
+            onPressed: () async {
+              final String resp = await addBook(model);
+              showToast(context, resp);
             },
             child: Text("Add to reading list"),
           )
-        ]));
+        ]))
+    );
   }
 }

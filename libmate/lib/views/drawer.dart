@@ -45,8 +45,10 @@ class AppDrawer extends StatelessWidget {
       _DrawerViewItem(Icons.location_on, 'Guide', '/guide').build(context),
       _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute')
           .build(context),
+      _DrawerViewItem(Icons.library_books, 'Issued Books', '/issued')
+          .build(context),
       _DrawerViewItem(Icons.people, 'Friends', '/friends').build(context),
-      _DrawerViewItem(Icons.library_books, 'Reading Goals', '/goals')
+      _DrawerViewItem(Icons.library_books, 'Reading List', '/goals')
           .build(context),
       _DrawerViewItem(Icons.card_membership, 'Library Card', '/libcard')
           .build(context),

@@ -1,52 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:libmate/datastore/model.dart';
 import 'package:libmate/views/drawer.dart';
-<<<<<<< HEAD
-=======
 import 'package:libmate/utils/utils.dart';
->>>>>>> 0a75ea8a1f55094253af81a365dcd6b371e1f79b
-import 'package:libmate/widgets/toread.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:intl/intl.dart';
-import 'dart:convert';
-<<<<<<< HEAD
 
-Route _createRoute(BookModel model) {
-  return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) =>
-          BookPage(model: model),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        var begin = Offset(0.0, 1.0);
-        var end = Offset.zero;
-        var curve = Curves.ease;
-
-        var tween = Tween(begin: begin, end: end);
-        var curvedAnimation = CurvedAnimation(
-          parent: animation,
-          curve: curve,
-        );
-
-        return SlideTransition(
-          position: tween.animate(curvedAnimation),
-          child: child,
-        );
-      });
-}
-=======
->>>>>>> 0a75ea8a1f55094253af81a365dcd6b371e1f79b
-
-class BookCard extends StatelessWidget {
-  BookModel model;
+class IssuedBookCard extends StatelessWidget {
+  final BorrowBookModel model;
   bool shouldOpenPage;
 
-  BookCard({Key key, @required this.model, this.shouldOpenPage})
-      : super(key: key) {
+  IssuedBookCard({Key key, @required this.model, this.shouldOpenPage}) : super(key: key) {
     shouldOpenPage = shouldOpenPage ?? false;
   }
 
   @override
   Widget build(BuildContext context) {
     final double height = 200;
+    final today = DateTime.now();
+    final fine = today.difference(model.dueDate).inDays * model.fine;
 
     return Card(
       elevation: 5,
@@ -94,13 +63,19 @@ class BookCard extends StatelessWidget {
                     ),
                     Spacer(),
                     Text(
-                      "Genre: " + model.genre,
+                      "Borrowed Date: " + model.borrowDate.toString().split(' ')[0],
                       style: TextStyle(
                         color: Colors.white,
                       ),
                     ),
                     Text(
-                      "ISBN: " + model.isbn,
+                      "Due Date: " + model.dueDate.toString().split(' ')[0],
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    Text(
+                      "Pending Fine: " + fine.toString(),
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -115,47 +90,29 @@ class BookCard extends StatelessWidget {
 }
 
 class BookPage extends StatelessWidget {
-  BookModel model;
-  final int maxBooks = 20;
+  final BorrowBookModel model;
+
   BookPage({@required this.model});
-
-  void saveReadingList(BookModel model) async {
-    final prefs = await SharedPreferences.getInstance();
-    List<String> readlist = prefs.getStringList("readingList") ?? [];
-    if(readlist.length > maxBooks) return;
-    ToRead rbook = new ToRead();
-    rbook.book = model.name;
-    rbook.date = new DateFormat("dd/MM").format(DateTime.now()).toString();
-    String sbook = json.encode(rbook);
-    for(var it = 0, name = sbook.split(',')[0]; it < readlist.length; it++) {
-      if(readlist[it].split(',')[0] == name) {
-        readlist[it] = sbook;
-        prefs.setStringList("readingList", readlist); return;
-      }
-    }
-    readlist.add(sbook);
-    prefs.setStringList("readingList", readlist);
-  }
-
-  void addBook(BookModel model) {
-    saveReadingList(model);
-  }
 
   @override
   Widget build(BuildContext context) {
+    final today = DateTime.now();
+    final latedays = today.difference(model.dueDate).inDays;
+    final fine = latedays * model.fine;
+
     return Scaffold(
         appBar: new AppBar(
-          title: new Text("Book"),
+          title: new Text("Issued Book"),
         ),
         drawer: AppDrawer(),
         body: Column(children: [
-          BookCard(model: model),
-          Text("Copies: available 5, total 10"),
+          IssuedBookCard(model: model),
+          Text("Total fine is $fine"),
           RaisedButton(
             onPressed: () {
-              addBook(model);
+              print("Added");
             },
-            child: Text("Add to reading list"),
+            child: Text("Pay fine"),
           )
         ]));
   }

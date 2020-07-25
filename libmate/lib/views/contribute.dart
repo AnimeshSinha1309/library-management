@@ -52,40 +52,45 @@ class _ContributePageState extends State<ContributePage> {
       controller: _barcodeController,
       decoration: InputDecoration(
           labelText: "Barcode value",
-          suffixIcon: new IconButton(onPressed: () async {
-            await _scanBarcode();
-            await _fillInfo();
-          }, icon: Icon(Icons.camera))
-      ),
+          suffixIcon: new IconButton(
+              onPressed: () async {
+                await _scanBarcode();
+                await _fillInfo();
+              },
+              icon: Icon(Icons.camera))),
       validator: (String value) {
-        RegExp re = new RegExp(r"^\d+$");
-        return value == null || !re.hasMatch(value)
-            ? "Value incorrect"
-            : null;
+        RegExp re = new RegExp(r"^\d{13}$");
+        return value == null || !re.hasMatch(value) ? "Value incorrect" : null;
       },
+      keyboardType: TextInputType.number,
     );
     var accNoText = TextFormField(
       controller: _accNoController,
-      decoration: InputDecoration(labelText: "Accession Number",),
+      decoration: InputDecoration(
+        labelText: "Accession Number",
+      ),
       validator: (String value) {
         RegExp re = new RegExp(r"^[0-9]+$");
-        return value == null || !re.hasMatch(value)
-            ? "Value incorrect"
-            : null;
+        return value == null || !re.hasMatch(value) ? "Value incorrect" : null;
       },
+      keyboardType: TextInputType.number,
     );
     var authorText = TextFormField(
       controller: _authorController,
-      decoration: InputDecoration(labelText: "Author",),
+      decoration: InputDecoration(
+        labelText: "Author",
+      ),
     );
     var bookText = TextFormField(
-        decoration: InputDecoration(labelText: "Book Name",),
-        controller: _titleController
-    );
+        decoration: InputDecoration(
+          labelText: "Book Name",
+        ),
+        controller: _titleController);
     var descriptionText = TextFormField(
-        decoration: InputDecoration(labelText: "Description",),
-        controller: _descriptionController
-    );
+        decoration: InputDecoration(
+          labelText: "Description",
+        ),
+        controller: _descriptionController);
 
     var submitBtn = RaisedButton(
       onPressed: () {
@@ -93,22 +98,17 @@ class _ContributePageState extends State<ContributePage> {
           try {
             Firestore.instance
                 .collection("books")
-                .document()
+                .document(_barcodeController.text)
                 .setData({
-              'name': _titleController,
-              'authors': _authorController,
-              'description': _descriptionController,
-              'isbn': _barcodeController,
-              'accNo': _accNoController,
+              'name': _titleController.text,
+              'authors': _authorController.text,
+              'description': _descriptionController.text,
+              'accNo': FieldValue.arrayUnion(
+                  [int.parse(_accNoController.text)]),
             }, merge: true);
           } catch (e) {
             print(e.toString());
           }
-
-          Scaffold
-              .of(context)
-              .showSnackBar(
-              SnackBar(content: Text('Book Datails have been Updated')));
         }
       },
       child: Text('Submit'),
@@ -120,7 +120,7 @@ class _ContributePageState extends State<ContributePage> {
       ),
       drawer: AppDrawer(),
       body: Padding(
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
         child: Form(
           key: _formKey,
           child: Column(

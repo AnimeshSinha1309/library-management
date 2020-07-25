@@ -1,34 +1,15 @@
 import 'package:flutter/material.dart';
-// import 'package:libmate/datastore/model.dart';
-import 'package:libmate/views/issued.dart';
+import 'package:libmate/datastore/model.dart';
 import 'package:libmate/views/drawer.dart';
-
-Route _createRoute(BorrowBookModel model) {
-  return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) =>
-          BookPage(model: model),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        var begin = Offset(0.0, 1.0);
-        var end = Offset.zero;
-        var curve = Curves.ease;
-
-        var tween = Tween(begin: begin, end: end);
-        var curvedAnimation = CurvedAnimation(
-          parent: animation,
-          curve: curve,
-        );
-
-        return SlideTransition(
-          position: tween.animate(curvedAnimation),
-          child: child,
-        );
-      });
-}
+import 'package:libmate/utils/utils.dart';
 
 class IssuedBookCard extends StatelessWidget {
   final BorrowBookModel model;
+  bool shouldOpenPage;
 
-  IssuedBookCard({Key key, @required this.model}) : super(key: key) {}
+  IssuedBookCard({Key key, @required this.model, this.shouldOpenPage}) : super(key: key) {
+    shouldOpenPage = shouldOpenPage ?? false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +23,7 @@ class IssuedBookCard extends StatelessWidget {
           splashFactory: InkRipple.splashFactory,
           splashColor: Colors.white,
           onTap: () {
-            Navigator.of(context).push(_createRoute(model));
+            if (shouldOpenPage) gotoPage(context, BookPage(model: model));
           },
           child: Row(children: [
             Expanded(
@@ -99,18 +80,6 @@ class IssuedBookCard extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    Text(
-                      "Genre: " + model.genre,
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      "ISBN: " + model.isbn,
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -133,7 +102,7 @@ class BookPage extends StatelessWidget {
 
     return Scaffold(
         appBar: new AppBar(
-          title: new Text("Book"),
+          title: new Text("Issued Book"),
         ),
         drawer: AppDrawer(),
         body: Column(children: [

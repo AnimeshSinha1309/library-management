@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -107,9 +105,11 @@ class BookModel {
       {@required this.name,
       this.author = def,
       this.isbn = def,
-      this.image = defImage,
+      this.image,
       this.subject = def,
-      this.genre = def});
+      this.genre = def}) {
+    this.image = this.image ?? defImage;
+  }
 
   // List of books in library
   // TODO: what is the String representing?
@@ -119,11 +119,32 @@ class BookModel {
 
 enum BookModelBorrowState { BORROWED, RESERVED, AVAILABLE }
 
-class BorrowedBookModel extends BookModel {
-  final String accessionNumber;
-  final DateTime dueDate;
+final defBorrow = DateTime.parse('2020-07-10');
+final defDue = DateTime.parse('2020-07-20');
+const defFine = 2.0;
 
-  BorrowedBookModel({this.accessionNumber, this.dueDate});
+class BorrowBookModel extends BookModel {
+  String accessionNumber;
+  DateTime borrowDate;
+  DateTime dueDate;
+  double fine;
+
+  BorrowBookModel(
+      {@required name,
+      author,
+      isbn,
+      image,
+      subject,
+      genre,
+      this.accessionNumber = def,
+      borrowDate,
+      dueDate,
+      this.fine = defFine})
+      : super(name: name, author: author, image: image, subject: subject) {
+    // reference: https://stackoverflow.com/questions/15394313
+    this.borrowDate = borrowDate ?? defBorrow;
+    this.dueDate = dueDate ?? defDue;
+  }
 }
 
 class BookList {

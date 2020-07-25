@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:libmate/datastore/model.dart';
 import 'package:libmate/views/drawer.dart';
 import 'package:libmate/widgets/issuedbookcard.dart';
-// import 'package:libmate/datastore/model.dart';
 
 
 class IssuedPage extends StatefulWidget {
@@ -35,45 +35,19 @@ class _IssuedPageState extends State<IssuedPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
-        title: new Text('About issued books'),
+        title: new Text('Your issued books'),
       ),
       drawer: AppDrawer(),
       body: _buildBooks(),
     );
   }
 
-
   Widget _buildBooks() {
     return ListView(
       padding: EdgeInsets.symmetric(vertical: 8.0),
       children: _issuedBooks.map((BorrowBookModel book) {
-        return IssuedBookCard(model: book);
-        // return Text('Name:' + book.name);
+        return IssuedBookCard(model: book, shouldOpenPage: true);
       }).toList(),
     );
   }
-
-}
-
-
-
-
-const String def = "not found";
-const String defImage =
-    "http://assets.stickpng.com/images/5847f289cef1014c0b5e486b.png";
-
-class BorrowBookModel {
-
-  final String name;
-  String author = def;
-  String isbn = def;
-  String image = defImage;
-  String subject = def;
-  String genre = def;
-  String accessionNumber = def;
-  final DateTime borrowDate = DateTime.parse('2020-07-10');
-  final DateTime dueDate = DateTime.parse('2020-07-20');
-  final double fine = 2.0;
-
-  BorrowBookModel({@required this.name, this.author, this.isbn, this.subject, this.genre, this.accessionNumber});
 }

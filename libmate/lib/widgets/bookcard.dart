@@ -1,28 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:libmate/datastore/model.dart';
 import 'package:libmate/views/drawer.dart';
-
-Route _createRoute(BookModel model) {
-  return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) =>
-          BookPage(model: model),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        var begin = Offset(0.0, 1.0);
-        var end = Offset.zero;
-        var curve = Curves.ease;
-
-        var tween = Tween(begin: begin, end: end);
-        var curvedAnimation = CurvedAnimation(
-          parent: animation,
-          curve: curve,
-        );
-
-        return SlideTransition(
-          position: tween.animate(curvedAnimation),
-          child: child,
-        );
-      });
-}
+import 'package:libmate/utils/utils.dart';
 
 class BookCard extends StatelessWidget {
   BookModel model;
@@ -43,7 +22,7 @@ class BookCard extends StatelessWidget {
           splashFactory: InkRipple.splashFactory,
           splashColor: Colors.white,
           onTap: () {
-            if (shouldOpenPage) Navigator.of(context).push(_createRoute(model));
+            if (shouldOpenPage) gotoPage(context, BookPage(model: model));
           },
           child: Row(children: [
             Expanded(

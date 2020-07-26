@@ -24,14 +24,18 @@ class _ContributePageState extends State<ContributePage> {
   Future _fillInfo() async {
     String isbn = _barcodeController.text;
     var raw = await http.get(
-        'https://www.googleapis.com/books/v1/volumes?q=isbn:$isbn&maxResults=1');
+        'https://www.googleapis.com/books/v1/volumes?q=$isbn&maxResults=1');
     var data = json.decode(raw.body);
+
     setState(() {
-      _titleController.text = data['items'][0]['volumeInfo']['title'];
-      _authorController.text =
-          (data['items'][0]['volumeInfo']['authors']).join('; ');
-      _descriptionController.text =
-      data['items'][0]['volumeInfo']['description'];
+      if (data['items'].length == 0) return;
+
+      var book = data['items'][0];
+      var bookdata = book['volumeInfo'];
+
+      _titleController.text = bookdata['title'];
+      _authorController.text = (bookdata['authors']).join('; ');
+      _descriptionController.text = bookdata['description'];
     });
   }
 
@@ -90,6 +94,8 @@ class _ContributePageState extends State<ContributePage> {
         decoration: InputDecoration(
           labelText: "Description",
         ),
+        minLines: 1,
+        maxLines: 10,
         controller: _descriptionController);
 
     var submitBtn = RaisedButton(
@@ -103,8 +109,8 @@ class _ContributePageState extends State<ContributePage> {
               'name': _titleController.text,
               'authors': _authorController.text,
               'description': _descriptionController.text,
-              'accNo': FieldValue.arrayUnion(
-                  [int.parse(_accNoController.text)]),
+              'accNo':
+                  FieldValue.arrayUnion([int.parse(_accNoController.text)]),
             }, merge: true);
           } catch (e) {
             print(e.toString());

@@ -9,9 +9,11 @@ class LoginSignupPage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => new _LoginSignupPageState();
+
 }
 
 class _LoginSignupPageState extends State<LoginSignupPage> {
+
   final _formKey = new GlobalKey<FormState>();
 
   String _email;
@@ -37,6 +39,7 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
       _errorMessage = "";
       _isLoading = true;
     });
+
     if (validateAndSave()) {
       String userId = "";
       try {
@@ -73,6 +76,8 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
     _isLoading = false;
     _isLoginForm = true;
     super.initState();
+
+
   }
 
   void resetForm() {
@@ -91,7 +96,7 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: new AppBar(
-          title: new Text('Flutter login demo'),
+          title: new Text('login/signup'),
         ),
         drawer: AppDrawer(),
 

@@ -35,7 +35,7 @@ class Searcher extends StatefulWidget {
 
 class _SearcherState extends State<Searcher> {
   final emptyWidget = Text("No results found");
-  Widget searchResults;
+  Widget searchResults = Text("No query yet");
 
   Future<Widget> onSearch(String queryUrl) async {
     await Future.delayed(Duration(seconds: 1));
@@ -92,7 +92,7 @@ class SearchOptions extends StatefulWidget {
 }
 
 class _SearchOptionsState extends State<SearchOptions> {
-  Map<String, TextEditingController> mapper;
+  Map<String, TextEditingController> mapper = Map();
 
   aggregateAndQuery() {
     // collect fields and call the callback
@@ -105,9 +105,10 @@ class _SearchOptionsState extends State<SearchOptions> {
   buildField(String text, String shortname) {
     var controller = TextEditingController();
     controller.addListener(() {
-      widget._debouncer.run(aggregateAndQuery());
+      widget._debouncer.run(aggregateAndQuery);
     });
 
+    mapper[shortname] = controller;
     return TextFormField(
         decoration: InputDecoration(labelText: text), controller: controller);
   }

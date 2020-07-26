@@ -61,7 +61,7 @@ class AppDrawer extends StatelessWidget {
 
   List<Widget> loggedOutDrawerList(context) {
     return <Widget>[
-      _DrawerViewItem(Icons.search, 'Login', '/login').build(context),
+      _DrawerViewItem(Icons.person, 'Login', '/login').build(context),
       _DrawerViewItem(Icons.search, 'Search', '/search').build(context),
 
       Divider(color: Colors.grey, thickness: 0.5),

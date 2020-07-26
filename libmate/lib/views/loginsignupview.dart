@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:libmate/views/login_signup.dart';
 import 'package:libmate/datastore/auth.dart';
+import 'package:libmate/views/drawer.dart';
+import 'package:flutter/material.dart';
+import 'package:libmate/datastore/model.dart';
 
 enum AuthStatus {
   NOT_DETERMINED,
@@ -55,6 +58,7 @@ class _RootPageState extends State<RootPage> {
 
   Widget buildWaitingScreen() {
     return Scaffold(
+      drawer: AppDrawer(),
       body: Container(
         alignment: Alignment.center,
         child: CircularProgressIndicator(),
@@ -77,13 +81,7 @@ class _RootPageState extends State<RootPage> {
         break;
       case AuthStatus.LOGGED_IN:
         if (_userId.length > 0 && _userId != null) {
-          print("hellloooo");
-
-//          return new HomePage(
-//            userId: _userId,
-//            auth: widget.auth,
-//            logoutCallback: logoutCallback,
-//          );
+          print("login successfull");
         } else
           return buildWaitingScreen();
         break;

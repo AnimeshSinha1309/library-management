@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:libmate/datastore/auth.dart';
-
+import 'package:libmate/views/drawer.dart';
 class LoginSignupPage extends StatefulWidget {
   LoginSignupPage({this.auth, this.loginCallback});
 
@@ -93,6 +93,8 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
         appBar: new AppBar(
           title: new Text('Flutter login demo'),
         ),
+        drawer: AppDrawer(),
+
         body: Stack(
           children: <Widget>[
             _showForm(),

@@ -21,3 +21,9 @@ void gotoPage(BuildContext context, dynamic page) {
       });
   Navigator.of(context).push(route);
 }
+
+void showToast(BuildContext context, String message) {
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text(message),
+    ));
+}

@@ -43,6 +43,7 @@ class AppDrawer extends StatelessWidget {
       _DrawerViewItem(Icons.home, 'Home', '/home').build(context),
       _DrawerViewItem(Icons.search, 'Search', '/search').build(context),
       _DrawerViewItem(Icons.keyboard_voice, 'VoiceSearch', '/voicesearch').build(context),
+      _DrawerViewItem(Icons.location_on, 'Guide', '/guide').build(context),
       _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute')
           .build(context),
       _DrawerViewItem(Icons.library_books, 'Issued Books', '/issued')

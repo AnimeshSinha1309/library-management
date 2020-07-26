@@ -1,5 +1,6 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:libmate/datastore/model.dart';
 import 'package:libmate/views/drawer.dart';
 import 'package:libmate/widgets/bookcard.dart';
 import 'package:libmate/utils/utils.dart';
@@ -35,21 +36,32 @@ class Searcher extends StatefulWidget {
 
 class _SearcherState extends State<Searcher> {
   final emptyWidget = Text("No results found");
-  Widget searchResults = Text("No query yet");
+  Widget searchResults =
+      Text("No query yet, search starts as soon as you start typing!");
+  Widget searchOptions;
+
+  @override
+  void initState() {
+    super.initState();
+    searchOptions = SearchOptions(scheduleSearch);
+  }
 
   Future<Widget> onSearch(String queryUrl) async {
     await Future.delayed(Duration(seconds: 1));
+    print("Querying: $queryUrl");
     final result = await http.get(queryUrl); // call api;
 
     if (result.statusCode == 200) {
-      var booklist = json.decode(result.body);
+      String resp = result.body.replaceAllMapped(RegExp(r"NaN,"), (match) {
+        return "\"\",";
+      });
+      var booklist = json.decode(resp);
       if (booklist.length == 0) return emptyWidget;
 
       List<BookCard> disp = List();
-      print(booklist);
 
       for (var res in booklist) {
-        var added = BookCard(model: res.item);
+        var added = BookCard(model: BookModel.fromJSON(res));
         added.shouldOpenPage = true;
         disp.add(added);
       }
@@ -60,33 +72,39 @@ class _SearcherState extends State<Searcher> {
     }
   }
 
-  void updateSearch(Map<String, String> data) async {
-    String query = "https://libmate.herokuapp.com/query";
-    bool first = true;
+  void scheduleSearch(Map<String, String> data) async {
+    setState(() {
+      searchResults = CircularProgressIndicator();
+    });
+
+    String query = "https://libmate.herokuapp.com/query?maxResults=5";
+    bool seenany = false;
 
     data.forEach((key, value) {
       if (value == "") return;
 
-      if (first)
-        query += "?$key=$value";
-      else
-        query += "&$key=$value";
-      first = false;
+      seenany = true;
+      query += "&$key=$value";
     });
 
-    searchResults = await onSearch(query);
+    if (!seenany) return;
+
+    var res = await onSearch(query);
+    setState(() {
+      searchResults = res;
+    });
   }
 
   Widget build(BuildContext build) {
-    return Column(children: [SearchOptions(updateSearch), searchResults]);
+    return ListView(children: [searchOptions, searchResults]);
   }
 }
 
 class SearchOptions extends StatefulWidget {
-  final Function updateSearch;
+  final Function scheduleSearch;
   final _debouncer = Debouncer(milliseconds: 500);
 
-  SearchOptions(this.updateSearch);
+  SearchOptions(this.scheduleSearch);
 
   createState() => _SearchOptionsState();
 }
@@ -99,7 +117,7 @@ class _SearchOptionsState extends State<SearchOptions> {
     Map<String, String> data = mapper.map((key, controller) {
       return MapEntry(key, controller.text);
     });
-    widget.updateSearch(data);
+    widget.scheduleSearch(data);
   }
 
   buildField(String text, String shortname) {
@@ -115,7 +133,7 @@ class _SearchOptionsState extends State<SearchOptions> {
 
   buildList() {
     TextFormField author = buildField("Author name", "author");
-    TextFormField category = buildField("Category name", "category");
+    TextFormField category = buildField("Category name", "tag");
     TextFormField publisher = buildField("Publisher name", "publisher");
 
     return Column(children: [author, category, publisher]);

@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import 'dart:convert';
 
 class BookCard extends StatelessWidget {
-  BookModel model;
+  final BookModel model;
   bool shouldOpenPage;
 
   BookCard({Key key, @required this.model, this.shouldOpenPage})
@@ -94,7 +94,7 @@ class BookPage extends StatelessWidget {
   Future<int> saveReadingList(BookModel model) async {
     final prefs = await SharedPreferences.getInstance();
     List<String> readlist = prefs.getStringList("readingList") ?? [];
-    if(readlist.length > maxBooks) return 1;
+    if (readlist.length > maxBooks) return 1;
 
     ToRead rbook = new ToRead();
     rbook.book = model.name;
@@ -102,8 +102,8 @@ class BookPage extends StatelessWidget {
 
     String sbook = json.encode(rbook);
     bool found = false;
-    for(var it = 0, name = sbook.split(',')[0]; it < readlist.length; it++) {
-      if(readlist[it].split(',')[0] == name) {
+    for (var it = 0, name = sbook.split(',')[0]; it < readlist.length; it++) {
+      if (readlist[it].split(',')[0] == name) {
         readlist[it] = sbook;
         found = true;
         break;
@@ -118,11 +118,11 @@ class BookPage extends StatelessWidget {
   Future<String> addBook(BookModel model) async {
     int res = await saveReadingList(model);
     if (res == 0) {
-        return "Added to reading list";
+      return "Added to reading list";
     } else if (res == 1) {
-        return "Exceeded max size of reading list";
+      return "Exceeded max size of reading list";
     } else if (res == 2) {
-        return "Error saving reading list!";
+      return "Error saving reading list!";
     }
   }
 
@@ -134,17 +134,16 @@ class BookPage extends StatelessWidget {
         ),
         drawer: AppDrawer(),
         body: Builder(
-        builder: (context) => Column(children: [
-          BookCard(model: model),
-          Text("Copies: available 5, total 10"),
-          RaisedButton(
-            onPressed: () async {
-              final String resp = await addBook(model);
-              showToast(context, resp);
-            },
-            child: Text("Add to reading list"),
-          )
-        ]))
-    );
+            builder: (context) => Column(children: [
+                  BookCard(model: model),
+                  Text("Copies: available 5, total 10"),
+                  RaisedButton(
+                    onPressed: () async {
+                      final String resp = await addBook(model);
+                      showToast(context, resp);
+                    },
+                    child: Text("Add to reading list"),
+                  )
+                ])));
   }
 }

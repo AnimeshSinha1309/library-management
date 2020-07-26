@@ -94,7 +94,7 @@ const String defImage =
 
 class BookModel {
   // Basic book identifiers
-  final String name;
+  String name;
   String author;
   String isbn;
   String image;
@@ -115,6 +115,14 @@ class BookModel {
   // TODO: what is the String representing?
   Map<String, BookModelBorrowState> copies;
   int issueCount, starCount;
+
+  BookModel.fromJSON(Map<String, dynamic> json) {
+    name = json["title"];
+    author = json["author"] ?? def;
+    genre = json["category"] ?? def;
+    isbn = (json["isbn"] ?? def).toString();
+    image = json["image"] ?? defImage;
+  }
 }
 
 enum BookModelBorrowState { BORROWED, RESERVED, AVAILABLE }

@@ -44,6 +44,8 @@ dependencies:
   image_cropper: ^1.2.3
   intl: ^0.16.1
 
+  expandable: ^4.1.4
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

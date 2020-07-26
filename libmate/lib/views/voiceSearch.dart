@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:libmate/views/drawer.dart';
-import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:english_words/english_words.dart' as words;
 import 'package:speech_recognition/speech_recognition.dart';
@@ -100,6 +98,8 @@ class  _VoiceSearchPageState extends State<VoiceSearchPage> {
                   label,
                   style: const TextStyle(color: Colors.white),
                 ),
+                onPressed: () => {
+                }
               ),
               IconButton(
                 icon: Icon(Icons.mic),
@@ -223,7 +223,7 @@ class _SearchAppBarDelegate extends SearchDelegate<String> {
                 this.query,
                 style: Theme.of(context)
                     .textTheme
-                    .display2
+                    .headline3
                     .copyWith(fontWeight: FontWeight.normal),
               ),
             ),
@@ -280,7 +280,7 @@ class _WordSuggestionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme.subhead;
+    final textTheme = Theme.of(context).textTheme.subtitle1;
     return ListView.builder(
       itemCount: suggestions.length,
       itemBuilder: (BuildContext context, int i) {

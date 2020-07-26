@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:libmate/views/drawer.dart';
+import 'package:libmate/datastore/model.dart';
 
 class ContributePage extends StatefulWidget {
   @override
@@ -20,6 +21,7 @@ class _ContributePageState extends State<ContributePage> {
   final _authorController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _accNoController = TextEditingController();
+  var imageUrl = "";
 
   Future _fillInfo() async {
     String isbn = _barcodeController.text;
@@ -36,6 +38,11 @@ class _ContributePageState extends State<ContributePage> {
       _titleController.text = bookdata['title'];
       _authorController.text = (bookdata['authors']).join('; ');
       _descriptionController.text = bookdata['description'];
+
+      if (bookdata['imageLinks'] != null &&
+          bookdata['imageLinks']['thumbnail'] != null) {
+        imageUrl = bookdata['imageLinks']['thumbnail'];
+      }
     });
   }
 
@@ -95,7 +102,7 @@ class _ContributePageState extends State<ContributePage> {
           labelText: "Description",
         ),
         minLines: 1,
-        maxLines: 10,
+        maxLines: 4,
         controller: _descriptionController);
 
     var submitBtn = RaisedButton(
@@ -132,6 +139,10 @@ class _ContributePageState extends State<ContributePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              FadeInImage(
+                  image: NetworkImage(imageUrl),
+                  placeholder: NetworkImage(defImage),
+                  height: 100),
               accNoText,
               barcodeText,
               bookText,

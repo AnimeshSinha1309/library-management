@@ -2,23 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:libmate/datastore/model.dart';
 import 'package:libmate/views/drawer.dart';
 import 'package:libmate/utils/utils.dart';
-import 'package:libmate/widgets/toread.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:intl/intl.dart';
-import 'dart:convert';
 
-class BookCard extends StatelessWidget {
-  BookModel model;
+class IssuedBookCard extends StatelessWidget {
+  final BorrowBookModel model;
   bool shouldOpenPage;
 
-  BookCard({Key key, @required this.model, this.shouldOpenPage})
-      : super(key: key) {
+  IssuedBookCard({Key key, @required this.model, this.shouldOpenPage}) : super(key: key) {
     shouldOpenPage = shouldOpenPage ?? false;
   }
 
   @override
   Widget build(BuildContext context) {
     final double height = 200;
+    final today = DateTime.now();
+    final fine = today.difference(model.dueDate).inDays * model.fine;
 
     return Card(
       elevation: 5,
@@ -66,13 +63,19 @@ class BookCard extends StatelessWidget {
                     ),
                     Spacer(),
                     Text(
-                      "Genre: " + model.genre,
+                      "Borrowed Date: " + model.borrowDate.toString().split(' ')[0],
                       style: TextStyle(
                         color: Colors.white,
                       ),
                     ),
                     Text(
-                      "ISBN: " + model.isbn,
+                      "Due Date: " + model.dueDate.toString().split(' ')[0],
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    Text(
+                      "Pending Fine: " + fine.toString(),
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -87,64 +90,30 @@ class BookCard extends StatelessWidget {
 }
 
 class BookPage extends StatelessWidget {
-  BookModel model;
-  final int maxBooks = 20;
+  final BorrowBookModel model;
+
   BookPage({@required this.model});
-
-  Future<int> saveReadingList(BookModel model) async {
-    final prefs = await SharedPreferences.getInstance();
-    List<String> readlist = prefs.getStringList("readingList") ?? [];
-    if(readlist.length > maxBooks) return 1;
-
-    ToRead rbook = new ToRead();
-    rbook.book = model.name;
-    rbook.date = new DateFormat("dd/MM").format(DateTime.now()).toString();
-
-    String sbook = json.encode(rbook);
-    bool found = false;
-    for(var it = 0, name = sbook.split(',')[0]; it < readlist.length; it++) {
-      if(readlist[it].split(',')[0] == name) {
-        readlist[it] = sbook;
-        found = true;
-        break;
-      }
-    }
-
-    if (!found) readlist.add(sbook);
-
-    return (await prefs.setStringList("readingList", readlist)) ? 0 : 2;
-  }
-
-  Future<String> addBook(BookModel model) async {
-    int res = await saveReadingList(model);
-    if (res == 0) {
-        return "Added to reading list";
-    } else if (res == 1) {
-        return "Exceeded max size of reading list";
-    } else if (res == 2) {
-        return "Error saving reading list!";
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
+    final today = DateTime.now();
+    final latedays = today.difference(model.dueDate).inDays;
+    final fine = latedays * model.fine;
+
     return Scaffold(
         appBar: new AppBar(
-          title: new Text("Book"),
+          title: new Text("Issued Book"),
         ),
         drawer: AppDrawer(),
-        body: Builder(
-        builder: (context) => Column(children: [
-          BookCard(model: model),
-          Text("Copies: available 5, total 10"),
+        body: Column(children: [
+          IssuedBookCard(model: model),
+          Text("Total fine is $fine"),
           RaisedButton(
-            onPressed: () async {
-              final String resp = await addBook(model);
-              showToast(context, resp);
+            onPressed: () {
+              print("Added");
             },
-            child: Text("Add to reading list"),
+            child: Text("Pay fine"),
           )
-        ]))
-    );
+        ]));
   }
 }

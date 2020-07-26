@@ -3,18 +3,19 @@ import 'package:libmate/datastore/model.dart';
 import 'package:libmate/views/drawer.dart';
 import 'package:libmate/utils/utils.dart';
 
-class BookCard extends StatelessWidget {
-  BookModel model;
+class IssuedBookCard extends StatelessWidget {
+  final BorrowBookModel model;
   bool shouldOpenPage;
 
-  BookCard({Key key, @required this.model, this.shouldOpenPage})
-      : super(key: key) {
+  IssuedBookCard({Key key, @required this.model, this.shouldOpenPage}) : super(key: key) {
     shouldOpenPage = shouldOpenPage ?? false;
   }
 
   @override
   Widget build(BuildContext context) {
     final double height = 200;
+    final today = DateTime.now();
+    final fine = today.difference(model.dueDate).inDays * model.fine;
 
     return Card(
       elevation: 5,
@@ -62,13 +63,19 @@ class BookCard extends StatelessWidget {
                     ),
                     Spacer(),
                     Text(
-                      "Genre: " + model.genre,
+                      "Borrowed Date: " + model.borrowDate.toString().split(' ')[0],
                       style: TextStyle(
                         color: Colors.white,
                       ),
                     ),
                     Text(
-                      "ISBN: " + model.isbn,
+                      "Due Date: " + model.dueDate.toString().split(' ')[0],
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    Text(
+                      "Pending Fine: " + fine.toString(),
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -83,25 +90,29 @@ class BookCard extends StatelessWidget {
 }
 
 class BookPage extends StatelessWidget {
-  BookModel model;
+  final BorrowBookModel model;
 
   BookPage({@required this.model});
 
   @override
   Widget build(BuildContext context) {
+    final today = DateTime.now();
+    final latedays = today.difference(model.dueDate).inDays;
+    final fine = latedays * model.fine;
+
     return Scaffold(
         appBar: new AppBar(
-          title: new Text("Book"),
+          title: new Text("Issued Book"),
         ),
         drawer: AppDrawer(),
         body: Column(children: [
-          BookCard(model: model),
-          Text("Copies: available 5, total 10"),
+          IssuedBookCard(model: model),
+          Text("Total fine is $fine"),
           RaisedButton(
             onPressed: () {
               print("Added");
             },
-            child: Text("Add to reading list"),
+            child: Text("Pay fine"),
           )
         ]));
   }

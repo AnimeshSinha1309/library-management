@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:libmate/views/drawer.dart';
 import 'package:libmate/datastore/model.dart';
+import 'package:libmate/utils/utils.dart';
 
 class ContributePage extends StatefulWidget {
   @override
@@ -105,27 +106,30 @@ class _ContributePageState extends State<ContributePage> {
         maxLines: 4,
         controller: _descriptionController);
 
-    var submitBtn = RaisedButton(
-      onPressed: () {
-        if (_formKey.currentState.validate()) {
-          try {
-            Firestore.instance
-                .collection("books")
-                .document(_barcodeController.text)
-                .setData({
-              'name': _titleController.text,
-              'authors': _authorController.text,
-              'description': _descriptionController.text,
-              'accNo':
-                  FieldValue.arrayUnion([int.parse(_accNoController.text)]),
-            }, merge: true);
-          } catch (e) {
-            print(e.toString());
-          }
-        }
-      },
-      child: Text('Submit'),
-    );
+    var submitBtnBuilder = (BuildContext context) => RaisedButton(
+          onPressed: () {
+            if (_formKey.currentState.validate()) {
+              try {
+                Firestore.instance
+                    .collection("books")
+                    .document(_barcodeController.text)
+                    .setData({
+                  'name': _titleController.text,
+                  'authors': _authorController.text,
+                  'description': _descriptionController.text,
+                  'accNo':
+                      FieldValue.arrayUnion([int.parse(_accNoController.text)]),
+                }, merge: true);
+                // just do this since apparently Firestore is weirdly-async
+                // so it we are not really getting a callback here
+                showToast(context, "Saved in database!");
+              } catch (e) {
+                print(e.toString());
+              }
+            }
+          },
+          child: Text('Submit'),
+        );
 
     return Scaffold(
       appBar: new AppBar(
@@ -148,7 +152,7 @@ class _ContributePageState extends State<ContributePage> {
               bookText,
               authorText,
               descriptionText,
-              submitBtn
+              Builder(builder: submitBtnBuilder)
             ],
           ),
         ),

@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:libmate/datastore/model.dart';
-import 'package:libmate/views/drawer.dart';
-import 'package:libmate/widgets/bookcard.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:flappy_search_bar/search_bar_style.dart';
+import 'package:flutter/material.dart';
+import 'package:libmate/views/drawer.dart';
+import 'package:libmate/widgets/bookcard.dart';
 
 class SearchPage extends StatefulWidget {
   final fuse;
@@ -17,7 +16,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   final _formKey = GlobalKey<FormState>();
   final SearchBarController<BookCard> _searchBarController =
-      SearchBarController();
+  SearchBarController();
 
   Future<List<BookCard>> onSearch(String search) async {
     await Future.delayed(Duration(seconds: 1));
@@ -30,21 +29,6 @@ class _SearchPageState extends State<SearchPage> {
       disp.add(added);
     }
     return disp;
-
-    return List.generate(
-        5,
-        (index) => new BookCard(
-            shouldOpenPage: true,
-            key: ValueKey(index.toString()),
-            model: new BookModel(
-              name: "$index on a Treasure Island",
-              author: "Enid Blyton",
-              isbn: "9785389130692",
-              image:
-                  "https://upload.wikimedia.org/wikipedia/en/e/ed/FiveOnATreasureIsland.jpg",
-              subject: "Novel",
-              genre: "Fiction",
-            )));
   }
 
   @override
@@ -56,15 +40,15 @@ class _SearchPageState extends State<SearchPage> {
       drawer: new AppDrawer(),
       body: SafeArea(
           child: SearchBar<BookCard>(
-        searchBarStyle: SearchBarStyle(),
-        onSearch: onSearch,
-        searchBarController: _searchBarController,
-        placeHolder: Text("Please enter minimum three characters"),
-        emptyWidget: Text("No results found"),
-        onItemFound: (BookCard book, int index) {
-          return book;
-        },
-      )),
+            searchBarStyle: SearchBarStyle(),
+            onSearch: onSearch,
+            searchBarController: _searchBarController,
+            placeHolder: Text("Please enter minimum three characters"),
+            emptyWidget: Text("No results found"),
+            onItemFound: (BookCard book, int index) {
+              return book;
+            },
+          )),
     );
   }
 }

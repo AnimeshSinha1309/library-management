@@ -53,7 +53,7 @@ class UserModel extends ChangeNotifier {
 
   void addReadingList(BookModel book) {}
 
-  static String LOGGED_IN = "logged_in";
+  static const String LOGGED_IN = "logged_in";
   static List<String> props = ["name", "email", "photoUrl", "uid"];
 
   static Future<UserModel> fromSharedPrefs() async {

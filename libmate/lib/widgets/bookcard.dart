@@ -17,13 +17,11 @@ class BookCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double height = 200;
-
     return Card(
         elevation: 5,
         child: SizedBox(
-          height: 300,
-          width: 200,
+          height: 250,
+          width: 150,
           child: Container(
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -53,18 +51,11 @@ class BookCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              model.subject ?? "",
+                              model.name ?? "",
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              model.genre ?? "",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                color: Colors.white,
                               ),
                             ),
                             Spacer(),
@@ -77,12 +68,6 @@ class BookCard extends StatelessWidget {
                             Spacer(),
                             Text(
                               "Genre: " + model.genre ?? "",
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                            Text(
-                              "ISBN: " + model.isbn ?? "",
                               style: TextStyle(
                                 color: Colors.white,
                               ),

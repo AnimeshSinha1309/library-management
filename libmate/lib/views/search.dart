@@ -50,10 +50,10 @@ class _SearchResultsWindowsState extends State<SearchResultsWindows> {
   }
 
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        buildField("Name of the Book", "title"),
-        buildQueryOptions(context),
+    return CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(child: buildField("Name of the Book", "title")),
+        SliverToBoxAdapter(child: buildQueryOptions(context)),
         buildResultsPane(context),
       ],
     );
@@ -68,8 +68,7 @@ class _SearchResultsWindowsState extends State<SearchResultsWindows> {
   void scheduleSearch() async {
     Map<String, String> query = Map<String, String>();
     searchControllers.forEach((key, value) {
-      if (value.text.length > 0)
-        query[key] = value.text;
+      if (value.text.length > 0) query[key] = value.text;
     });
 
     // Reject if empty, otherwise start loading
@@ -111,12 +110,20 @@ class _SearchResultsWindowsState extends State<SearchResultsWindows> {
     } else if (data == null || data.length == 0) {
       return Text("No items in data view");
     } else {
-      return Column(
-          children: data.map((e) => BookCard(model: e)).toList()
+      return SliverGrid(
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 200.0,
+          mainAxisSpacing: 10.0,
+          crossAxisSpacing: 10.0,
+          childAspectRatio: 0.75,
+        ),
+        delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) => BookCard(model: data[index]),
+          childCount: data.length,
+        ),
       );
     }
   }
-
 
   /**
    * Search Option Segment:
@@ -141,7 +148,7 @@ class _SearchResultsWindowsState extends State<SearchResultsWindows> {
   Widget buildQueryOptions(BuildContext context) {
     return ExpandableNotifier(
         child: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.symmetric(vertical: 10),
           child: ScrollOnExpand(
             child: Card(
               clipBehavior: Clip.antiAlias,
@@ -174,7 +181,8 @@ class _SearchResultsWindowsState extends State<SearchResultsWindows> {
                             Expanded(
                               child: Text(
                                 "Advanced options",
-                                style: Theme.of(context)
+                                style: Theme
+                                    .of(context)
                                     .textTheme
                                     .bodyText1
                                     .copyWith(color: Colors.white),

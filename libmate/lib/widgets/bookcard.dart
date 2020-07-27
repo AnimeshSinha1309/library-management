@@ -50,21 +50,26 @@ class BookCard extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(
-                              model.name ?? "",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
+                            Flexible(
+                              child: Text(
+                                model.name ?? "",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                             Spacer(),
-                            Text(
+                            Flexible(
+                                child: Text(
                               model.author ?? "",
                               style: TextStyle(
                                 color: Colors.white,
                               ),
-                            ),
+                                  overflow: TextOverflow.ellipsis,
+                                )),
                             Spacer(),
                             Text(
                               "Genre: " + model.genre ?? "",

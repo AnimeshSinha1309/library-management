@@ -100,15 +100,16 @@ class _SearchResultsWindowsState extends State<SearchResultsWindows> {
   }
 
   Widget buildResultsPane(BuildContext context) {
-    if (searchLoading) {
-      return Center(
-          child: SizedBox(
-            child: CircularProgressIndicator(),
-            height: 50.0,
-            width: 50.0,
-          ));
-    } else if (data == null || data.length == 0) {
-      return Text("No items in data view");
+    if (false && searchLoading) {
+      return SliverToBoxAdapter(
+          child: Center(
+              child: SizedBox(
+                child: CircularProgressIndicator(),
+                height: 50.0,
+                width: 50.0,
+              )));
+    } else if (false && (data == null || data.length == 0)) {
+      return SliverToBoxAdapter(child: Text("No items in data view"));
     } else {
       return SliverGrid(
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
@@ -119,7 +120,7 @@ class _SearchResultsWindowsState extends State<SearchResultsWindows> {
         ),
         delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) => BookCard(model: data[index]),
-          childCount: data.length,
+          childCount: data == null ? 0 : data.length,
         ),
       );
     }

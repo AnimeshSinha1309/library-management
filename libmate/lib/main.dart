@@ -12,6 +12,7 @@ import 'package:libmate/views/libcard.dart';
 import 'package:libmate/views/request.dart';
 import 'package:libmate/views/search.dart';
 import 'package:libmate/views/issued.dart';
+import 'package:libmate/views/razorpay.dart';
 import 'package:fuzzy/fuzzy.dart';
 
 void main() => runApp(MyApp());
@@ -90,6 +91,7 @@ class _MyAppState extends State<MyApp> {
                 '/home': (BuildContext context) =>
                     new Home(loggedIn: usermodel.isLoggedIn()),
                 '/search': (BuildContext context) => new SearchPage(fuse: fuse),
+                '/payfines':(BuildContext context) => new RazorPayPage(),
                 '/contribute': (BuildContext context) => new ContributePage(),
                 '/issued': (BuildContext context) => new IssuedPage(),
                 '/friends': (BuildContext context) => new FriendsPage(),

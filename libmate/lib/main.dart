@@ -10,6 +10,7 @@ import 'package:libmate/views/goals.dart';
 import 'package:libmate/views/home.dart';
 import 'package:libmate/views/libcard.dart';
 import 'package:libmate/views/request.dart';
+import 'package:libmate/views/requested.dart';
 import 'package:libmate/views/search.dart';
 import 'package:libmate/views/issued.dart';
 import 'package:fuzzy/fuzzy.dart';
@@ -96,6 +97,7 @@ class _MyAppState extends State<MyApp> {
                 '/goals': (BuildContext context) => new GoalsPage(),
                 '/libcard': (BuildContext context) => new LibcardPage(),
                 '/request': (BuildContext context) => new RequestPage(),
+                '/requested': (BuildContext context) => new RequestedPage(),
                 '/about': (BuildContext context) => new AboutPage(),
                 '/accounts': (BuildContext context) => new AccountsPage(),
               });

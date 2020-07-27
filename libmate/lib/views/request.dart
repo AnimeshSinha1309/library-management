@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:libmate/views/drawer.dart';
 import 'package:libmate/utils/utils.dart';
+import 'package:libmate/widgets/request.dart';
+import 'package:validators/validators.dart';
 
 class RequestPage extends StatefulWidget {
   @override
@@ -9,6 +11,16 @@ class RequestPage extends StatefulWidget {
 
 class _RequestPageState extends State<RequestPage> {
   final _formKey = GlobalKey<FormState>();
+  RequestBookModel model = RequestBookModel();
+  // RegExp exp = new RegExp(r"^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$");  # regex for isbn
+
+  bool doesExist(String isbn) {
+    return false;
+  }
+
+  void sendRequest(RequestBookModel model) {
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,18 +47,41 @@ class _RequestPageState extends State<RequestPage> {
                             }
                             return null;
                           },
+                          onSaved: (String value) {
+                            model.name = value;
+                          },
                         ),
                         TextFormField(
-                          keyboardType: TextInputType.number,
+                          keyboardType: TextInputType.text,
                           decoration:
-                              InputDecoration(hintText: "Estimated Price"),
+                              InputDecoration(hintText: "ISBN of the Book"),
                           validator: (value) {
                             if (value.isEmpty) {
-                              return 'Please enter an approximate price for it.';
+                              return 'Please enter the ISBN of the book';
+                            }
+                            else if(!isISBN(value)) {
+                              return 'Please enter the valid ISBN';
+                            }
+                            else if(doesExist(value)) {
+                              return 'This book is in the library';
                             }
                             return null;
                           },
+                          onSaved: (String value) {
+                            model.isbn = value;
+                          },
                         ),
+                        // TextFormField(
+                        //   keyboardType: TextInputType.number,
+                        //   decoration:
+                        //       InputDecoration(hintText: "Estimated Price"),
+                        //   validator: (value) {
+                        //     if (value.isEmpty) {
+                        //       return 'Please enter an approximate price for it.';
+                        //     }
+                        //     return null;
+                        //   },
+                        // ),
                         TextFormField(
                           keyboardType: TextInputType.text,
                           decoration:
@@ -57,12 +92,18 @@ class _RequestPageState extends State<RequestPage> {
                             }
                             return null;
                           },
+                          onSaved: (String value) {
+                            model.subject = value;
+                          },
                         ),
                         TextFormField(
                           keyboardType: TextInputType.text,
                           decoration: InputDecoration(
                               hintText: "Reasons, Cosigners, etc."),
                           maxLines: 3,
+                          onSaved: (String value) {
+                            model.reason = value.isEmpty ? model.reason : value;
+                          },
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -73,9 +114,10 @@ class _RequestPageState extends State<RequestPage> {
                               // otherwise.
                               if (_formKey.currentState.validate()) {
                                 // If the form is valid, display a Snackbar.
+                                sendRequest(model);
+                                _formKey.currentState.reset();
                                 showToast(context,
                                     'Backend for the App is not Ready');
-                                _formKey.currentState.reset();
                               }
                             },
                             child: Text(

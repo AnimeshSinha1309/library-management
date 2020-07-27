@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:libmate/datastore/model.dart';
-import 'package:libmate/datastore/auth.dart';
-import 'package:libmate/datastore/model.dart';
 import 'package:libmate/widgets/gauth.dart';
 import 'package:provider/provider.dart';
 
@@ -42,10 +40,7 @@ class AppDrawer extends StatelessWidget {
     return <Widget>[
       _DrawerViewItem(Icons.home, 'Home', '/home').build(context),
       _DrawerViewItem(Icons.search, 'Search', '/search').build(context),
-      _DrawerViewItem(Icons.location_on, 'Guide', '/guide').build(context),
       _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute')
-          .build(context),
-      _DrawerViewItem(Icons.library_books, 'Issued Books', '/issued')
           .build(context),
       _DrawerViewItem(Icons.people, 'Friends', '/friends').build(context),
       _DrawerViewItem(Icons.library_books, 'Reading List', '/goals')
@@ -64,7 +59,6 @@ class AppDrawer extends StatelessWidget {
   List<Widget> loggedOutDrawerList(context) {
     return <Widget>[
       _DrawerViewItem(Icons.search, 'Search', '/search').build(context),
-      _DrawerViewItem(Icons.location_on, 'Guide', '/guide').build(context),
       _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute')
           .build(context),
       Divider(color: Colors.grey, thickness: 0.5),

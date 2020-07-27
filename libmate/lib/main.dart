@@ -8,7 +8,6 @@ import 'package:libmate/views/contribute.dart';
 import 'package:libmate/views/friends.dart';
 import 'package:libmate/views/goals.dart';
 import 'package:libmate/views/home.dart';
-import 'package:libmate/views/issued.dart';
 import 'package:libmate/views/libcard.dart';
 import 'package:libmate/views/request.dart';
 import 'package:libmate/views/search.dart';
@@ -90,7 +89,6 @@ class _MyAppState extends State<MyApp> {
                 '/home': (BuildContext context) => new Home(),
                 '/search': (BuildContext context) => new SearchPage(fuse: fuse),
                 '/contribute': (BuildContext context) => new ContributePage(),
-                '/issued': (BuildContext context) => new IssuedPage(),
                 '/friends': (BuildContext context) => new FriendsPage(),
                 '/goals': (BuildContext context) => new GoalsPage(),
                 '/libcard': (BuildContext context) => new LibcardPage(),

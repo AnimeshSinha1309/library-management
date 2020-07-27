@@ -88,10 +88,6 @@ class UserModel extends ChangeNotifier {
   }
 }
 
-const String def = "not found";
-const String defImage =
-    "http://assets.stickpng.com/images/5847f289cef1014c0b5e486b.png";
-
 class BookModel {
   // Basic book identifiers
   String name;
@@ -104,14 +100,12 @@ class BookModel {
 
   BookModel(
       {@required this.name,
-      this.author = def,
-      this.isbn = def,
-      this.image,
-      this.subject = def,
-        this.genre = def,
-        this.description}) {
-    this.image = this.image ?? defImage;
-  }
+        this.author = "",
+        this.isbn = "",
+        this.image = "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg",
+        this.subject = "",
+        this.genre = "",
+        this.description});
 
   // List of books in library
   // TODO: what is the String representing?
@@ -120,40 +114,38 @@ class BookModel {
 
   BookModel.fromJSON(Map<String, dynamic> json) {
     name = json["title"];
-    author = json["author"] ?? def;
-    genre = json["category"] ?? def;
-    isbn = (json["isbn"] ?? def).toString();
-    image = json["image"] ?? defImage;
+    author = json["author"] ?? "";
+    genre = json["category"] ?? "";
+    isbn = (json["isbn"] ?? "").toString();
+    image = json["image"] ??
+        "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg";
   }
 }
 
 enum BookModelBorrowState { BORROWED, RESERVED, AVAILABLE }
 
-final defBorrow = DateTime.parse('2020-07-10');
-final defDue = DateTime.parse('2020-07-20');
-const defFine = 2.0;
-
-class BorrowBookModel extends BookModel {
-  String accessionNumber;
+class BorrowBookModel {
+  int accessionNumber;
   DateTime borrowDate;
-  DateTime dueDate;
-  double fine;
+  BookModel book;
+  static const int fineRate = 2;
 
   BorrowBookModel(
-      {@required name,
-      author,
-      isbn,
-      image,
-      subject,
-      genre,
-      this.accessionNumber = def,
-      borrowDate,
-      dueDate,
-      this.fine = defFine})
-      : super(name: name, author: author, image: image, subject: subject) {
-    // reference: https://stackoverflow.com/questions/15394313
-    this.borrowDate = borrowDate ?? defBorrow;
-    this.dueDate = dueDate ?? defDue;
+      {@required this.accessionNumber, this.borrowDate, @required this.book}) {
+    this.borrowDate = this.borrowDate ?? DateTime.now();
+    assert(this.book != null);
+  }
+
+  get dueDate {
+    return borrowDate.add(Duration(days: 14));
+  }
+
+  get fine {
+    int delay = DateTime
+        .now()
+        .difference(this.borrowDate)
+        .inDays - 14;
+    return (delay > 0 ? delay : 0) * fineRate;
   }
 }
 

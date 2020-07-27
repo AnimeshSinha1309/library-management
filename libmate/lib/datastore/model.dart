@@ -100,6 +100,7 @@ class BookModel {
   String image;
   String subject;
   String genre;
+  String description;
 
   BookModel(
       {@required this.name,
@@ -107,7 +108,8 @@ class BookModel {
       this.isbn = def,
       this.image,
       this.subject = def,
-      this.genre = def}) {
+        this.genre = def,
+        this.description}) {
     this.image = this.image ?? defImage;
   }
 

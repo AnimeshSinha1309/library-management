@@ -111,16 +111,12 @@ class _SearchResultsWindowsState extends State<SearchResultsWindows> {
     } else if (data == null || data.length == 0) {
       return Text("No items in data view");
     } else {
-      return SliverList(
-        delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-            return BookCard(model: data[index - 1]);
-          },
-          childCount: data.length,
-        ),
+      return Column(
+          children: data.map((e) => BookCard(model: e)).toList()
       );
     }
   }
+
 
   /**
    * Search Option Segment:

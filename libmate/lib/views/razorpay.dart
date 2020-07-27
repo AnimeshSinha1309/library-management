@@ -62,7 +62,7 @@ class _RazorPayPageState extends State<RazorPayPage> {
     return Scaffold(
         appBar: AppBar(
             title: Text(
-                'In App Payments In flutter'
+                'Pay Fine'
             )
         ),
         drawer: AppDrawer(),

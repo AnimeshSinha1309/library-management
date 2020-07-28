@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tags/flutter_tags.dart';
-import 'package:libmate/datastore/auth.dart';
 import 'package:libmate/datastore/model.dart';
 import 'package:libmate/views/drawer.dart';
 import 'package:libmate/widgets/gauth.dart';
@@ -77,14 +75,11 @@ class _AccountsPageState extends State<AccountsPage> {
                             },
                             text: 'Sign Out',
                           ),
-                          // TODO: buildTagInput(model),
                         ],
                       ))),
-              // SCREEN PORTION: Account Header
             );
           },
-        )
-    );
+        ));
   }
 
   /*
@@ -119,7 +114,7 @@ class _AccountsPageState extends State<AccountsPage> {
       },
     );
   }
-   */
 
   final GlobalKey<TagsState> _tagStateKey = GlobalKey<TagsState>();
+   */
 }

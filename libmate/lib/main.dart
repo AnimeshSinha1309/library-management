@@ -13,6 +13,7 @@ import 'package:libmate/views/request.dart';
 import 'package:libmate/views/search.dart';
 import 'package:libmate/views/issued.dart';
 import 'package:libmate/views/razorpay.dart';
+import 'package:libmate/views/guide.dart';
 import 'package:fuzzy/fuzzy.dart';
 
 void main() => runApp(MyApp());
@@ -100,6 +101,7 @@ class _MyAppState extends State<MyApp> {
                 '/request': (BuildContext context) => new RequestPage(),
                 '/about': (BuildContext context) => new AboutPage(),
                 '/accounts': (BuildContext context) => new AccountsPage(),
+                '/guide':(BuildContext context) => new GuidePage(),
               });
         }));
   }

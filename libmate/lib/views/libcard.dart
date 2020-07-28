@@ -16,6 +16,7 @@ class _LibcardPageState extends State<LibcardPage> {
       "To Kill a Mockingbird",
       "Algorithms: Cormen"
     ];
+
     return Scaffold(
         backgroundColor: Colors.grey[100],
         appBar: new AppBar(
@@ -58,7 +59,12 @@ class _LibcardPageState extends State<LibcardPage> {
 
                       )
                   ),
+
                   SizedBox(height:30.0),
+                Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
                   Text(
                       'ROLL NUMBER',
                       style: TextStyle(
@@ -77,18 +83,48 @@ class _LibcardPageState extends State<LibcardPage> {
 
                       )
                   ),
+                  ]),
                   SizedBox(height:30.0),
                   Row(
-                      children: <Widget>[
-                        Icon(
-                          Icons.book,
-                          color: Colors.grey[400],
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                   Text(
+                        'Batch',
+                        style: TextStyle(
+                          color: Colors.grey,
+                          letterSpacing: 2.0,
+                        )
+                    ),
+                    SizedBox(height:10.0),
+                    Text(
+                        '2018',
+                        style: TextStyle(
+                            color: Colors.black87,
+                            letterSpacing: 2.0,
+                            fontWeight: FontWeight.bold
 
-                        ),
+                        )
+                    ),
+                    ]
+                  ),
+                  SizedBox(height:30.0),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
                         Text(
-                            'Books Issued',
+                            'Programme',
                             style: TextStyle(
-                                color: Colors.grey[600],
+                              color: Colors.grey,
+                              letterSpacing: 2.0,
+                            )
+                        ),
+                        SizedBox(height:10.0),
+                        Text(
+                            'B.Tech',
+                            style: TextStyle(
+                                color: Colors.black87,
                                 letterSpacing: 2.0,
                                 fontWeight: FontWeight.bold
 
@@ -96,39 +132,33 @@ class _LibcardPageState extends State<LibcardPage> {
                         ),
                       ]
                   ),
-                  Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: books.map((book){
-                        return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Text("$book"),
-                              Center(
-                                child: RaisedButton.icon(
-                                  onPressed: (){},
-                                  color: Colors.amber,
-                                  icon: Icon(Icons.launch),
-                                  label: Text('Return'),
-                                ),
-                              ),
-                              Center(
-                                child: RaisedButton.icon(
-                                  onPressed: (){},
-                                  color: Colors.amber,
-                                  icon: Icon(Icons.swap_horiz),
-                                  label: Text('Re-issue'),
-                                ),
-                              ),
+                  SizedBox(height:30.0),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                            'Stream',
+                            style: TextStyle(
+                              color: Colors.grey,
+                              letterSpacing: 2.0,
+                            )
+                        ),
+                        SizedBox(height:10.0),
+                        Text(
+                            'Computer Science',
+                            style: TextStyle(
+                                color: Colors.black87,
+                                letterSpacing: 2.0,
+                                fontWeight: FontWeight.bold
 
-                            ]);
-                      }).toList()),
-
+                            )
+                        ),
+                      ]
+                  ),
                 ]
             )
         )
-
     );
   }
 }

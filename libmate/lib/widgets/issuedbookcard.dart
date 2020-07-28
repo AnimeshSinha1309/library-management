@@ -119,7 +119,6 @@ class BookPage extends StatelessWidget {
                     icon: Icon(Icons.launch),
                     label: Text('Pay fine'),
                     onPressed: () {
-                          print("Added");
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) =>new RazorPayPage()),
@@ -131,7 +130,8 @@ class BookPage extends StatelessWidget {
 
                 Center(
                   child: RaisedButton.icon(
-                    onPressed: (){},
+                    onPressed: (){
+                    },
                     color: Colors.amber,
                     icon: Icon(Icons.launch),
                     label: Text('Return'),

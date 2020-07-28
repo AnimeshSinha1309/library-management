@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:libmate/datastore/model.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:fuzzy/fuzzy.dart';
+import 'package:libmate/datastore/model.dart';
 import 'package:libmate/views/about.dart';
 import 'package:libmate/views/accounts.dart';
 import 'package:libmate/views/contribute.dart';
@@ -11,8 +11,7 @@ import 'package:libmate/views/home.dart';
 import 'package:libmate/views/libcard.dart';
 import 'package:libmate/views/request.dart';
 import 'package:libmate/views/search.dart';
-import 'package:libmate/views/issued.dart';
-import 'package:fuzzy/fuzzy.dart';
+import 'package:provider/provider.dart';
 
 void main() => runApp(MyApp());
 
@@ -43,8 +42,9 @@ class _MyAppState extends State<MyApp> {
         final name = document.data["name"];
         books.add(BookModel(name: name));
       }
-    }).then((some_res) {
-      final wk = WeightedKey(name: "keyer", getter: (obj) => obj.name, weight: 1);
+    }).then((someRes) {
+      final wk =
+      WeightedKey(name: "keyer", getter: (obj) => obj.name, weight: 1);
       final fo = FuzzyOptions(keys: [wk]);
       fuse = Fuzzy(books, options: fo);
       // in fuse.search, score of 0 is fullmatch, 1 is complete mismatch
@@ -87,11 +87,9 @@ class _MyAppState extends State<MyApp> {
               ),
               initialRoute: "/home",
               routes: <String, WidgetBuilder>{
-                '/home': (BuildContext context) =>
-                    new Home(loggedIn: usermodel.isLoggedIn()),
+                '/home': (BuildContext context) => new Home(),
                 '/search': (BuildContext context) => new SearchPage(fuse: fuse),
                 '/contribute': (BuildContext context) => new ContributePage(),
-                '/issued': (BuildContext context) => new IssuedPage(),
                 '/friends': (BuildContext context) => new FriendsPage(),
                 '/goals': (BuildContext context) => new GoalsPage(),
                 '/libcard': (BuildContext context) => new LibcardPage(),

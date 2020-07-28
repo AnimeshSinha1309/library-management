@@ -1,42 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:libmate/datastore/dummy.dart';
 import 'package:libmate/views/drawer.dart';
-import 'package:libmate/widgets/gauth.dart';
+import 'package:libmate/widgets/bookcard.dart';
 
 class Home extends StatelessWidget {
   final Icon customIcon = Icon(Icons.search);
   final Widget customHeading = Text("LibMate");
-  bool loggedIn;
 
-  Home({ this.loggedIn });
-
-  Widget getLoggedInBody() {
-    return Container(
-      padding: EdgeInsets.all(2),
-      margin: EdgeInsets.all(5),
-      child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              "Your Personalized Library Buddy",
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 2.0,
-                color: Colors.grey[600],
-              ),
-            ),
-            Image.asset('assets/bgbook.jpg'),
-     ])
-    );
-  }
-
-  Widget getLoggedOutBody() {
-    return GAuth();
-  }
-
-  Widget getBody() {
-    return loggedIn ? getLoggedInBody() : getLoggedOutBody();
+  List<Widget> generateRecommendations() {
+    return dummyBooks.map((e) => BookCard(model: e)).toList(growable: false);
   }
 
   @override
@@ -47,6 +19,58 @@ class Home extends StatelessWidget {
           centerTitle: true,
         ),
         drawer: AppDrawer(),
-        body: getBody());
+        body: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.all(20),
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Hi there, Animesh!',
+                style: TextStyle(
+                  color: Colors.grey[800],
+                  fontWeight: FontWeight.w800,
+                  fontFamily: 'Open Sans',
+                  fontSize: 30,
+                ),
+                textAlign: TextAlign.left,
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.all(20),
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Here are some hot picks of the day for you to read.',
+                style: TextStyle(
+                  color: Colors.grey[800],
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Open Sans',
+                  fontSize: 18,
+                ),
+                textAlign: TextAlign.left,
+              ),
+            ),
+            Container(
+              constraints: BoxConstraints(minHeight: 150, maxHeight: 250),
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: generateRecommendations(),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.all(20),
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Books you have issued.',
+                style: TextStyle(
+                  color: Colors.grey[800],
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Open Sans',
+                  fontSize: 18,
+                ),
+                textAlign: TextAlign.left,
+              ),
+            ),
+          ],
+        ));
   }
 }

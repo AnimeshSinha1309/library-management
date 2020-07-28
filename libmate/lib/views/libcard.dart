@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:libmate/datastore/dummy.dart';
+import 'package:libmate/datastore/state.dart';
 import 'package:libmate/datastore/model.dart';
 import 'package:libmate/views/drawer.dart';
 import 'package:libmate/widgets/issueitem.dart';
@@ -15,18 +15,6 @@ class _LibcardPageState extends State<LibcardPage> {
 
   @override
   void initState() {
-    this._issuedBooks = <BorrowBookModel>[
-      BorrowBookModel(
-        book: dummyBooks[1],
-        accessionNumber: 2,
-        borrowDate: DateTime.now().subtract(Duration(days: 11)),
-      ),
-      BorrowBookModel(
-        book: dummyBooks[0],
-        accessionNumber: 1,
-        borrowDate: DateTime.now().subtract(Duration(days: 18)),
-      ),
-    ];
     super.initState();
   }
 
@@ -94,8 +82,8 @@ class _LibcardPageState extends State<LibcardPage> {
     var dueBooks = SliverList(
       delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) =>
-              IssuedBookCard(model: _issuedBooks[index]),
-          childCount: _issuedBooks.length),
+              IssuedBookCard(model: borrowedBooks[index]),
+          childCount: borrowedBooks.length),
     );
 
     return Scaffold(

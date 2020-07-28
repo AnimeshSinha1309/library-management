@@ -42,3 +42,16 @@ List<BookModel> dummyBooks = <BookModel>[
       author: "Donald E. Knuth",
       subject: "Computers"),
 ];
+
+List<BorrowBookModel> dummyBorrow = <BorrowBookModel>[
+  BorrowBookModel(
+    book: dummyBooks[1],
+    accessionNumber: 2,
+    borrowDate: DateTime.now().subtract(Duration(days: 11)),
+  ),
+  BorrowBookModel(
+    book: dummyBooks[0],
+    accessionNumber: 1,
+    borrowDate: DateTime.now().subtract(Duration(days: 18)),
+  ),
+];

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:libmate/datastore/dummy.dart';
+import 'package:libmate/datastore/state.dart';
 import 'package:libmate/views/drawer.dart';
 import 'package:libmate/widgets/bookcard.dart';
+import 'package:libmate/widgets/issueitem.dart';
 
 class Home extends StatelessWidget {
   final Icon customIcon = Icon(Icons.search);
   final Widget customHeading = Text("LibMate");
 
   List<Widget> generateRecommendations() {
-    return dummyBooks.map((e) => BookCard(model: e)).toList(growable: false);
+    return cachedBooks.map((e) => BookCard(model: e)).toList(growable: false);
   }
 
   @override
@@ -19,9 +20,10 @@ class Home extends StatelessWidget {
           centerTitle: true,
         ),
         drawer: AppDrawer(),
-        body: Column(
-          children: [
-            Container(
+        body: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+                child: Container(
               padding: EdgeInsets.all(20),
               alignment: Alignment.centerLeft,
               child: Text(
@@ -34,8 +36,9 @@ class Home extends StatelessWidget {
                 ),
                 textAlign: TextAlign.left,
               ),
-            ),
-            Container(
+            )),
+            SliverToBoxAdapter(
+                child: Container(
               padding: EdgeInsets.all(20),
               alignment: Alignment.centerLeft,
               child: Text(
@@ -48,15 +51,17 @@ class Home extends StatelessWidget {
                 ),
                 textAlign: TextAlign.left,
               ),
-            ),
-            Container(
+            )),
+            SliverToBoxAdapter(
+                child: Container(
               constraints: BoxConstraints(minHeight: 150, maxHeight: 250),
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: generateRecommendations(),
               ),
-            ),
-            Container(
+            )),
+            SliverToBoxAdapter(
+                child: Container(
               padding: EdgeInsets.all(20),
               alignment: Alignment.centerLeft,
               child: Text(
@@ -69,6 +74,12 @@ class Home extends StatelessWidget {
                 ),
                 textAlign: TextAlign.left,
               ),
+            )),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) =>
+                      IssuedBookCard(model: borrowedBooks[index]),
+                  childCount: borrowedBooks.length),
             ),
           ],
         ));

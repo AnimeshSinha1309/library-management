@@ -4,16 +4,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 class UserModel extends ChangeNotifier {
   // Basic Features of the user
   String uid, name, email, photoUrl, role;
-  List<BookModel> wishList;
+  List<BookModel> starList = [];
 
   UserModel({
     this.name,
     this.email,
     this.photoUrl,
     this.uid,
-  }) {
-    this.role = "student";
-  }
+    this.role = "student",
+  });
 
   void loginUser(UserModel userData) {
     this.name = userData.name;
@@ -87,16 +86,17 @@ class BookModel {
   String subject;
   String genre;
   String description;
+  Map<int, dynamic> issues = Map<int, dynamic>();
 
   BookModel(
       {@required this.name,
-        this.author = "",
-        this.isbn = "",
-        this.image =
-        "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg",
-        this.subject = "",
-        this.genre = "",
-        this.description});
+      this.author = "",
+      this.isbn = "",
+      this.image =
+          "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg",
+      this.subject = "",
+      this.genre = "",
+      this.description});
 
   Map<String, BookModelBorrowState> copies;
   int issueCount, starCount;
@@ -105,15 +105,17 @@ class BookModel {
     name = json["title"];
     author = json["author"] ?? "";
     genre = json["category"] ?? "";
-    isbn = (json["isbn"] ?? "").toString();
+    isbn = json["isbn"] ?? "";
     image = json["image"] ??
         "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg";
+    issues = json["issues"];
   }
 }
 
 enum BookModelBorrowState { BORROWED, RESERVED, AVAILABLE }
 
 class BorrowBookModel {
+  String uid;
   int accessionNumber;
   DateTime borrowDate;
   BookModel book;
@@ -130,10 +132,21 @@ class BorrowBookModel {
   }
 
   get fine {
-    int delay = DateTime
-        .now()
-        .difference(this.borrowDate)
-        .inDays - 14;
+    int delay = DateTime.now().difference(this.borrowDate).inDays - 14;
     return (delay > 0 ? delay : 0) * fineRate;
+  }
+
+  BorrowBookModel.fromJSON(Map<String, dynamic> json) {
+    accessionNumber = json["accNo"];
+    borrowDate = json["borrowDate"];
+    book = json["book"];
+  }
+
+  Map<String, dynamic> toJSON() {
+    return <String, dynamic>{
+      "accNo": accessionNumber,
+      "borrowDate": borrowDate,
+      "book": book.isbn,
+    };
   }
 }

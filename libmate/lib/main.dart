@@ -11,8 +11,9 @@ import 'package:libmate/views/home.dart';
 import 'package:libmate/views/libcard.dart';
 import 'package:libmate/views/request.dart';
 import 'package:libmate/views/search.dart';
-import 'package:libmate/views/voiceSearch.dart';
+
 import 'package:libmate/views/issued.dart';
+import 'package:libmate/views/speech.dart';
 import 'package:fuzzy/fuzzy.dart';
 
 void main() => runApp(MyApp());
@@ -93,7 +94,7 @@ class _MyAppState extends State<MyApp> {
                 '/search': (BuildContext context) => new SearchPage(),
                 '/issued': (BuildContext context) => new IssuedPage(),
                 '/search': (BuildContext context) => new SearchPage(fuse: fuse),
-                '/voicesearch': (BuildContext context) => new VoiceSearchPage(),
+                '/speech': (BuildContext context) => new Speech(),
                 '/contribute': (BuildContext context) => new ContributePage(),
                 '/friends': (BuildContext context) => new FriendsPage(),
                 '/goals': (BuildContext context) => new GoalsPage(),

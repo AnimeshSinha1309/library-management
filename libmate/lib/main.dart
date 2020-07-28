@@ -14,6 +14,7 @@ import 'package:libmate/views/search.dart';
 import 'package:provider/provider.dart';
 import 'package:libmate/views/guide.dart';
 import 'package:libmate/views/razorpay.dart';
+import 'package:libmate/widgets/permissionscheck.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
@@ -89,6 +90,7 @@ class _MyAppState extends State<MyApp> {
               initialRoute: "/home",
               routes: <String, WidgetBuilder>{
                 '/home': (BuildContext context) => new Home(),
+                '/permi': (BuildContext context) => new PermissionsPage(),
                 '/search': (BuildContext context) => new SearchPage(fuse: fuse),
                 '/payfines':(BuildContext context) => new RazorPayPage(),
                 '/contribute': (BuildContext context) => new ContributePage(),

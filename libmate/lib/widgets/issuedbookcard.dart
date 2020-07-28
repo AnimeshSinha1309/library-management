@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:libmate/datastore/model.dart';
 import 'package:libmate/views/drawer.dart';
 import 'package:libmate/utils/utils.dart';
-
+import 'package:libmate/views/razorpay.dart';
 class IssuedBookCard extends StatelessWidget {
   final BorrowBookModel model;
   bool shouldOpenPage;
@@ -111,6 +111,10 @@ class BookPage extends StatelessWidget {
           RaisedButton(
             onPressed: () {
               print("Added");
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) =>new RazorPayPage()),
+              );
             },
             child: Text("Pay fine"),
           )

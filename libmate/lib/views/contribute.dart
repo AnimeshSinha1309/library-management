@@ -5,9 +5,8 @@ import 'package:barcode_scan/barcode_scan.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:libmate/views/drawer.dart';
-import 'package:libmate/datastore/model.dart';
 import 'package:libmate/utils/utils.dart';
+import 'package:libmate/views/drawer.dart';
 
 class ContributePage extends StatefulWidget {
   @override
@@ -145,7 +144,8 @@ class _ContributePageState extends State<ContributePage> {
             children: <Widget>[
               FadeInImage(
                   image: NetworkImage(imageUrl),
-                  placeholder: NetworkImage(defImage),
+                  placeholder: NetworkImage(
+                      "http://assets.stickpng.com/images/5847f289cef1014c0b5e486b.png"),
                   height: 100),
               accNoText,
               barcodeText,

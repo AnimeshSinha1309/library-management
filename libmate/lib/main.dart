@@ -1,7 +1,8 @@
 import 'package:libmate/datastore/model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:fuzzy/fuzzy.dart';
+import 'package:libmate/datastore/model.dart';
 import 'package:libmate/views/about.dart';
 import 'package:libmate/views/accounts.dart';
 import 'package:libmate/views/contribute.dart';
@@ -44,8 +45,9 @@ class _MyAppState extends State<MyApp> {
         final name = document.data["name"];
         books.add(BookModel(name: name));
       }
-    }).then((some_res) {
-      final wk = WeightedKey(name: "keyer", getter: (obj) => obj.name, weight: 1);
+    }).then((someRes) {
+      final wk =
+      WeightedKey(name: "keyer", getter: (obj) => obj.name, weight: 1);
       final fo = FuzzyOptions(keys: [wk]);
       fuse = Fuzzy(books, options: fo);
       // in fuse.search, score of 0 is fullmatch, 1 is complete mismatch
@@ -87,11 +89,9 @@ class _MyAppState extends State<MyApp> {
               ),
               initialRoute: "/home",
               routes: <String, WidgetBuilder>{
-
                 '/home': (BuildContext context) =>
                     new Home(loggedIn: usermodel.isLoggedIn()),
                 '/search': (BuildContext context) => new SearchPage(),
-                '/issued': (BuildContext context) => new IssuedPage(),
                 '/search': (BuildContext context) => new SearchPage(fuse: fuse),
                 '/voicesearch': (BuildContext context) => new VoiceSearchPage(),
                 '/contribute': (BuildContext context) => new ContributePage(),

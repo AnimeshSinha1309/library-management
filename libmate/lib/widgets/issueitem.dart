@@ -8,8 +8,7 @@ class IssuedBookCard extends StatelessWidget {
   final bool shouldOpenPage;
 
   IssuedBookCard({@required this.model, this.shouldOpenPage = true})
-      : super(key: UniqueKey()) {
-  }
+      : super(key: UniqueKey());
 
   @override
   Widget build(BuildContext context) {

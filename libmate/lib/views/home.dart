@@ -6,7 +6,6 @@ import 'package:libmate/widgets/bookcard.dart';
 class Home extends StatelessWidget {
   final Icon customIcon = Icon(Icons.search);
   final Widget customHeading = Text("LibMate");
-  bool loggedIn;
 
   List<Widget> generateRecommendations() {
     return dummyBooks.map((e) => BookCard(model: e)).toList(growable: false);
@@ -71,7 +70,6 @@ class Home extends StatelessWidget {
                 textAlign: TextAlign.left,
               ),
             ),
-
           ],
         ));
   }

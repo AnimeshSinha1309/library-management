@@ -42,8 +42,9 @@ class _MyAppState extends State<MyApp> {
         final name = document.data["name"];
         books.add(BookModel(name: name));
       }
-    }).then((some_res) {
-      final wk = WeightedKey(name: "keyer", getter: (obj) => obj.name, weight: 1);
+    }).then((someRes) {
+      final wk =
+      WeightedKey(name: "keyer", getter: (obj) => obj.name, weight: 1);
       final fo = FuzzyOptions(keys: [wk]);
       fuse = Fuzzy(books, options: fo);
       // in fuse.search, score of 0 is fullmatch, 1 is complete mismatch

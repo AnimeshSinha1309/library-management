@@ -13,7 +13,7 @@ class BookCard extends StatelessWidget {
   final bool shouldOpenPage;
 
   BookCard({@required this.model, this.shouldOpenPage = true})
-      : super(key: UniqueKey()) {}
+      : super(key: UniqueKey());
 
   @override
   Widget build(BuildContext context) {
@@ -72,13 +72,13 @@ class BookCard extends StatelessWidget {
                                 )),
                             Spacer(),
                             Text(
-                              "Genre: " + model.genre ?? "",
+                              "Genre: " + (model.genre ?? ""),
                               style: TextStyle(
                                 color: Colors.white,
                               ),
                             ),
                             Text(
-                              "Genre: " + model.subject ?? "",
+                              "Subject: " + (model.subject ?? model.genre),
                               style: TextStyle(
                                 color: Colors.white,
                               ),

@@ -6,15 +6,6 @@ class UserModel extends ChangeNotifier {
   String uid, name, email, photoUrl, role;
   List<BookModel> wishList;
 
-//// For the library card
-//List<BorrowedBookModel> borrowed;
-//
-//// For the wish list and recommendations
-//// TODO: these should NOT be models?
-//List<BookModel> pastReads;
-//List<UserModel> friends;
-//List<String> likedTags = <String>[];
-
   UserModel({
     this.name,
     this.email,
@@ -25,16 +16,16 @@ class UserModel extends ChangeNotifier {
   }
 
   void loginUser(UserModel userData) {
-    // this.name = userData.name;
-    // this.email = userData.email;
-    // this.photoUrl = userData.photoUrl;
-    // this.uid = userData.uid;
+    this.name = userData.name;
+    this.email = userData.email;
+    this.photoUrl = userData.photoUrl;
+    this.uid = userData.uid;
 
-    this.name = "Akshat";
-    this.email = "akshatgoyalak23@gmail.com";
-    this.photoUrl =
-        "http://assets.stickpng.com/images/5847f289cef1014c0b5e486b.png";
-    this.uid = "20102010";
+    // this.name = "Akshat";
+    // this.email = "akshatgoyalak23@gmail.com";
+    // this.photoUrl =
+    //     "http://assets.stickpng.com/images/5847f289cef1014c0b5e486b.png";
+    // this.uid = "20102010";
 
     toSharedPrefs();
     notifyListeners();
@@ -47,8 +38,7 @@ class UserModel extends ChangeNotifier {
   }
 
   bool isLoggedIn() {
-    // return uid != null;
-    return true;
+    return uid != null;
   }
 
   void addReadingList(BookModel book) {}
@@ -60,20 +50,20 @@ class UserModel extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     UserModel model = new UserModel();
 
-    // if (prefs.getBool(LOGGED_IN) ?? false) {
-    //   model.uid = prefs.getString("uid");
-    //   model.name = prefs.getString("name");
-    //   model.email = prefs.getString("email");
-    //   model.photoUrl = prefs.getString("photoUrl");
-    // }
-
-    if (true) {
-      model.name = "Akshat";
-      model.email = "akshatgoyalak23@gmail.com";
-      model.photoUrl =
-          "http://assets.stickpng.com/images/5847f289cef1014c0b5e486b.png";
-      model.uid = "20102010";
+    if (prefs.getBool(LOGGED_IN) ?? false) {
+      model.uid = prefs.getString("uid");
+      model.name = prefs.getString("name");
+      model.email = prefs.getString("email");
+      model.photoUrl = prefs.getString("photoUrl");
     }
+
+    // if (true) {
+    //   model.name = "Akshat";
+    //   model.email = "akshatgoyalak23@gmail.com";
+    //   model.photoUrl =
+    //       "http://assets.stickpng.com/images/5847f289cef1014c0b5e486b.png";
+    //   model.uid = "20102010";
+    // }
 
     return model;
   }
@@ -102,13 +92,12 @@ class BookModel {
       {@required this.name,
         this.author = "",
         this.isbn = "",
-        this.image = "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg",
+        this.image =
+        "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg",
         this.subject = "",
         this.genre = "",
         this.description});
 
-  // List of books in library
-  // TODO: what is the String representing?
   Map<String, BookModelBorrowState> copies;
   int issueCount, starCount;
 
@@ -148,11 +137,3 @@ class BorrowBookModel {
     return (delay > 0 ? delay : 0) * fineRate;
   }
 }
-
-class BookList {
-  List<BookModel> books;
-}
-
-class SearchResults extends BookList {}
-
-class RecommendedBooks extends BookList {}

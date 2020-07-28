@@ -3,6 +3,7 @@ import 'package:libmate/views/drawer.dart';
 import 'package:libmate/utils/utils.dart';
 import 'package:libmate/widgets/request.dart';
 import 'package:validators/validators.dart';
+import 'package:http/http.dart' as http;
 
 class RequestPage extends StatefulWidget {
   @override
@@ -12,14 +13,29 @@ class RequestPage extends StatefulWidget {
 class _RequestPageState extends State<RequestPage> {
   final _formKey = GlobalKey<FormState>();
   RequestBookModel model = RequestBookModel();
-  // RegExp exp = new RegExp(r"^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$");  # regex for isbn
 
-  bool doesExist(String isbn) {
-    return false;
+  Future<bool> doesExist(String isbn) async {
+    final response =
+        await http.get('https://libmate.herokuapp.com/query?isbn=$isbn');
+    bool res = response.body.length != 0;
+    return res;
   }
 
-  void sendRequest(RequestBookModel model) {
+  Future<String> sendRequest(RequestBookModel model) async {
+    // final res = await doesExist(model.isbn);
+    // if (res) {
+    //   return "This book is present in the library";
+    // }
+    final response = await http.post(
+        'https://libmate.herokuapp.com/request-book',
+        body: model.toMap());
 
+    if (response.statusCode == 200) {
+      _formKey.currentState.reset();
+      return "Request Submitted!!";
+    } else {
+      return "Error sending request!";
+    }
   }
 
   @override
@@ -58,12 +74,8 @@ class _RequestPageState extends State<RequestPage> {
                           validator: (value) {
                             if (value.isEmpty) {
                               return 'Please enter the ISBN of the book';
-                            }
-                            else if(!isISBN(value)) {
+                            } else if (!isISBN(value)) {
                               return 'Please enter the valid ISBN';
-                            }
-                            else if(doesExist(value)) {
-                              return 'This book is in the library';
                             }
                             return null;
                           },
@@ -71,17 +83,6 @@ class _RequestPageState extends State<RequestPage> {
                             model.isbn = value;
                           },
                         ),
-                        // TextFormField(
-                        //   keyboardType: TextInputType.number,
-                        //   decoration:
-                        //       InputDecoration(hintText: "Estimated Price"),
-                        //   validator: (value) {
-                        //     if (value.isEmpty) {
-                        //       return 'Please enter an approximate price for it.';
-                        //     }
-                        //     return null;
-                        //   },
-                        // ),
                         TextFormField(
                           keyboardType: TextInputType.text,
                           decoration:
@@ -102,22 +103,21 @@ class _RequestPageState extends State<RequestPage> {
                               hintText: "Reasons, Cosigners, etc."),
                           maxLines: 3,
                           onSaved: (String value) {
-                            model.reason = value.isEmpty ? model.reason : value;
+                            model.reason = value.isEmpty ? def : value;
                           },
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16.0),
                           child: RaisedButton(
                             color: Colors.pinkAccent,
-                            onPressed: () {
+                            onPressed: () async {
                               // Validate returns true if the form is valid, or false
                               // otherwise.
                               if (_formKey.currentState.validate()) {
-                                // If the form is valid, display a Snackbar.
-                                sendRequest(model);
-                                _formKey.currentState.reset();
-                                showToast(context,
-                                    'Backend for the App is not Ready');
+                                _formKey.currentState.save();
+                                showToast(context, "Sending Request..");
+                                final String resp = await sendRequest(model);
+                                showToast(context, resp);
                               }
                             },
                             child: Text(

@@ -102,7 +102,7 @@ class RequestedBookCard extends StatelessWidget {
 class BookPage extends StatelessWidget {
   final RequestedBookModel model;
 
-  void markBook(String uid) {}
+  void markBook(String isbn) {}
 
   BookPage({@required this.model});
 
@@ -118,8 +118,7 @@ class BookPage extends StatelessWidget {
           Spacer(),
           RaisedButton(
             onPressed: () {
-              markBook(model.uid);
-              print("Approved");
+              markBook(model.isbn);
             },
             child: Text("Approve"),
           ),

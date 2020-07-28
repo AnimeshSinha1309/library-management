@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:libmate/views/drawer.dart';
 import 'package:libmate/widgets/request.dart';
 import 'package:libmate/widgets/requestedbookcard.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'dart:async';
 
 class RequestedPage extends StatefulWidget {
@@ -13,29 +15,26 @@ class _RequestedPageState extends State<RequestedPage> {
   Timer timer;
   Set<RequestedBookModel> books = Set<RequestedBookModel>();
 
-  Set<RequestedBookModel> requestedBooks() {
+  void requestedBooks() async {
+    final response =
+        await http.get('https://libmate.herokuapp.com/view-requested-books?sort=cnt&flag=1');
     Set<RequestedBookModel> requestlist = Set<RequestedBookModel>();
-    requestlist.add(RequestedBookModel(
-        uid: "01",
-        name: "Gulliver's Travels",
-        isbn: "9781982654368",
-        subject: "Fiction"));
-    requestlist.add(RequestedBookModel(
-        uid: "10",
-        name: "Gulliver's Travels",
-        isbn: "9781982654368",
-        subject: "Fiction"));
-    return requestlist;
+    if (response.statusCode == 200) {
+      for (var book in json.decode(response.body)) {
+        requestlist.add(RequestedBookModel.fromJson(book));
+      }
+    }
+    setState(() {
+      books = requestlist;
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    books = requestedBooks();
-    timer = Timer.periodic(Duration(seconds: 10), (Timer t) {
-      setState(() {
-        books = requestedBooks();
-      });
+    requestedBooks();
+    timer = Timer.periodic(Duration(seconds: 60), (Timer t) {
+      requestedBooks();
     });
   }
 
@@ -45,10 +44,14 @@ class _RequestedPageState extends State<RequestedPage> {
     super.dispose();
   }
 
-  void removeBook(RequestBookModel book) {
+  void removeBook(RequestBookModel book) async {
     setState(() {
       books.remove(book);
     });
+    final res = await http.post(
+      'https://libmate.herokuapp.com/delete-requested-book',
+      body: book.toMap(),
+    );
   }
 
   @override

@@ -108,16 +108,44 @@ class BookPage extends StatelessWidget {
         body: Column(children: [
           IssuedBookCard(model: model),
           Text("Total fine is $fine"),
-          RaisedButton(
-            onPressed: () {
-              print("Added");
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) =>new RazorPayPage()),
-              );
-            },
-            child: Text("Pay fine"),
-          )
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Center(
+                  child: RaisedButton.icon(
+
+                    color: Colors.amber,
+                    icon: Icon(Icons.launch),
+                    label: Text('Pay fine'),
+                    onPressed: () {
+                          print("Added");
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) =>new RazorPayPage()),
+                          );
+                        },
+                  ),
+                ),
+
+
+                Center(
+                  child: RaisedButton.icon(
+                    onPressed: (){},
+                    color: Colors.amber,
+                    icon: Icon(Icons.launch),
+                    label: Text('Return'),
+                  ),
+                ),
+                Center(
+                  child: RaisedButton.icon(
+                    onPressed: (){},
+                    color: Colors.amber,
+                    icon: Icon(Icons.swap_horiz),
+                    label: Text('Re-issue'),
+                  ),
+                ),
+         ] )
         ]));
   }
 }

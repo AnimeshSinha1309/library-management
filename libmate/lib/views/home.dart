@@ -10,7 +10,25 @@ class Home extends StatelessWidget {
   Home({ this.loggedIn });
 
   Widget getLoggedInBody() {
-    return Text("Hello!");
+    return Container(
+      padding: EdgeInsets.all(2),
+      margin: EdgeInsets.all(5),
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              "Your Personalized Library Buddy",
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 2.0,
+                color: Colors.grey[600],
+              ),
+            ),
+            Image.asset('assets/bgbook.jpg'),
+     ])
+    );
   }
 
   Widget getLoggedOutBody() {

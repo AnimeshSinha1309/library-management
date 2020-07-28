@@ -44,12 +44,15 @@ class  _VoiceSearchPageState extends State<VoiceSearchPage> {
       await PermissionHandler()
           .requestPermissions([PermissionGroup.microphone]);
     }
+
   }
+
+
 
   // Platform messages are asynchronous, so we initialize in an async method.
   void activateSpeechRecognizer() {
-    requestPermission();
 
+     requestPermission();
     _speech = new SpeechRecognition();
     _speech.setAvailabilityHandler(onSpeechAvailability);
     _speech.setCurrentLocaleHandler(onCurrentLocale);
@@ -173,6 +176,7 @@ class  _VoiceSearchPageState extends State<VoiceSearchPage> {
     }
   }
 }
+
 
 //Search delegate
 class _SearchAppBarDelegate extends SearchDelegate<String> {

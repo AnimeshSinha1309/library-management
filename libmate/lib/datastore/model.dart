@@ -87,7 +87,7 @@ class BookModel {
   String subject;
   String genre;
   String description;
-  Map<int, dynamic> issues = Map<int, dynamic>();
+  Map<dynamic, dynamic> issues = Map<String, dynamic>();
 
   BookModel(
       {@required this.name,
@@ -102,22 +102,22 @@ class BookModel {
   Map<String, BookModelBorrowState> copies;
   int issueCount, starCount;
 
-  BookModel.fromJSON(Map<String, dynamic> json) {
-    name = json["title"];
-    author = json["author"] ?? "";
-    genre = json["category"] ?? "";
-    isbn = json["isbn"] ?? "";
-    image = json["image"] ??
+  BookModel.fromJSON({Map<String, dynamic> json, String isbn}) {
+    this.name = json["name"];
+    this.author = json["author"] ?? "";
+    this.genre = json["category"] ?? "";
+    this.isbn = isbn;
+    this.image = json["image"] ??
         "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg";
-    issues = json["issues"];
+    this.issues = json["issues"] ?? Map();
+    this.subject = json["subject"] ?? "";
   }
 }
 
 enum BookModelBorrowState { BORROWED, RESERVED, AVAILABLE }
 
 class BorrowBookModel {
-  String uid;
-  int accessionNumber;
+  String accessionNumber;
   DateTime borrowDate, returnDate;
   BookModel book;
   static const int fineRate = 2;
@@ -139,9 +139,9 @@ class BorrowBookModel {
     return (delay > 0 ? delay : 0) * fineRate;
   }
 
-  BorrowBookModel.fromJSON(Map<String, dynamic> json) {
+  BorrowBookModel.fromJSON(Map<dynamic, dynamic> json) {
     accessionNumber = json["accNo"];
-    borrowDate = json["borrowDate"];
+    borrowDate = json["borrowDate"].toDate();
     returnDate = json["returnDate"];
     book = json["book"];
   }

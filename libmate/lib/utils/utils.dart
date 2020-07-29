@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'dart:io' show File;
 
 void gotoPage(BuildContext context, dynamic page) {
   var route = PageRouteBuilder(
@@ -23,7 +25,13 @@ void gotoPage(BuildContext context, dynamic page) {
 }
 
 void showToast(BuildContext context, String message) {
-    Scaffold.of(context).showSnackBar(SnackBar(
-      content: Text(message),
-    ));
+  Scaffold.of(context).showSnackBar(SnackBar(
+    content: Text(message),
+  ));
+}
+
+Future<Map<String, String>> readConfig() async {
+  const configPath = "../config/config.json";
+
+  return jsonDecode(await new File(configPath).readAsString());
 }

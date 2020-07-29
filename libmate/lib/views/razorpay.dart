@@ -13,18 +13,13 @@ class RazorPayPage extends StatefulWidget {
 }
 
 class _RazorPayPageState extends State<RazorPayPage> {
-  String RAZOR_KEY;
-  int totalAmount = 0;
+  static String RAZOR_KEY = config["razorkey"];
+  int totalAmount = 100;
   Razorpay _razorpay;
-
-  void getKey() async {
-    RAZOR_KEY = (await readConfig())["razorkey"];
-  }
 
   @override
   void initState() {
     super.initState();
-    getKey();
     _razorpay = Razorpay();
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
@@ -56,11 +51,11 @@ class _RazorPayPageState extends State<RazorPayPage> {
     }
   }
 
-  void _handlePaymentSuccess(PaymentSuccessResponse, response) {
+  void _handlePaymentSuccess(response) {
     Fluttertoast.showToast(msg: "SUCCESS: " + response.paymentId);
   }
 
-  void _handlePaymentError(PaymentErrorResponse, response) {
+  void _handlePaymentError(response) {
     Fluttertoast.showToast(
         msg: "ERROR: " + response.code.toString() + "-" + response.message);
   }

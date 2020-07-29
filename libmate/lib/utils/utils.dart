@@ -30,8 +30,4 @@ void showToast(BuildContext context, String message) {
   ));
 }
 
-Future<Map<String, String>> readConfig() async {
-  const configPath = "../config/config.json";
-
-  return jsonDecode(await new File(configPath).readAsString());
-}
+const config = {"razorkey": "rzp_test_U4H7R8ZUFz2iHt"};

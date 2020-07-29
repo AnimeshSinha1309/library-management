@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 import 'package:flutter/material.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:libmate/views/drawer.dart';
 import 'package:libmate/utils/utils.dart';
 
@@ -16,6 +15,7 @@ class _RazorPayPageState extends State<RazorPayPage> {
   static String RAZOR_KEY = config["razorkey"];
   int totalAmount = 100;
   Razorpay _razorpay;
+  BuildContext context;
 
   @override
   void initState() {
@@ -52,16 +52,17 @@ class _RazorPayPageState extends State<RazorPayPage> {
   }
 
   void _handlePaymentSuccess(response) {
-    Fluttertoast.showToast(msg: "SUCCESS: " + response.paymentId);
+    showToast(context, "SUCCESS: " + response.paymentId);
   }
 
   void _handlePaymentError(response) {
-    Fluttertoast.showToast(
-        msg: "ERROR: " + response.code.toString() + "-" + response.message);
+    String msg = "ERROR: " + response.code.toString() + "-" + response.message;
+    showToast(context, msg);
+    print(msg);
   }
 
   void _handleExternalWallet(ExternalWalletResponse, response) {
-    Fluttertoast.showToast(msg: "EXTERNAL WALLET: " + response.walletName);
+    showToast(context, "EXTERNAL WALLET: " + response.walletName);
   }
 
   @override
@@ -69,28 +70,31 @@ class _RazorPayPageState extends State<RazorPayPage> {
     return Scaffold(
         appBar: AppBar(title: Text('Pay Fine')),
         drawer: AppDrawer(),
-        body: Center(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            LimitedBox(
-              maxWidth: 150.0,
-              child: Text("Your payment amount is INR $totalAmount"),
-            ),
-            SizedBox(
-              height: 15.0,
-            ),
-            RaisedButton(
-              child: Text('Make Payment',
-                  style: TextStyle(
-                      color: Colors.pink,
-                      fontSize: 22.0,
-                      fontWeight: FontWeight.bold)),
-              onPressed: () {
-                openCheckout();
-              },
-            )
-          ],
-        )));
+        body: Builder(builder: (context) {
+          this.context = context;
+          return Center(
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              LimitedBox(
+                maxWidth: 150.0,
+                child: Text("Your payment amount is INR $totalAmount"),
+              ),
+              SizedBox(
+                height: 15.0,
+              ),
+              RaisedButton(
+                child: Text('Make Payment',
+                    style: TextStyle(
+                        color: Colors.pink,
+                        fontSize: 22.0,
+                        fontWeight: FontWeight.bold)),
+                onPressed: () {
+                  openCheckout();
+                },
+              )
+            ],
+          ));
+        }));
   }
 }

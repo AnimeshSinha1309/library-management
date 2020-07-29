@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'dart:io' show File;
+import 'dart:async';
 
 void gotoPage(BuildContext context, dynamic page) {
   var route = PageRouteBuilder(
@@ -28,6 +30,22 @@ void showToast(BuildContext context, String message) {
   Scaffold.of(context).showSnackBar(SnackBar(
     content: Text(message),
   ));
+}
+
+class Debouncer {
+  final int milliseconds;
+  VoidCallback action;
+  Timer _timer;
+
+  Debouncer({this.milliseconds});
+
+  run(VoidCallback action) {
+    if (_timer != null) {
+      _timer.cancel();
+    }
+
+    _timer = Timer(Duration(milliseconds: milliseconds), action);
+  }
 }
 
 const config = {"razorkey": "rzp_test_U4H7R8ZUFz2iHt"};

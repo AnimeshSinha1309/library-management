@@ -5,6 +5,7 @@ class UserModel extends ChangeNotifier {
   // Basic Features of the user
   String uid, name, email, photoUrl, role;
   List<BookModel> starList = [];
+  List<BorrowBookModel> borrowedBooks = [];
 
   UserModel({
     this.name,

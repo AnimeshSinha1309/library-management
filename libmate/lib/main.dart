@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:libmate/datastore/model.dart';
+import 'package:libmate/datastore/state.dart';
 import 'package:libmate/views/about.dart';
 import 'package:libmate/views/accounts.dart';
 import 'package:libmate/views/contribute.dart';
@@ -32,6 +32,7 @@ class _MyAppState extends State<MyApp> {
 
   void loadState() async {
     model = await UserModel.fromSharedPrefs();
+    loadUser(model);
 
     setState(() {
       loaded = true;

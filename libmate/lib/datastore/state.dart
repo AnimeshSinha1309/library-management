@@ -5,23 +5,21 @@ import 'package:libmate/datastore/model.dart';
 
 /// Global State of the User
 
-UserModel currentUser;
-List<BorrowBookModel> borrowedBooks = dummyBorrow;
-
-void loadUser(String uid) async {
-  final user = await Firestore.instance.collection("users").document(uid).get();
+void loadUser(UserModel currentUser) async {
+  final user = await Firestore.instance.collection("users").document(
+      currentUser.uid).get();
   if (!user.exists) {
     Firestore.instance
         .collection("users")
-        .document(uid)
+        .document(currentUser.uid)
         .setData({"issueList": [], "role": "student"});
   } else {
-    borrowedBooks = user.data["issueList"];
+    currentUser.borrowedBooks = dummyBorrow; // FIXME: user.data["issueList"];
     currentUser.role = user.data["role"];
   }
 }
 
-Future issueBook(String isbn, String uid, int accNo) async {
+Future issueBook(String isbn, UserModel currentUser, int accNo) async {
   BookModel book = BookModel.fromJSON(
       (await Firestore.instance.collection("books").document(isbn).get()).data);
   if (!book.issues.containsKey(accNo))
@@ -30,16 +28,16 @@ Future issueBook(String isbn, String uid, int accNo) async {
 
   var borrow = BorrowBookModel(
       accessionNumber: accNo, borrowDate: DateTime.now(), book: book);
-  Firestore.instance.collection("users").document(uid).setData({
+  Firestore.instance.collection("users").document(currentUser.uid).setData({
     'issueList': FieldValue.arrayUnion([borrow.toJSON()]),
   }, merge: true);
   Firestore.instance.collection("books").document(isbn).setData({
     'state': book.issues,
   }, merge: true);
-  borrowedBooks.add(borrow);
+  currentUser.borrowedBooks.add(borrow);
 }
 
-Future returnBook(String isbn, String uid, int accNo) async {
+Future returnBook(String isbn, UserModel currentUser, int accNo) async {
   BookModel book = BookModel.fromJSON(
       (await Firestore.instance.collection("books").document(isbn).get()).data);
   if (!book.issues.containsKey(accNo))
@@ -48,24 +46,35 @@ Future returnBook(String isbn, String uid, int accNo) async {
 
   var borrow = BorrowBookModel(
       accessionNumber: accNo, borrowDate: DateTime.now(), book: book);
-  Firestore.instance.collection("users").document(uid).setData({
+  Firestore.instance.collection("users").document(currentUser.uid).setData({
     'issueList': FieldValue.arrayRemove([borrow.toJSON()]),
   }, merge: true);
   Firestore.instance.collection("books").document(isbn).setData({
     'state': book.issues,
   }, merge: true);
-  borrowedBooks.add(borrow);
+  currentUser.borrowedBooks.add(borrow);
 }
 
 /// Adding new books to the library
 
 Future createBook(String isbn, String title, String author, String description,
     int accNo) async {
+  var currentBook = await Firestore.instance.collection("books")
+      .document(isbn)
+      .get();
+  Map accList = Map();
+  if (currentBook.exists) {
+    accList = currentBook.data['accNo'];
+    accList[accNo] = "available";
+  } else {
+    accList[accNo] = {accNo: "available"};
+  }
+
   Firestore.instance.collection("books").document(isbn).setData({
     'name': title,
     'authors': author,
     'description': description,
-    'accNo': {accNo: "available"},
+    'accNo': accList,
   }, merge: true);
 }
 

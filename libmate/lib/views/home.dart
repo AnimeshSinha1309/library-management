@@ -11,7 +11,12 @@ class Home extends StatelessWidget {
   final Widget customHeading = Text("LibMate");
 
   List<Widget> generateRecommendations() {
-    return cachedBooks.map((e) => BookCard(model: e)).toList(growable: false);
+    List<BookCard> recommendations = [];
+    cachedBooks.forEach((String key, BookModel value) {
+      if (recommendations.length < 6)
+        recommendations.add(BookCard(model: value));
+    });
+    return recommendations;
   }
 
   @override

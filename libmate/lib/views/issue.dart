@@ -4,12 +4,12 @@ import 'package:libmate/datastore/state.dart';
 import 'package:libmate/views/drawer.dart';
 import 'package:provider/provider.dart';
 
-class FriendsPage extends StatefulWidget {
+class IssuePage extends StatefulWidget {
   @override
-  _FriendsPageState createState() => _FriendsPageState();
+  _IssuePageState createState() => _IssuePageState();
 }
 
-class _FriendsPageState extends State<FriendsPage> {
+class _IssuePageState extends State<IssuePage> {
   TextEditingController _isbnController = TextEditingController(),
       _accNoController = TextEditingController();
   final _formKey = GlobalKey<FormState>();

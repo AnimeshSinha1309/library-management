@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fuzzy/fuzzy.dart';
 import 'package:libmate/datastore/dummy.dart';
 import 'package:libmate/datastore/model.dart';
 
@@ -93,21 +92,22 @@ Future createBook(String isbn, String title, String author, String description,
 
 /// Cached Books for Search and Recommendations
 
-List<BookModel> cachedBooks = dummyBooks;
+Map<String, BookModel> cachedBooks;
 
 void loadBooks() {
+  cachedBooks = Map<String, BookModel>();
   Firestore.instance.collection('books').getDocuments().then((snapshot) {
     final documents = snapshot.documents;
-    cachedBooks = List<BookModel>();
-
     for (var document in documents) {
-      final name = document.data["name"];
-      cachedBooks.add(BookModel(name: name));
+      cachedBooks[document.documentID] =
+          BookModel.fromJSON(json: document.data, isbn: document.documentID);
     }
-  }).then((res) {
-    final wk = WeightedKey(name: "keyer", getter: (obj) => obj.name, weight: 1);
-    final fo = FuzzyOptions(keys: [wk]);
-    var fuse = Fuzzy(cachedBooks, options: fo);
-    // in fuse.search, score of 0 is full-match, 1 is complete mismatch
   });
+  // TODO: Implement local fuzzy searching
+  //      .then((res) {
+  //    final wk = WeightedKey(name: "keyer", getter: (obj) => obj.name, weight: 1);
+  //    final fo = FuzzyOptions(keys: [wk]);
+  //    var fuse = Fuzzy(cachedBooks, options: fo);
+  //    // in fuse.search, score of 0 is full-match, 1 is complete mismatch
+  //  });
 }

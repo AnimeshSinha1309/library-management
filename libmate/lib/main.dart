@@ -28,6 +28,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     loaded = false;
     loadState();
+    loadBooks();
   }
 
   void loadState() async {
@@ -68,7 +69,7 @@ class _MyAppState extends State<MyApp> {
                 '/home': (BuildContext context) => new Home(),
                 '/search': (BuildContext context) => new SearchPage(),
                 '/contribute': (BuildContext context) => new ContributePage(),
-                '/friends': (BuildContext context) => new FriendsPage(),
+                '/issue': (BuildContext context) => new IssuePage(),
                 '/goals': (BuildContext context) => new GoalsPage(),
                 '/libcard': (BuildContext context) => new LibcardPage(),
                 '/request': (BuildContext context) => new RequestPage(),

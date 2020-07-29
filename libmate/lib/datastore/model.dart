@@ -111,6 +111,7 @@ class BookModel {
         "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg";
     this.issues = json["issues"] ?? Map();
     this.subject = json["subject"] ?? "";
+    this.description = json["description"];
   }
 }
 

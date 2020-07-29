@@ -35,7 +35,7 @@ class _IssuePageState extends State<IssuePage> {
 
           return Scaffold(
             appBar: new AppBar(
-              title: new Text('Friends Page'),
+              title: new Text('Issue Book'),
             ),
             drawer: AppDrawer(),
             body: Padding(

@@ -86,6 +86,12 @@ class _LibcardPageState extends State<LibcardPage> {
                     IssuedBookCard(model: model.borrowedBooks[index]),
                 childCount: model.borrowedBooks.length),
           );
+          var pastBooks = SliverList(
+            delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) =>
+                    IssuedBookCard(model: model.borrowedBooks[index]),
+                childCount: model.pastBooks.length),
+          );
 
           return Scaffold(
               backgroundColor: Colors.grey[100],
@@ -95,7 +101,7 @@ class _LibcardPageState extends State<LibcardPage> {
               ),
               drawer: AppDrawer(),
               body: CustomScrollView(
-                slivers: [statsGroup, dueBooks],
+                slivers: [statsGroup, dueBooks, pastBooks],
               ));
         });
   }

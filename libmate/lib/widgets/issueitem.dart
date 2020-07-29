@@ -37,7 +37,9 @@ class IssuedBookCard extends StatelessWidget {
               child: Container(
                 height: 135,
                 padding: EdgeInsets.all(8),
-                color: Color.fromRGBO(100, 100, 100, 0.9),
+                color: model.returnDate != null
+                    ? Color.fromRGBO(100, 100, 100, 0.9)
+                    : Color.fromRGBO(20, 20, 20, 0.9),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -58,7 +60,11 @@ class IssuedBookCard extends StatelessWidget {
                     ),
                     Spacer(),
                     Text(
-                      "Due Date: " + model.dueDate.toString().split(' ')[0],
+                      model.returnDate == null
+                          ? "Due Date: " +
+                          model.dueDate.toString().split(' ')[0]
+                          : "Issue Date: " +
+                          model.borrowDate.toString().split(' ')[0],
                       style: TextStyle(
                         color: Colors.white,
                       ),

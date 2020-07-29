@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:libmate/datastore/dummy.dart';
 import 'package:libmate/datastore/model.dart';
 
 /// Global State of the User
@@ -15,7 +14,13 @@ void loadUser(UserModel currentUser) async {
         .document(currentUser.uid)
         .setData({"issueList": [], "role": "student"});
   } else {
-    currentUser.borrowedBooks = dummyBorrow; // FIXME: user.data["issueList"];
+    for (var borrow in user.data["issueList"]) {
+      var el = BorrowBookModel.fromJSON(borrow);
+      if (el.returnDate == null)
+        currentUser.borrowedBooks.add(el);
+      else
+        currentUser.pastBooks.add(el);
+    }
     currentUser.role = user.data["role"];
   }
 }

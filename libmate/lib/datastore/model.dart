@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:libmate/datastore/state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,6 +8,7 @@ class UserModel extends ChangeNotifier {
   String uid, name, email, photoUrl, role;
   List<BookModel> starList = [];
   List<BorrowBookModel> borrowedBooks = [];
+  List<BorrowBookModel> pastBooks = [];
 
   UserModel({
     this.name,
@@ -90,15 +92,14 @@ class BookModel {
   String description;
   Map<dynamic, dynamic> issues = Map<String, dynamic>();
 
-  BookModel(
-      {@required this.name,
-      this.author = "",
-      this.isbn = "",
-      this.image =
-          "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg",
-      this.subject = "",
-      this.genre = "",
-      this.description});
+  BookModel({@required this.name,
+    this.author = "",
+    this.isbn = "",
+    this.image =
+    "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg",
+    this.subject = "",
+    this.genre = "",
+    this.description});
 
   Map<String, BookModelBorrowState> copies;
   int issueCount, starCount;
@@ -144,7 +145,10 @@ class BorrowBookModel {
   BorrowBookModel.fromJSON(Map<dynamic, dynamic> json) {
     accessionNumber = json["accNo"];
     borrowDate = json["borrowDate"].toDate();
-    returnDate = json["returnDate"];
+    if (json["returnDate"] is DateTime)
+      returnDate = json["returnDate"];
+    else if (json["returnDate"] is Timestamp)
+      returnDate = json["returnDate"].toDate();
     book = cachedBooks[json["book"]];
   }
 

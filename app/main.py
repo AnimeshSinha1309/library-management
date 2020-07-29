@@ -1,5 +1,6 @@
 import json
 import uuid
+import requests
 import pandas as pd
 from fuzzywuzzy import fuzz 
 from fuzzywuzzy import process
@@ -84,15 +85,10 @@ def query():
 @app.route("/request-book",methods=['POST'])
 def requestbook():
     dict = request.form
-    print(dict)
-    return dict
-
     bookdb_path = './app/db/request-books.csv'
     df = pd.read_csv(bookdb_path)    
 
     try:
-        print(type(dict['isbn']))
-        return dict['isbn']
         check = (int(dict['isbn']) in df.isbn.values)
     except:
         return abort(404)    
@@ -100,11 +96,21 @@ def requestbook():
     try:
         if check == False:
             id = uuid.uuid4()
-            df = df.append({"id":id,'isbn':dict['isbn'],'title':dict['title'],'category':dict['category'],'reason':dict['reason'],'cnt':1},ignore_index = True)
+            URL = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + dict['isbn']
+            r = requests.get(url = URL) 
+            data = r.json()
+            try:
+                img = data['items'][0]['volumeInfo']['imageLinks']['thumbnail']
+            except:
+                img = "NaN"
+                
+            df = df.append({"id":id,'isbn':dict['isbn'],'title':dict['title'],'category':dict['category'],'reason':dict['reason'],'image':img,'cnt':1},ignore_index = True)
             df.to_csv(bookdb_path,index = False)
         else:
             df.loc[df.isbn == int(dict['isbn']) , ['cnt']] += 1
-            df.loc[df.isbn == int(dict['isbn']) , ['reason']] += "|" + dict['reason']
+            prev = df.loc[df.isbn == int(dict['isbn']) , ['reason']]
+            if(len(prev) < len(dict['reason'])):
+                df.loc[df.isbn == int(dict['isbn']) , ['reason']]  = dict['reason']            
             df.to_csv(bookdb_path,index = False)
     except:
         return abort(404)

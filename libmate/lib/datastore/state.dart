@@ -58,7 +58,8 @@ Future returnBook(String isbn, UserModel currentUser, String accNo) async {
     }
   }
   currentUser.borrowedBooks =
-      issueList.map((json) => BorrowBookModel.fromJSON(json)).toList();
+      issueList.map<BorrowBookModel>((json) => BorrowBookModel.fromJSON(json))
+          .toList();
 
   Firestore.instance.collection("books").document(isbn).setData({
     'issues': book.issues,

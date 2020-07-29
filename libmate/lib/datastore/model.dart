@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:libmate/datastore/state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserModel extends ChangeNotifier {
@@ -105,7 +106,7 @@ class BookModel {
   BookModel.fromJSON({Map<String, dynamic> json, String isbn}) {
     this.name = json["name"];
     this.author = json["author"] ?? "";
-    this.genre = json["category"] ?? "";
+    this.genre = json["genre"] ?? "";
     this.isbn = isbn;
     this.image = json["image"] ??
         "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg";
@@ -144,7 +145,7 @@ class BorrowBookModel {
     accessionNumber = json["accNo"];
     borrowDate = json["borrowDate"].toDate();
     returnDate = json["returnDate"];
-    book = json["book"];
+    book = cachedBooks[json["book"]];
   }
 
   Map<String, dynamic> toJSON() {

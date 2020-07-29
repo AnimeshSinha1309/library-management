@@ -16,8 +16,8 @@ void loadUser(String uid) async {
         .document(uid)
         .setData({"issueList": [], "role": "student"});
   } else {
-    borrowedBooks = user["issueList"];
-    currentUser.role = user["role"];
+    borrowedBooks = user.data["issueList"];
+    currentUser.role = user.data["role"];
   }
 }
 
@@ -26,19 +26,48 @@ Future issueBook(String isbn, String uid, int accNo) async {
       (await Firestore.instance.collection("books").document(isbn).get()).data);
   if (!book.issues.containsKey(accNo))
     throw Exception("Invalid Accession Number for given ISBN.");
+  book.issues[accNo] = "issued";
 
-  var borrow = BorrowBookModel(accessionNumber: accNo, borrowDate: DateTime.now(), book: book);
+  var borrow = BorrowBookModel(
+      accessionNumber: accNo, borrowDate: DateTime.now(), book: book);
   Firestore.instance.collection("users").document(uid).setData({
     'issueList': FieldValue.arrayUnion([borrow.toJSON()]),
   }, merge: true);
   Firestore.instance.collection("books").document(isbn).setData({
-    'state': FieldValue,
+    'state': book.issues,
   }, merge: true);
-  borrowedBooks.add(BorrowBookModel(
-      accessionNumber: accNo, borrowDate: DateTime.now(), book: null));
+  borrowedBooks.add(borrow);
 }
 
-void returnBook(String isbn, String uid) async {}
+Future returnBook(String isbn, String uid, int accNo) async {
+  BookModel book = BookModel.fromJSON(
+      (await Firestore.instance.collection("books").document(isbn).get()).data);
+  if (!book.issues.containsKey(accNo))
+    throw Exception("Invalid Accession Number for given ISBN.");
+  book.issues[accNo] = "available";
+
+  var borrow = BorrowBookModel(
+      accessionNumber: accNo, borrowDate: DateTime.now(), book: book);
+  Firestore.instance.collection("users").document(uid).setData({
+    'issueList': FieldValue.arrayRemove([borrow.toJSON()]),
+  }, merge: true);
+  Firestore.instance.collection("books").document(isbn).setData({
+    'state': book.issues,
+  }, merge: true);
+  borrowedBooks.add(borrow);
+}
+
+/// Adding new books to the library
+
+Future createBook(String isbn, String title, String author, String description,
+    int accNo) async {
+  Firestore.instance.collection("books").document(isbn).setData({
+    'name': title,
+    'authors': author,
+    'description': description,
+    'accNo': {accNo: "available"},
+  }, merge: true);
+}
 
 /// Cached Books for Search and Recommendations
 

@@ -117,12 +117,14 @@ enum BookModelBorrowState { BORROWED, RESERVED, AVAILABLE }
 class BorrowBookModel {
   String uid;
   int accessionNumber;
-  DateTime borrowDate;
+  DateTime borrowDate, returnDate;
   BookModel book;
   static const int fineRate = 2;
 
-  BorrowBookModel(
-      {@required this.accessionNumber, this.borrowDate, @required this.book}) {
+  BorrowBookModel({@required this.accessionNumber,
+    this.borrowDate,
+    @required this.book,
+    this.returnDate}) {
     this.borrowDate = this.borrowDate ?? DateTime.now();
     assert(this.book != null);
   }
@@ -139,6 +141,7 @@ class BorrowBookModel {
   BorrowBookModel.fromJSON(Map<String, dynamic> json) {
     accessionNumber = json["accNo"];
     borrowDate = json["borrowDate"];
+    returnDate = json["returnDate"];
     book = json["book"];
   }
 
@@ -146,6 +149,7 @@ class BorrowBookModel {
     return <String, dynamic>{
       "accNo": accessionNumber,
       "borrowDate": borrowDate,
+      "returnDate": returnDate,
       "book": book.isbn,
     };
   }

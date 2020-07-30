@@ -62,9 +62,10 @@ class AppDrawer extends StatelessWidget {
     return <Widget>[
       //(login doesnt work) for testing other features start:
       _DrawerViewItem(Icons.home, 'Home', '/home').build(context),
-      _DrawerViewItem(Icons.search, 'Search', '/search').build(context),
+      _DrawerViewItem(Icons.search, 'Search Books', '/search').build(context),
       _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute')
           .build(context),
+      _DrawerViewItem(Icons.book, 'Journals', '/journal').build(context),
       _DrawerViewItem(Icons.people, 'Friends', '/friends').build(context),
       _DrawerViewItem(Icons.library_books, 'Reading List', '/goals')
           .build(context),

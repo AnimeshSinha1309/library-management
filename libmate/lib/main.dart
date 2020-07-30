@@ -6,6 +6,7 @@ import 'package:libmate/views/about.dart';
 import 'package:libmate/views/accounts.dart';
 import 'package:libmate/views/contribute.dart';
 import 'package:libmate/views/friends.dart';
+import 'package:libmate/views/issue.dart';
 import 'package:libmate/views/goals.dart';
 import 'package:libmate/views/home.dart';
 import 'package:libmate/views/libcard.dart';
@@ -98,6 +99,7 @@ class _MyAppState extends State<MyApp> {
                 '/speech': (BuildContext context) => new Speech(),
                 '/contribute': (BuildContext context) => new ContributePage(),
                 '/friends': (BuildContext context) => new FriendsPage(),
+                '/issue': (BuildContext context) => new IssuePage(),
                 '/goals': (BuildContext context) => new GoalsPage(),
                 '/libcard': (BuildContext context) => new LibcardPage(),
                 '/request': (BuildContext context) => new RequestPage(),

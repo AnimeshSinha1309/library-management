@@ -60,9 +60,27 @@ class AppDrawer extends StatelessWidget {
 
   List<Widget> loggedOutDrawerList(context) {
     return <Widget>[
+      //(login doesnt work) for testing other features start:
+      _DrawerViewItem(Icons.home, 'Home', '/home').build(context),
+      _DrawerViewItem(Icons.search, 'Search', '/search').build(context),
+      _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute')
+          .build(context),
+      _DrawerViewItem(Icons.people, 'Friends', '/friends').build(context),
+      _DrawerViewItem(Icons.library_books, 'Reading List', '/goals')
+          .build(context),
+      _DrawerViewItem(Icons.card_membership, 'Library Card', '/libcard')
+          .build(context),
+      _DrawerViewItem(Icons.library_add, 'Request Books', '/request')
+          .build(context),
+      Divider(color: Colors.grey, thickness: 0.5),
+      _DrawerViewItem(Icons.account_circle, 'Accounts', '/accounts')
+          .build(context),
+      _DrawerViewItem(Icons.info, 'About', '/about').build(context),
+      //end
       _DrawerViewItem(Icons.search, 'Search', '/search').build(context),
       _DrawerViewItem(Icons.keyboard_voice, 'Speech', '/speech').build(context),
-      _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute').build(context),
+      _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute')
+          .build(context),
       Divider(color: Colors.grey, thickness: 0.5),
 
       _DrawerViewItem(Icons.info, 'About', '/about').build(context),

@@ -14,6 +14,10 @@ import 'package:libmate/views/search.dart';
 import 'package:libmate/views/speech.dart';
 import 'package:fuzzy/fuzzy.dart';
 import 'package:provider/provider.dart';
+import 'package:libmate/views/guide.dart';
+import 'package:libmate/views/razorpay.dart';
+import 'package:libmate/views/razorpay.dart';
+import 'package:provider/provider.dart';
 
 void main() => runApp(MyApp());
 
@@ -46,7 +50,7 @@ class _MyAppState extends State<MyApp> {
       }
     }).then((someRes) {
       final wk =
-      WeightedKey(name: "keyer", getter: (obj) => obj.name, weight: 1);
+          WeightedKey(name: "keyer", getter: (obj) => obj.name, weight: 1);
       final fo = FuzzyOptions(keys: [wk]);
       fuse = Fuzzy(books, options: fo);
       // in fuse.search, score of 0 is fullmatch, 1 is complete mismatch
@@ -99,6 +103,7 @@ class _MyAppState extends State<MyApp> {
                 '/request': (BuildContext context) => new RequestPage(),
                 '/about': (BuildContext context) => new AboutPage(),
                 '/accounts': (BuildContext context) => new AccountsPage(),
+                '/guide': (BuildContext context) => new GuidePage(),
               });
         }));
   }

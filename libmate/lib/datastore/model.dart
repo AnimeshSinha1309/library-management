@@ -106,14 +106,14 @@ class BookModel {
   int issueCount, starCount;
 
   BookModel.fromJSON({Map<String, dynamic> json, String isbn}) {
-    this.name = json["name"];
-    this.author = json["author"] ?? "";
-    this.genre = json["genre"] ?? "";
+    this.name = json["name"] ?? json["title"];
+    this.author = json["author"] ?? json["authors"] ?? "";
+    this.genre = json["genre"] ?? json["category"] ?? "";
     this.isbn = isbn;
     this.image = json["image"] ??
         "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg";
     this.issues = json["issues"] ?? Map();
-    this.subject = json["subject"] ?? "";
+    this.subject = json["subject"] ?? json["category"] ?? "";
     this.description = json["description"];
   }
 }

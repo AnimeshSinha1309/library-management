@@ -2,10 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:libmate/datastore/model.dart';
 import 'package:libmate/widgets/gauth.dart';
 import 'package:provider/provider.dart';
+import 'dart:js' as js;
 
 class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    MediaQueryData queryData;
+    queryData = MediaQuery.of(context);
+    var width = queryData.size.width;
+    var height = queryData.size.height;
+    bool isLarge = width >= 1000;
+
+    js.context.callMethod("alert", <String>["$isLarge"]);
+    js.context.callMethod("alert", <String>["$width"]);
+    js.context.callMethod("alert", <String>["$height"]);
+    print(isLarge);
+    print(width);
+    print(height);
+
     return Consumer<UserModel>(
         builder: (BuildContext context, UserModel model, Widget child) {
       var firstChild;
@@ -31,8 +45,11 @@ class AppDrawer extends StatelessWidget {
           ? loggedInDrawerList(context)
           : loggedOutDrawerList(context);
 
-      return Drawer(
-          child: ListView(children: <Widget>[firstChild] + secondChild));
+      var children = <Widget>[firstChild] + secondChild;
+      if (isLarge)
+        return Drawer(child: ListView(children: children));
+      else
+        return Column(children: children);
     });
   }
 

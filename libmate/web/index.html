@@ -50,6 +50,7 @@
       // Initialize Firebase
       firebase.initializeApp(firebaseConfig);
       firebase.analytics();
+      firebase.firestore().enablePersistence(); // required for flutter web
     </script>
 
     <!-- this should be at the bottom -->

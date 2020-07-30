@@ -159,7 +159,12 @@ class JournalPage extends StatelessWidget {
               JournalCard(model: model),
               Text("Impact Factor "+model.impactfactor),
               Text("Chief Editor "+model.chiefeditor),
-              Text(model.description),
+              new Expanded(flex: 1,
+                child: new SingleChildScrollView(
+                    scrollDirection: Axis.vertical,//.horizontal
+                    child: new Text(
+                        model.description)),
+              ),
 
               RaisedButton(
                 onPressed: () async {

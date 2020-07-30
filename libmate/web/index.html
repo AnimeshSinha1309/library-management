@@ -26,6 +26,33 @@
       });
     }
   </script>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-firestore.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+         https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-analytics.js"></script>
+
+    <script>
+      // Your web app's Firebase configuration
+      var firebaseConfig = {
+        apiKey: "AIzaSyAHP5I2EDjv2kE311EnqkNElid2ZympJsY",
+        authDomain: "librarymanagement-366ac.firebaseapp.com",
+        databaseURL: "https://librarymanagement-366ac.firebaseio.com",
+        projectId: "librarymanagement-366ac",
+        storageBucket: "librarymanagement-366ac.appspot.com",
+        messagingSenderId: "842844863088",
+        appId: "1:842844863088:web:a05cba4ecd7c8f12e9d2b5",
+        measurementId: "G-HZTMDY8XVV"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      firebase.analytics();
+    </script>
+
+    <!-- this should be at the bottom -->
   <script src="main.dart.js" type="application/javascript"></script>
 </body>
 </html>

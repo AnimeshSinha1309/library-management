@@ -34,8 +34,7 @@ dependencies:
   barcode_scan: 1.0.0
 
   # Google and Firebase for DataBase and Auth
-  firebase_auth: ^0.16.0
-  cloud_firestore: ^0.11.0+2
+  cloud_firestore: ^0.13.7
   google_sign_in: ^4.4.4
   speech_to_text: ^2.3.0
 
@@ -51,6 +50,9 @@ dependencies:
 
   shared_preferences: ^0.5.4+8
   shared_preferences_web: ^0.1.0
+
+  firebase_auth:
+  firebase_auth_web:
 
 
 dev_dependencies:

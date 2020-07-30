@@ -53,6 +53,8 @@ dependencies:
   intl: ^0.16.1
   expandable: ^4.1.4
 
+  flutter_launcher_icons: ^0.7.2
+
 
 dev_dependencies:
   flutter_test:
@@ -99,3 +101,8 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_icons:
+  image_path: 'assets/favicon.png'
+  android: true
+  ios: true

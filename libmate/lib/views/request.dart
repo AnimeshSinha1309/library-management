@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:libmate/views/drawer.dart';
 import 'package:libmate/utils/utils.dart';
-import 'package:libmate/widgets/request.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:validators/validators.dart';
+import 'package:barcode_scan/barcode_scan.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+const String defImage =
+    "https://www.peterharrington.co.uk/blog/wp-content/uploads/2014/09/shelves.jpg";
 
 class RequestPage extends StatefulWidget {
   @override
@@ -12,29 +17,93 @@ class RequestPage extends StatefulWidget {
 
 class _RequestPageState extends State<RequestPage> {
   final _formKey = GlobalKey<FormState>();
-  RequestBookModel model = RequestBookModel();
 
-  Future<bool> doesExist(String isbn) async {
+  final _isbnController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _reasonController = TextEditingController();
+  String _subject = "";
+  String _image = defImage;
+
+  Future<bool> doesExist() async {
     final response =
-        await http.get('https://libmate.herokuapp.com/query?isbn=$isbn');
+        await http.get('https://libmate.herokuapp.com/query?isbn=${_isbnController.text}');
     bool res = response.body.length != 0;
     return res;
   }
 
-  Future<String> sendRequest(RequestBookModel model) async {
-    // final res = await doesExist(model.isbn);
-    // if (res) {
-    //   return "This book is present in the library";
-    // }
-    final response = await http.post(
-        'https://libmate.herokuapp.com/request-book',
-        body: model.toMap());
+  Future<String> _sendRequest() async {
+    final res = await doesExist();
+    if (res) {
+      return "This book is present in the library";
+    }
 
-    if (response.statusCode == 200) {
-      _formKey.currentState.reset();
-      return "Request Submitted!!";
-    } else {
-      return "Error sending request!";
+    try {
+      final snapShot = await Firestore.instance
+          .collection("requested books")
+          .document(_isbnController.text)
+          .get();
+      if (snapShot == null || !snapShot.exists) {
+        if (_nameController.text == "") {
+          await _autofill();
+        }
+        await Firestore.instance
+            .collection("requested books")
+            .document(_isbnController.text)
+            .setData({
+          'name': _nameController.text,
+          'subject': _subject,
+          'reason': _reasonController.text,
+          'image': _image,
+          'cnt': 1,
+        });
+      } else {
+        await Firestore.instance
+            .collection("requested books")
+            .document(_isbnController.text)
+            .updateData({'cnt': snapShot.data['cnt'] + 1});
+      }
+
+      _isbnController.text = "";
+      _nameController.text = "";
+      _reasonController.text = "";
+      return "Request Submitted!";
+    } catch (e) {
+      return "Error sending request!!";
+    }
+  }
+
+  Future<String> _autofill() async {
+    var raw = await http.get(
+        'https://www.googleapis.com/books/v1/volumes?q=${_isbnController.text}&maxResults=1');
+    var data = jsonDecode(raw.body);
+    if (data['totalItems'] == 0 || data['items'].length == 0) {
+      return "Book Not Found!!";
+    }
+    data = data['items'][0]['volumeInfo'];
+    _nameController.text = data['title'];
+    _subject = "";
+    if (data['categories'] != null) {
+      for (var catg in data['categories']) {
+        _subject += catg + ", ";
+      }
+      _subject = _subject.substring(0, _subject.length - 2);
+    }
+    _image = defImage;
+    if (data['imageLinks'] != null && data['imageLinks']['thumbnail'] != null) {
+      _image = data['imageLinks']['thumbnail'];
+    }
+    return "Auto Filled!";
+  }
+
+  Future _scanBarcode() async {
+    try {
+      final isbn = await BarcodeScanner.scan();
+      if (isISBN(isbn)) {
+        _isbnController.text = isbn;
+        await _autofill();
+      }
+    } catch (e) {
+      print('Error: $e');
     }
   }
 
@@ -55,22 +124,14 @@ class _RequestPageState extends State<RequestPage> {
                       children: <Widget>[
                         TextFormField(
                           keyboardType: TextInputType.text,
-                          decoration:
-                              InputDecoration(hintText: "Name of the Book"),
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Please enter the name of the Book.';
-                            }
-                            return null;
-                          },
-                          onSaved: (String value) {
-                            model.name = value;
-                          },
-                        ),
-                        TextFormField(
-                          keyboardType: TextInputType.text,
-                          decoration:
-                              InputDecoration(hintText: "ISBN of the Book"),
+                          decoration: InputDecoration(
+                              hintText: "ISBN of the Book",
+                              suffixIcon: new IconButton(
+                                  onPressed: () async {
+                                    await _scanBarcode();
+                                  },
+                                  icon: Icon(Icons.camera))),
+                          controller: _isbnController,
                           validator: (value) {
                             if (value.isEmpty) {
                               return 'Please enter the ISBN of the book';
@@ -79,51 +140,64 @@ class _RequestPageState extends State<RequestPage> {
                             }
                             return null;
                           },
-                          onSaved: (String value) {
-                            model.isbn = value;
-                          },
                         ),
                         TextFormField(
                           keyboardType: TextInputType.text,
+                          enabled: false,
                           decoration:
-                              InputDecoration(hintText: "Genre / Subject"),
+                              InputDecoration(hintText: "Name of the Book"),
+                          controller: _nameController,
                           validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Enter the Subject / Genre.';
-                            }
                             return null;
-                          },
-                          onSaved: (String value) {
-                            model.subject = value;
                           },
                         ),
                         TextFormField(
                           keyboardType: TextInputType.text,
                           decoration: InputDecoration(
                               hintText: "Reasons, Cosigners, etc."),
-                          maxLines: 3,
-                          onSaved: (String value) {
-                            model.reason = value.isEmpty ? def : value;
-                          },
+                          controller: _reasonController,
+                          minLines: 1,
+                          maxLines: 4,
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16.0),
-                          child: RaisedButton(
-                            color: Colors.pinkAccent,
-                            onPressed: () async {
-                              // Validate returns true if the form is valid, or false
-                              // otherwise.
-                              if (_formKey.currentState.validate()) {
-                                _formKey.currentState.save();
-                                showToast(context, "Sending Request..");
-                                final String resp = await sendRequest(model);
-                                showToast(context, resp);
-                              }
-                            },
-                            child: Text(
-                              'Submit',
-                              style: TextStyle(color: Colors.white),
-                            ),
+                          child: Row(
+                            children: <Widget>[
+                              RaisedButton(
+                                color: Colors.pinkAccent,
+                                onPressed: () async {
+                                  // Validate returns true if the form is valid, or false
+                                  // otherwise.
+                                  if (_formKey.currentState.validate()) {
+                                    _formKey.currentState.save();
+                                    showToast(context, "Sending Request..");
+                                    final String resp = await _sendRequest();
+                                    showToast(context, resp);
+                                  }
+                                },
+                                child: Text(
+                                  'Submit',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                              SizedBox(width: 64),
+                              RaisedButton(
+                                color: Colors.pinkAccent,
+                                onPressed: () async {
+                                  // Validate returns true if the form is valid, or false
+                                  // otherwise.
+                                  if (_formKey.currentState.validate()) {
+                                    showToast(context, "Fetching Info..");
+                                    final String resp = await _autofill();
+                                    showToast(context, resp);
+                                  }
+                                },
+                                child: Text(
+                                  'Autofill',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ]),

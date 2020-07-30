@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:libmate/datastore/model.dart';
-import 'package:libmate/views/drawer.dart';
 import 'package:libmate/utils/utils.dart';
+import 'package:libmate/views/razorpay.dart';
+import 'package:libmate/views/drawer.dart';
 
 class IssuedBookCard extends StatelessWidget {
   final BorrowBookModel model;
-  bool shouldOpenPage;
+  final bool shouldOpenPage;
 
-  IssuedBookCard({Key key, @required this.model, this.shouldOpenPage}) : super(key: key) {
-    shouldOpenPage = shouldOpenPage ?? false;
-  }
+  IssuedBookCard({@required this.model, this.shouldOpenPage = true})
+      : super(key: UniqueKey());
 
   @override
   Widget build(BuildContext context) {
-    final double height = 200;
-    final today = DateTime.now();
-    final fine = today.difference(model.dueDate).inDays * model.fine;
-
     return Card(
       elevation: 5,
       child: InkWell(
@@ -27,27 +23,27 @@ class IssuedBookCard extends StatelessWidget {
           },
           child: Row(children: [
             Expanded(
-              flex: 3,
+              flex: 2,
               child: Container(
-                  height: height,
+                  height: 125,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: NetworkImage(model.image),
+                      image: NetworkImage(model.book.image),
                       fit: BoxFit.fitHeight,
                     ),
                   )),
             ),
             Expanded(
-              flex: 4,
+              flex: 5,
               child: Container(
-                height: height,
+                height: 135,
                 padding: EdgeInsets.all(8),
                 color: Color.fromRGBO(100, 100, 100, 0.9),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      model.name,
+                      model.book.name,
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         color: Colors.white,
@@ -56,14 +52,15 @@ class IssuedBookCard extends StatelessWidget {
                     ),
                     Spacer(),
                     Text(
-                      model.author,
+                      model.book.author,
                       style: TextStyle(
                         color: Colors.white,
                       ),
                     ),
                     Spacer(),
                     Text(
-                      "Borrowed Date: " + model.borrowDate.toString().split(' ')[0],
+                      "Borrowed Date: " +
+                          model.borrowDate.toString().split(' ')[0],
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -75,9 +72,12 @@ class IssuedBookCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "Pending Fine: " + fine.toString(),
+                      model.fine != 0
+                          ? "Pending Fine: " + model.fine.toString()
+                          : "",
                       style: TextStyle(
                         color: Colors.white,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],
@@ -96,9 +96,39 @@ class BookPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final today = DateTime.now();
-    final latedays = today.difference(model.dueDate).inDays;
-    final fine = latedays * model.fine;
+    final fine = model.fine;
+
+    var children = <Widget>[
+      Center(
+        child: RaisedButton.icon(
+          onPressed: () {},
+          color: Colors.amber,
+          icon: Icon(Icons.launch),
+          label: Text('Return'),
+        ),
+      ),
+      Center(
+        child: RaisedButton.icon(
+          onPressed: () {},
+          color: Colors.amber,
+          icon: Icon(Icons.swap_horiz),
+          label: Text('Re-issue'),
+        ),
+      ),
+    ];
+
+    var finePayBtn = Center(
+      child: RaisedButton.icon(
+        color: Colors.amber,
+        icon: Icon(Icons.launch),
+        label: Text('Pay fine'),
+        onPressed: () {
+          gotoPage(context, RazorPayPage(fine));
+        },
+      ),
+    );
+
+    if (fine > 0) children.insert(0, finePayBtn);
 
     return Scaffold(
         appBar: new AppBar(
@@ -108,12 +138,10 @@ class BookPage extends StatelessWidget {
         body: Column(children: [
           IssuedBookCard(model: model),
           Text("Total fine is $fine"),
-          RaisedButton(
-            onPressed: () {
-              print("Added");
-            },
-            child: Text("Pay fine"),
-          )
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: children)
         ]));
   }
 }

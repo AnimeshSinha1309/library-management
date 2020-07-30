@@ -96,9 +96,39 @@ class BookPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final today = DateTime.now();
-    final latedays = today.difference(model.dueDate).inDays;
-    final fine = latedays * model.fine;
+    final fine = model.fine;
+
+    var children = <Widget>[
+      Center(
+        child: RaisedButton.icon(
+          onPressed: () {},
+          color: Colors.amber,
+          icon: Icon(Icons.launch),
+          label: Text('Return'),
+        ),
+      ),
+      Center(
+        child: RaisedButton.icon(
+          onPressed: () {},
+          color: Colors.amber,
+          icon: Icon(Icons.swap_horiz),
+          label: Text('Re-issue'),
+        ),
+      ),
+    ];
+
+    var finePayBtn = Center(
+      child: RaisedButton.icon(
+        color: Colors.amber,
+        icon: Icon(Icons.launch),
+        label: Text('Pay fine'),
+        onPressed: () {
+          gotoPage(context, RazorPayPage(fine));
+        },
+      ),
+    );
+
+    if (fine > 0) children.insert(0, finePayBtn);
 
     return Scaffold(
         appBar: new AppBar(
@@ -111,34 +141,7 @@ class BookPage extends StatelessWidget {
           Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Center(
-                  child: RaisedButton.icon(
-                    color: Colors.amber,
-                    icon: Icon(Icons.launch),
-                    label: Text('Pay fine'),
-                    onPressed: () {
-                      gotoPage(context, RazorPayPage());
-                    },
-                  ),
-                ),
-                Center(
-                  child: RaisedButton.icon(
-                    onPressed: () {},
-                    color: Colors.amber,
-                    icon: Icon(Icons.launch),
-                    label: Text('Return'),
-                  ),
-                ),
-                Center(
-                  child: RaisedButton.icon(
-                    onPressed: () {},
-                    color: Colors.amber,
-                    icon: Icon(Icons.swap_horiz),
-                    label: Text('Re-issue'),
-                  ),
-                ),
-              ])
+              children: children)
         ]));
   }
 }

@@ -93,7 +93,6 @@ class _MyAppState extends State<MyApp> {
               routes: <String, WidgetBuilder>{
                 '/home': (BuildContext context) => new Home(),
                 '/search': (BuildContext context) => new SearchPage(fuse: fuse),
-                '/payfines': (BuildContext context) => new RazorPayPage(),
                 '/contribute': (BuildContext context) => new ContributePage(),
                 '/friends': (BuildContext context) => new FriendsPage(),
                 '/goals': (BuildContext context) => new GoalsPage(),

@@ -69,11 +69,9 @@ class _SearchPageState extends State<SearchPage> {
       return;
     }
     // Process the response
-    String response = result.body.replaceAllMapped(RegExp(r"NaN,"), (match) {
-      return "\"\",";
-    });
+    var response = readBookData(result);
     List<BookModel> searchResults = List();
-    for (var res in json.decode(response)) {
+    for (var res in response) {
       searchResults.add(BookModel.fromJSON(res));
     }
     // Set the state again
@@ -88,10 +86,10 @@ class _SearchPageState extends State<SearchPage> {
       return SliverToBoxAdapter(
           child: Center(
               child: SizedBox(
-                child: CircularProgressIndicator(),
-                height: 50.0,
-                width: 50.0,
-              )));
+        child: CircularProgressIndicator(),
+        height: 50.0,
+        width: 50.0,
+      )));
     } else if (data == null || data.length == 0) {
       return SliverToBoxAdapter(child: Text("No items in data view"));
     } else {
@@ -103,7 +101,7 @@ class _SearchPageState extends State<SearchPage> {
           childAspectRatio: 0.75,
         ),
         delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) => BookCard(model: data[index]),
+          (BuildContext context, int index) => BookCard(model: data[index]),
           childCount: data == null ? 0 : data.length,
         ),
       );
@@ -134,63 +132,62 @@ class _SearchPageState extends State<SearchPage> {
   Widget buildQueryOptions() {
     return ExpandableNotifier(
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: ScrollOnExpand(
-            child: Card(
-              clipBehavior: Clip.antiAlias,
-              child: Column(
-                children: <Widget>[
-                  ExpandablePanel(
-                    theme: const ExpandableThemeData(
-                      headerAlignment: ExpandablePanelHeaderAlignment.center,
-                      tapBodyToExpand: true,
-                      tapBodyToCollapse: true,
-                      hasIcon: false,
-                    ),
-                    header: Container(
-                      color: Colors.indigoAccent,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Row(
-                          children: [
-                            ExpandableIcon(
-                              theme: const ExpandableThemeData(
-                                expandIcon: Icons.arrow_right,
-                                collapseIcon: Icons.arrow_drop_down,
-                                iconColor: Colors.white,
-                                iconSize: 28.0,
-                                iconRotationAngle: math.pi / 2,
-                                iconPadding: EdgeInsets.only(right: 5),
-                                hasIcon: false,
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                "Advanced options",
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .bodyText1
-                                    .copyWith(color: Colors.white),
-                              ),
-                            ),
-                          ],
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: ScrollOnExpand(
+        child: Card(
+          clipBehavior: Clip.antiAlias,
+          child: Column(
+            children: <Widget>[
+              ExpandablePanel(
+                theme: const ExpandableThemeData(
+                  headerAlignment: ExpandablePanelHeaderAlignment.center,
+                  tapBodyToExpand: true,
+                  tapBodyToCollapse: true,
+                  hasIcon: false,
+                ),
+                header: Container(
+                  color: Colors.indigoAccent,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      children: [
+                        ExpandableIcon(
+                          theme: const ExpandableThemeData(
+                            expandIcon: Icons.arrow_right,
+                            collapseIcon: Icons.arrow_drop_down,
+                            iconColor: Colors.white,
+                            iconSize: 28.0,
+                            iconRotationAngle: math.pi / 2,
+                            iconPadding: EdgeInsets.only(right: 5),
+                            hasIcon: false,
+                          ),
                         ),
-                      ),
+                        Expanded(
+                          child: Text(
+                            "Advanced options",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText1
+                                .copyWith(color: Colors.white),
+                          ),
+                        ),
+                      ],
                     ),
-                    expanded: Form(
-                        key: _formKey,
-                        child: Column(children: [
-                          buildField("Author", "author"),
-                          buildField("Category", "tag"),
-                          buildField("Publisher", "publisher"),
-                        ])),
                   ),
-                ],
+                ),
+                expanded: Form(
+                    key: _formKey,
+                    child: Column(children: [
+                      buildField("Author", "author"),
+                      buildField("Category", "tag"),
+                      buildField("Publisher", "publisher"),
+                    ])),
               ),
-            ),
+            ],
           ),
-        ));
+        ),
+      ),
+    ));
   }
 
   @override

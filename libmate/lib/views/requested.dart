@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:libmate/views/drawer.dart';
 import 'package:libmate/widgets/request.dart';
+import 'package:libmate/utils/utils.dart';
 import 'package:libmate/widgets/requestedbookcard.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -16,11 +17,12 @@ class _RequestedPageState extends State<RequestedPage> {
   Set<RequestedBookModel> books = Set<RequestedBookModel>();
 
   void requestedBooks() async {
-    final response =
-        await http.get('https://libmate.herokuapp.com/view-requested-books?sort=cnt&flag=1');
+    final response = await http.get(
+        'https://libmate.herokuapp.com/view-requested-books?sort=cnt&flag=1');
     Set<RequestedBookModel> requestlist = Set<RequestedBookModel>();
     if (response.statusCode == 200) {
-      for (var book in json.decode(response.body)) {
+      var jsonData = readBookData(response);
+      for (var book in jsonData) {
         requestlist.add(RequestedBookModel.fromJson(book));
       }
     }

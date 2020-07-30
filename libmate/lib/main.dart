@@ -10,6 +10,11 @@ import 'package:libmate/views/issue.dart';
 import 'package:libmate/views/libcard.dart';
 import 'package:libmate/views/request.dart';
 import 'package:libmate/views/search.dart';
+import 'package:libmate/views/speech.dart';
+import 'package:fuzzy/fuzzy.dart';
+import 'package:provider/provider.dart';
+import 'package:libmate/views/guide.dart';
+import 'package:libmate/views/razorpay.dart';
 import 'package:libmate/views/razorpay.dart';
 import 'package:provider/provider.dart';
 
@@ -68,15 +73,16 @@ class _MyAppState extends State<MyApp> {
               initialRoute: "/home",
               routes: <String, WidgetBuilder>{
                 '/home': (BuildContext context) => new Home(),
+                '/libcard': (BuildContext context) => new LibcardPage(),
                 '/search': (BuildContext context) => new SearchPage(),
-                '/payfines': (BuildContext context) => new RazorPayPage(),
+                '/speech': (BuildContext context) => new Speech(),
                 '/contribute': (BuildContext context) => new ContributePage(),
                 '/issue': (BuildContext context) => new IssuePage(),
                 '/goals': (BuildContext context) => new GoalsPage(),
-                '/libcard': (BuildContext context) => new LibcardPage(),
                 '/request': (BuildContext context) => new RequestPage(),
                 '/about': (BuildContext context) => new AboutPage(),
                 '/accounts': (BuildContext context) => new AccountsPage(),
+                '/guide': (BuildContext context) => new GuidePage(),
               });
         }));
   }

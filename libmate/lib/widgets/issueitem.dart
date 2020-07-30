@@ -63,9 +63,9 @@ class IssuedBookCard extends StatelessWidget {
                     Text(
                       model.returnDate == null
                           ? "Due Date: " +
-                          model.dueDate.toString().split(' ')[0]
+                              model.dueDate.toString().split(' ')[0]
                           : "Issue Date: " +
-                          model.borrowDate.toString().split(' ')[0],
+                              model.borrowDate.toString().split(' ')[0],
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -95,6 +95,40 @@ class BookPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fine = model.fine;
+
+    var children = <Widget>[
+      Center(
+        child: RaisedButton.icon(
+          onPressed: () {},
+          color: Colors.amber,
+          icon: Icon(Icons.launch),
+          label: Text('Return'),
+        ),
+      ),
+      Center(
+        child: RaisedButton.icon(
+          onPressed: () {},
+          color: Colors.amber,
+          icon: Icon(Icons.swap_horiz),
+          label: Text('Re-issue'),
+        ),
+      ),
+    ];
+
+    var finePayBtn = Center(
+      child: RaisedButton.icon(
+        color: Colors.amber,
+        icon: Icon(Icons.launch),
+        label: Text('Pay fine'),
+        onPressed: () {
+          gotoPage(context, RazorPayPage(fine));
+        },
+      ),
+    );
+
+    if (fine > 0) children.insert(0, finePayBtn);
+
     return Scaffold(
         appBar: new AppBar(
           title: new Text("Issued Book"),
@@ -102,17 +136,11 @@ class BookPage extends StatelessWidget {
         drawer: AppDrawer(),
         body: Column(children: [
           IssuedBookCard(model: model),
-          Text("Total fine is " + model.fine.toString()),
-          RaisedButton(
-            onPressed: () {
-              print("Added");
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => new RazorPayPage()),
-              );
-            },
-            child: Text("Pay fine"),
-          )
+          Text("Total fine is $fine"),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: children)
         ]));
   }
 }

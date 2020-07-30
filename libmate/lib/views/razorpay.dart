@@ -7,13 +7,16 @@ import 'package:libmate/views/drawer.dart';
 import 'package:libmate/utils/utils.dart';
 
 class RazorPayPage extends StatefulWidget {
+  int amount;
+
+  RazorPayPage(this.amount);
+
   @override
   _RazorPayPageState createState() => new _RazorPayPageState();
 }
 
 class _RazorPayPageState extends State<RazorPayPage> {
   static String RAZOR_KEY = config["razorkey"];
-  int totalAmount = 100;
   Razorpay _razorpay;
   BuildContext context;
 
@@ -36,7 +39,7 @@ class _RazorPayPageState extends State<RazorPayPage> {
   void openCheckout() async {
     var options = {
       'key': RAZOR_KEY,
-      'amount': totalAmount * 100,
+      'amount': widget.amount * 100,
       'name': "Andaman College Library",
       'description': 'Fine payment',
       'prefill': {'contact': '', 'email': ''},
@@ -67,6 +70,8 @@ class _RazorPayPageState extends State<RazorPayPage> {
 
   @override
   Widget build(BuildContext context) {
+    int amount = widget.amount;
+
     return Scaffold(
         appBar: AppBar(title: Text('Pay Fine')),
         drawer: AppDrawer(),
@@ -78,7 +83,7 @@ class _RazorPayPageState extends State<RazorPayPage> {
             children: <Widget>[
               LimitedBox(
                 maxWidth: 150.0,
-                child: Text("Your payment amount is INR $totalAmount"),
+                child: Text("Your payment amount is INR $amount"),
               ),
               SizedBox(
                 height: 15.0,

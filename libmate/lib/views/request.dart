@@ -25,10 +25,14 @@ class _RequestPageState extends State<RequestPage> {
   String _image = defImage;
 
   Future<bool> doesExist() async {
-    final response =
-        await http.get('https://libmate.herokuapp.com/query?isbn=${_isbnController.text}');
-    bool res = response.body.length != 0;
-    return res;
+    final snapShot = await Firestore.instance
+        .collection("books")
+        .document(_isbnController.text)
+        .get();
+    if (snapShot == null || !snapShot.exists) {
+      return false;
+    }
+    return true;
   }
 
   Future<String> _sendRequest() async {

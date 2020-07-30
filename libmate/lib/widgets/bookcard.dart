@@ -141,7 +141,7 @@ class BookPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: new AppBar(
-          title: new Text("Book"),
+          title: new Text(model.name),
         ),
         drawer: AppDrawer(),
         body: Builder(

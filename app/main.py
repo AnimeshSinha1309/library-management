@@ -4,13 +4,18 @@ import requests
 import pandas as pd
 from fuzzywuzzy import fuzz 
 from fuzzywuzzy import process
-from flask import Flask,request,abort
+from flask import Flask,request,abort,make_response
 
 app = Flask(__name__)
 
+@app.after_request
+def apply_headers(response):
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
+
 @app.route("/")
 def hello():
-    return "Hello World!"  
+    return "Hello World"
 
 @app.route("/query",methods=['GET'])
 def query():

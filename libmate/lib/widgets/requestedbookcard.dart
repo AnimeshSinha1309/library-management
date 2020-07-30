@@ -16,7 +16,7 @@ class RequestedBookCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double height = 200;
+    final double height = 150;
 
     return Card(
       elevation: 5,
@@ -24,7 +24,13 @@ class RequestedBookCard extends StatelessWidget {
           splashFactory: InkRipple.splashFactory,
           splashColor: Colors.white,
           onTap: () {
-            if (shouldOpenPage) gotoPage(context, BookPage(model: model));
+            if (shouldOpenPage)
+              gotoPage(
+                  context,
+                  BookPage(
+                    model: model,
+                    removeBook: removeBook,
+                  ));
           },
           child: Row(children: [
             Expanded(
@@ -55,40 +61,26 @@ class RequestedBookCard extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Spacer(),
+                    SizedBox(height: 20),
                     Text(
                       "ISBN: " + model.isbn,
                       style: TextStyle(
                         color: Colors.white,
                       ),
                     ),
-                    Spacer(),
+                    SizedBox(height: 20),
                     Text(
                       "Subject: " + model.subject,
                       style: TextStyle(
                         color: Colors.white,
                       ),
                     ),
-                    Text(
-                      "Reason: " + model.reason,
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
+                    SizedBox(height: 20),
                     Text(
                       "Request Count: " + model.count.toString(),
                       style: TextStyle(
                         color: Colors.white,
                       ),
-                    ),
-                    Divider(),
-                    RaisedButton.icon(
-                      onPressed: () {
-                        removeBook(model);
-                      },
-                      color: Colors.amber,
-                      icon: Icon(Icons.remove_shopping_cart),
-                      label: Text('Remove'),
                     ),
                   ],
                 ),
@@ -101,10 +93,9 @@ class RequestedBookCard extends StatelessWidget {
 
 class BookPage extends StatelessWidget {
   final RequestedBookModel model;
+  final ValueChanged<RequestedBookModel> removeBook;
 
-  void markBook(String isbn) {}
-
-  BookPage({@required this.model});
+  BookPage({@required this.model, @required this.removeBook});
 
   @override
   Widget build(BuildContext context) {
@@ -115,12 +106,20 @@ class BookPage extends StatelessWidget {
         drawer: AppDrawer(),
         body: Column(children: [
           RequestedBookCard(model: model),
-          Spacer(),
-          RaisedButton(
+          SizedBox(height: 10),
+          Text('Reason: ' + model.reason,
+              style: TextStyle(
+                color: Colors.black,
+                letterSpacing: 2.0,
+              )),
+          SizedBox(height: 20),
+          RaisedButton.icon(
             onPressed: () {
-              markBook(model.isbn);
+              removeBook(model);
             },
-            child: Text("Approve"),
+            color: Colors.amber,
+            icon: Icon(Icons.remove_shopping_cart),
+            label: Text('Remove'),
           ),
         ]));
   }

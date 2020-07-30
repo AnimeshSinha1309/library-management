@@ -72,7 +72,7 @@ class _RequestedPageState extends State<RequestedPage> {
       padding: EdgeInsets.symmetric(vertical: 8.0),
       children: books.map((RequestedBookModel book) {
         return RequestedBookCard(
-            model: book, removeBook: removeBook, shouldOpenPage: false);
+            model: book, removeBook: removeBook, shouldOpenPage: true);
       }).toList(),
     );
   }

@@ -74,7 +74,7 @@ class _SearchPageState extends State<SearchPage> {
     });
     List<BookModel> searchResults = List();
     for (var res in json.decode(response)) {
-      searchResults.add(BookModel.fromJSON(res));
+      searchResults.add(BookModel.fromJSON(json: res));
     }
     // Set the state again
     setState(() {

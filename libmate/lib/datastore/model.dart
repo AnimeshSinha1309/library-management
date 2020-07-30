@@ -92,14 +92,15 @@ class BookModel {
   String description;
   Map<dynamic, dynamic> issues = Map<String, dynamic>();
 
-  BookModel({@required this.name,
-    this.author = "",
-    this.isbn = "",
-    this.image =
-    "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg",
-    this.subject = "",
-    this.genre = "",
-    this.description});
+  BookModel(
+      {@required this.name,
+      this.author = "",
+      this.isbn = "",
+      this.image =
+          "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg",
+      this.subject = "",
+      this.genre = "",
+      this.description});
 
   Map<String, BookModelBorrowState> copies;
   int issueCount, starCount;
@@ -125,10 +126,11 @@ class BorrowBookModel {
   BookModel book;
   static const int fineRate = 2;
 
-  BorrowBookModel({@required this.accessionNumber,
-    this.borrowDate,
-    @required this.book,
-    this.returnDate}) {
+  BorrowBookModel(
+      {@required this.accessionNumber,
+      this.borrowDate,
+      @required this.book,
+      this.returnDate}) {
     this.borrowDate = this.borrowDate ?? DateTime.now();
     assert(this.book != null);
   }

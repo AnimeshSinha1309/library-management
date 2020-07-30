@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:libmate/datastore/model.dart';
+import 'dart:async';
 
 /// Global State of the User
 
@@ -108,6 +109,9 @@ void loadBooks(Function callback) {
       cachedBooks[document.documentID] =
           BookModel.fromJSON(json: document.data, isbn: document.documentID);
     }
+  }).then((NULL) {
+    // funny but true: without this NULL argment it does not work
+    callback();
+    return Future.value(true); // necessary compile-time
   });
-  callback();
 }

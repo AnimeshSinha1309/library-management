@@ -62,9 +62,9 @@ Future returnBook(String isbn, UserModel currentUser, String accNo) async {
       item["returnDate"] = DateTime.now();
     }
   }
-  currentUser.borrowedBooks =
-      issueList.map<BorrowBookModel>((json) => BorrowBookModel.fromJSON(json))
-          .toList();
+  currentUser.borrowedBooks = issueList
+      .map<BorrowBookModel>((json) => BorrowBookModel.fromJSON(json))
+      .toList();
 
   Firestore.instance.collection("books").document(isbn).setData({
     'issues': book.issues,
@@ -79,7 +79,7 @@ Future returnBook(String isbn, UserModel currentUser, String accNo) async {
 Future createBook(String isbn, String title, String author, String description,
     int accNo) async {
   var currentBook =
-  await Firestore.instance.collection("books").document(isbn).get();
+      await Firestore.instance.collection("books").document(isbn).get();
   Map accList = Map();
   if (currentBook.exists) {
     accList = currentBook.data['accNo'];
@@ -100,7 +100,7 @@ Future createBook(String isbn, String title, String author, String description,
 
 Map<String, BookModel> cachedBooks;
 
-void loadBooks() {
+void loadBooks(Function callback) {
   cachedBooks = Map<String, BookModel>();
   Firestore.instance.collection('books').getDocuments().then((snapshot) {
     final documents = snapshot.documents;
@@ -109,11 +109,5 @@ void loadBooks() {
           BookModel.fromJSON(json: document.data, isbn: document.documentID);
     }
   });
-  // TODO: Implement local fuzzy searching
-  //      .then((res) {
-  //    final wk = WeightedKey(name: "keyer", getter: (obj) => obj.name, weight: 1);
-  //    final fo = FuzzyOptions(keys: [wk]);
-  //    var fuse = Fuzzy(cachedBooks, options: fo);
-  //    // in fuse.search, score of 0 is full-match, 1 is complete mismatch
-  //  });
+  callback();
 }

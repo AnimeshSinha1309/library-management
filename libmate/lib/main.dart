@@ -27,23 +27,37 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool loaded;
+  int loadingComps;
   UserModel model;
+
+  void callback() {
+    loadingComps++;
+    print("Called $loadingComps");
+    if (loadingComps == 2) {
+      setState(() {
+        loaded = true;
+      });
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     loaded = false;
-    loadState();
-    loadBooks();
+    loadingComps = 0;
+    loadState(callback);
+    loadBooks(callback);
   }
 
-  void loadState() async {
-    model = await UserModel.fromSharedPrefs();
-    loadUser(model);
+  void loadState(Function callback) {
+    void loader() async {
+      model = await UserModel.fromSharedPrefs();
+      loadUser(model);
+      callback();
+    }
 
-    setState(() {
-      loaded = true;
-    });
+    // to avoid clogging up initStae
+    loader();
   }
 
   @override

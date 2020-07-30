@@ -14,6 +14,9 @@ import 'package:libmate/views/search.dart';
 import 'package:provider/provider.dart';
 import 'package:libmate/views/guide.dart';
 import 'package:libmate/views/razorpay.dart';
+import 'package:libmate/views/razorpay.dart';
+import 'package:provider/provider.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
@@ -45,7 +48,7 @@ class _MyAppState extends State<MyApp> {
       }
     }).then((someRes) {
       final wk =
-      WeightedKey(name: "keyer", getter: (obj) => obj.name, weight: 1);
+          WeightedKey(name: "keyer", getter: (obj) => obj.name, weight: 1);
       final fo = FuzzyOptions(keys: [wk]);
       fuse = Fuzzy(books, options: fo);
       // in fuse.search, score of 0 is fullmatch, 1 is complete mismatch
@@ -90,7 +93,7 @@ class _MyAppState extends State<MyApp> {
               routes: <String, WidgetBuilder>{
                 '/home': (BuildContext context) => new Home(),
                 '/search': (BuildContext context) => new SearchPage(fuse: fuse),
-                '/payfines':(BuildContext context) => new RazorPayPage(),
+                '/payfines': (BuildContext context) => new RazorPayPage(),
                 '/contribute': (BuildContext context) => new ContributePage(),
                 '/friends': (BuildContext context) => new FriendsPage(),
                 '/goals': (BuildContext context) => new GoalsPage(),
@@ -98,7 +101,7 @@ class _MyAppState extends State<MyApp> {
                 '/request': (BuildContext context) => new RequestPage(),
                 '/about': (BuildContext context) => new AboutPage(),
                 '/accounts': (BuildContext context) => new AccountsPage(),
-                '/guide':(BuildContext context) => new GuidePage(),
+                '/guide': (BuildContext context) => new GuidePage(),
               });
         }));
   }

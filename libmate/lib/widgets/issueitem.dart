@@ -59,7 +59,8 @@ class IssuedBookCard extends StatelessWidget {
                     ),
                     Spacer(),
                     Text(
-                      "Borrowed Date: " + model.borrowDate.toString().split(' ')[0],
+                      "Borrowed Date: " +
+                          model.borrowDate.toString().split(' ')[0],
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -113,24 +114,17 @@ class BookPage extends StatelessWidget {
               children: <Widget>[
                 Center(
                   child: RaisedButton.icon(
-
                     color: Colors.amber,
                     icon: Icon(Icons.launch),
                     label: Text('Pay fine'),
                     onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) =>new RazorPayPage()),
-                          );
-                        },
+                      gotoPage(context, RazorPayPage());
+                    },
                   ),
                 ),
-
-
                 Center(
                   child: RaisedButton.icon(
-                    onPressed: (){
-                    },
+                    onPressed: () {},
                     color: Colors.amber,
                     icon: Icon(Icons.launch),
                     label: Text('Return'),
@@ -138,13 +132,13 @@ class BookPage extends StatelessWidget {
                 ),
                 Center(
                   child: RaisedButton.icon(
-                    onPressed: (){},
+                    onPressed: () {},
                     color: Colors.amber,
                     icon: Icon(Icons.swap_horiz),
                     label: Text('Re-issue'),
                   ),
                 ),
-         ] )
+              ])
         ]));
   }
 }

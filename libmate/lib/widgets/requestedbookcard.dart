@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:libmate/widgets/request.dart';
+import 'package:libmate/widgets/requested.dart';
 import 'package:libmate/views/drawer.dart';
 import 'package:libmate/utils/utils.dart';
 
@@ -16,7 +16,7 @@ class RequestedBookCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double height = 150;
+    final double height = 180;
 
     return Card(
       elevation: 5,
@@ -77,7 +77,7 @@ class RequestedBookCard extends StatelessWidget {
                     ),
                     SizedBox(height: 20),
                     Text(
-                      "Request Count: " + model.count.toString(),
+                      "Request Count: " + model.cnt.toString(),
                       style: TextStyle(
                         color: Colors.white,
                       ),

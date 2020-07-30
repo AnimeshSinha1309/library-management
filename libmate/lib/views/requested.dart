@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:libmate/views/drawer.dart';
-import 'package:libmate/widgets/request.dart';
-import 'package:libmate/utils/utils.dart';
+import 'package:libmate/widgets/requested.dart';
 import 'package:libmate/widgets/requestedbookcard.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 
 class RequestedPage extends StatefulWidget {
@@ -14,21 +12,32 @@ class RequestedPage extends StatefulWidget {
 
 class _RequestedPageState extends State<RequestedPage> {
   Timer timer;
+  bool _loaded = false;
   Set<RequestedBookModel> books = Set<RequestedBookModel>();
 
   void requestedBooks() async {
-    final response = await http.get(
-        'https://libmate.herokuapp.com/view-requested-books?sort=cnt&flag=1');
-    Set<RequestedBookModel> requestlist = Set<RequestedBookModel>();
-    if (response.statusCode == 200) {
-      var jsonData = readBookData(response);
-      for (var book in jsonData) {
-        requestlist.add(RequestedBookModel.fromJson(book));
+    try {
+      final snapShot =
+          await Firestore.instance.collection('requested books').getDocuments();
+      Set<RequestedBookModel> requestlist = Set<RequestedBookModel>();
+
+      for (var document in snapShot.documents) {
+        var book = RequestedBookModel();
+        book.isbn = document.documentID;
+        book.name = document.data['name'];
+        book.subject = document.data['subject'];
+        book.cnt = document.data['cnt'];
+        book.reason = document.data['reason'];
+        book.image = document.data['image'];
+        requestlist.add(book);
       }
+      setState(() {
+        books = requestlist;
+        _loaded = true;
+      });
+    } catch (e) {
+      print(e.toString());
     }
-    setState(() {
-      books = requestlist;
-    });
   }
 
   @override
@@ -46,14 +55,19 @@ class _RequestedPageState extends State<RequestedPage> {
     super.dispose();
   }
 
-  void removeBook(RequestBookModel book) async {
+  void removeBook(RequestedBookModel book) async {
+    Navigator.of(context).pop();
     setState(() {
       books.remove(book);
     });
-    final res = await http.post(
-      'https://libmate.herokuapp.com/delete-requested-book',
-      body: book.toMap(),
-    );
+    try {
+      await Firestore.instance
+          .collection('requested books')
+          .document(book.isbn)
+          .delete();
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   @override
@@ -63,7 +77,7 @@ class _RequestedPageState extends State<RequestedPage> {
         title: new Text('Book Requests'),
       ),
       drawer: AppDrawer(),
-      body: _buildBooks(),
+      body: _loaded == true ? _buildBooks() : Text('loading...'),
     );
   }
 

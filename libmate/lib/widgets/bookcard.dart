@@ -147,14 +147,29 @@ class BookPage extends StatelessWidget {
         body: Builder(
             builder: (context) => Column(children: [
               BookCard(model: model),
+              SizedBox(height:3.0),
               Text("Copies: available 5, total 10"),
+              SizedBox(height:5.0),
+              SizedBox(height:2.0),
               RaisedButton(
                 onPressed: () async {
                   final String resp = await addBook(model);
                   showToast(context, resp);
                 },
+
                 child: Text("Add to reading list"),
-              )
+              ),
+              Text("Description",
+                  style: TextStyle(
+                    color: Colors.pink,
+                    letterSpacing: 2.0,
+                  )),
+             new Expanded(flex: 1,
+                child: new SingleChildScrollView(
+                scrollDirection: Axis.vertical,//.horizontal
+                child: new Text(
+                model.description)),
+                ),
             ])));
   }
 }

@@ -10,6 +10,7 @@ import 'package:libmate/views/issue.dart';
 import 'package:libmate/views/libcard.dart';
 import 'package:libmate/views/request.dart';
 import 'package:libmate/views/search.dart';
+import 'package:libmate/views/razorpay.dart';
 import 'package:provider/provider.dart';
 
 void main() => runApp(MyApp());
@@ -68,6 +69,7 @@ class _MyAppState extends State<MyApp> {
               routes: <String, WidgetBuilder>{
                 '/home': (BuildContext context) => new Home(),
                 '/search': (BuildContext context) => new SearchPage(),
+                '/payfines': (BuildContext context) => new RazorPayPage(),
                 '/contribute': (BuildContext context) => new ContributePage(),
                 '/issue': (BuildContext context) => new IssuePage(),
                 '/goals': (BuildContext context) => new GoalsPage(),

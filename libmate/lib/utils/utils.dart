@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'dart:io' show File;
 import 'dart:async';
 
 void gotoPage(BuildContext context, dynamic page) {
@@ -45,3 +47,5 @@ class Debouncer {
     _timer = Timer(Duration(milliseconds: milliseconds), action);
   }
 }
+
+const config = {"razorkey": "rzp_test_U4H7R8ZUFz2iHt"};

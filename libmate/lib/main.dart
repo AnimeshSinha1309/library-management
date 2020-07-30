@@ -11,6 +11,8 @@ import 'package:libmate/views/home.dart';
 import 'package:libmate/views/libcard.dart';
 import 'package:libmate/views/request.dart';
 import 'package:libmate/views/search.dart';
+import 'package:libmate/views/speech.dart';
+import 'package:fuzzy/fuzzy.dart';
 import 'package:provider/provider.dart';
 import 'package:libmate/views/guide.dart';
 import 'package:libmate/views/razorpay.dart';
@@ -93,6 +95,7 @@ class _MyAppState extends State<MyApp> {
               routes: <String, WidgetBuilder>{
                 '/home': (BuildContext context) => new Home(),
                 '/search': (BuildContext context) => new SearchPage(fuse: fuse),
+                '/speech': (BuildContext context) => new Speech(),
                 '/contribute': (BuildContext context) => new ContributePage(),
                 '/friends': (BuildContext context) => new FriendsPage(),
                 '/goals': (BuildContext context) => new GoalsPage(),

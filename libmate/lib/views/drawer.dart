@@ -40,6 +40,8 @@ class AppDrawer extends StatelessWidget {
     return <Widget>[
       _DrawerViewItem(Icons.home, 'Home', '/home').build(context),
       _DrawerViewItem(Icons.search, 'Search', '/search').build(context),
+      _DrawerViewItem(Icons.keyboard_voice, 'Speech', '/speech').build(context),
+      _DrawerViewItem(Icons.location_on, 'Guide', '/guide').build(context),
       _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute')
           .build(context),
       _DrawerViewItem(Icons.people, 'Friends', '/friends').build(context),
@@ -76,10 +78,11 @@ class AppDrawer extends StatelessWidget {
       _DrawerViewItem(Icons.info, 'About', '/about').build(context),
       //end
       _DrawerViewItem(Icons.search, 'Search', '/search').build(context),
-      _DrawerViewItem(Icons.location_on, 'Guide', '/guide').build(context),
+      _DrawerViewItem(Icons.keyboard_voice, 'Speech', '/speech').build(context),
       _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute')
           .build(context),
       Divider(color: Colors.grey, thickness: 0.5),
+
       _DrawerViewItem(Icons.info, 'About', '/about').build(context),
     ];
   }

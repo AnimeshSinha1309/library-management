@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:libmate/views/goals.dart';
+import 'package:libmate/views/accounts.dart';
 import 'package:libmate/widgets/toread.dart';
 
 void main() {
@@ -22,5 +23,11 @@ void main() {
     //   goals.removeBook(ToRead(book: "New Book 2", date: "28/8"));
     //   expect(goals.numBooks, 1);
     // });
+  });
+  group("Accounts", () {
+    test("Not logged in", () {
+      final account = AccountsPage();
+      expect(account.createState().loggedIn, null);
+    });
   });
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:libmate/views/drawer.dart';
 import 'package:libmate/datastore/model.dart';
+import 'package:libmate/chatbot/chatbot.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -12,7 +13,12 @@ import 'package:dash_chat/dash_chat.dart';
 
 class GuidePage extends StatefulWidget {
   UserModel currentUser;
-  GuidePage({@required this.currentUser});
+  Chatbot bot;
+  GuidePage({@required this.currentUser}) {
+    var subjects = ["math"];
+    var authors = ["Enid Blyton"];
+    bot = Chatbot(subjects: subjects, authors: authors);
+  }
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -21,7 +27,7 @@ class _MyHomePageState extends State<GuidePage> {
   final GlobalKey<DashChatState> _chatViewKey = GlobalKey<DashChatState>();
 
   ChatUser user;
-  final ChatUser otherUser = ChatUser(
+  final ChatUser botUser = ChatUser(
     name: "LibMate",
     uid: "25649654",
   );
@@ -60,11 +66,20 @@ class _MyHomePageState extends State<GuidePage> {
     });
   }
 
-  void onSend(ChatMessage message) {
-    print(message.toJson());
+  void getBotResponse(String message) async {
+    String res = await widget.bot.giveInput(message);
+    res = "answer";
+    var msg = ChatMessage(text: res, user: botUser, createdAt: DateTime.now());
+    onSend(msg, fromUser: false);
+  }
+
+  void onSend(ChatMessage message, {fromUser = true}) {
+    var json = message.toJson();
+    var text = json["text"];
+
     setState(() {
       messages.add(message);
-      print(messages);
+      if (fromUser) getBotResponse(text);
     });
 
     /* setState(() {

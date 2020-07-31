@@ -3,10 +3,6 @@ import 'package:fuzzy/fuzzy.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-void output(dynamic msg) {
-  print(msg);
-}
-
 String readUser() {
   return stdin.readLineSync();
 }
@@ -106,12 +102,12 @@ class Chatbot {
     return finalRes;
   }
 
-  void giveInput(String userInput) async {
+  dynamic giveInput(String userInput) async {
     var tokens = userInput.split(" ");
 
     if (!sanityCheck(tokens)) {
-      output("Sorry I do not understand that.");
-      output(
+      print("Sorry I do not understand that.");
+      print(
           "Try asking me to 'recommend a maths book' or 'give a good book by michael nielsen about quantum physics'");
       return;
     }
@@ -122,22 +118,7 @@ class Chatbot {
     print(detectedSubjects);
 
     var result = await search(detectedAuthors, detectedSubjects);
-    output(result);
-  }
-}
 
-void main() async {
-  output("Welcome to the chatbot");
-  output("You can ask me to recommend/suggest/give you a book");
-
-  var subjects = ["math"];
-  var authors = ["Enid Blyton"];
-  Chatbot bot = Chatbot(subjects: subjects, authors: authors);
-
-  // game loop
-  while (true) {
-    var input = readUser();
-
-    await bot.giveInput(input);
+    return result;
   }
 }

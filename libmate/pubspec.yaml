@@ -47,10 +47,12 @@ dependencies:
   image_picker: ^0.6.7+4
   image_cropper: ^1.2.3
   intl: ^0.16.1
+  validators: ^2.0.0+1
   expandable: ^4.1.4
 
   shared_preferences: ^0.5.4+8
   shared_preferences_web: ^0.1.0
+  flutter_launcher_icons: ^0.7.2
 
 
 dev_dependencies:
@@ -98,3 +100,8 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_icons:
+  image_path: 'assets/favicon.png'
+  android: true
+  ios: true

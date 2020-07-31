@@ -1,8 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:libmate/views/drawer.dart';
 import 'package:libmate/widgets/toread.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 
 class GoalsPage extends StatefulWidget {
   @override
@@ -72,13 +73,6 @@ class _GoalsPageState extends State<GoalsPage> {
           title: new Text('Goals'),
         ),
         drawer: AppDrawer(),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            addBook(ToRead(book: "New Book", date: "28/7"));
-          },
-          child: Icon(Icons.add),
-          backgroundColor: Colors.pink,
-        ),
         body: Padding(
             padding: EdgeInsets.fromLTRB(30.0, 40.0, 30.0, 0.0),
             child: Column(

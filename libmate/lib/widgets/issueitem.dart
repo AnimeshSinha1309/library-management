@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:libmate/datastore/model.dart';
 import 'package:libmate/utils/utils.dart';
-import 'package:libmate/views/razorpay.dart';
 import 'package:libmate/views/drawer.dart';
+import 'package:libmate/views/razorpay.dart';
 
 class IssuedBookCard extends StatelessWidget {
   final BorrowBookModel model;
@@ -38,7 +38,9 @@ class IssuedBookCard extends StatelessWidget {
               child: Container(
                 height: 135,
                 padding: EdgeInsets.all(8),
-                color: Color.fromRGBO(100, 100, 100, 0.9),
+                color: model.returnDate != null
+                    ? Color.fromRGBO(100, 100, 100, 0.9)
+                    : Color.fromRGBO(20, 20, 20, 0.9),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -59,14 +61,11 @@ class IssuedBookCard extends StatelessWidget {
                     ),
                     Spacer(),
                     Text(
-                      "Borrowed Date: " +
-                          model.borrowDate.toString().split(' ')[0],
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      "Due Date: " + model.dueDate.toString().split(' ')[0],
+                      model.returnDate == null
+                          ? "Due Date: " +
+                              model.dueDate.toString().split(' ')[0]
+                          : "Issue Date: " +
+                              model.borrowDate.toString().split(' ')[0],
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -96,39 +95,40 @@ class BookPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fine = model.fine;
-
     var children = <Widget>[
       Center(
-        child: RaisedButton.icon(
-          onPressed: () {},
-          color: Colors.amber,
-          icon: Icon(Icons.launch),
-          label: Text('Return'),
+        child: ButtonTheme(
+          textTheme: ButtonTextTheme.primary,
+          child: RaisedButton.icon(
+            onPressed: () {},
+            icon: Icon(Icons.launch),
+            label: Text('Return'),
+          ),
         ),
       ),
       Center(
-        child: RaisedButton.icon(
-          onPressed: () {},
-          color: Colors.amber,
-          icon: Icon(Icons.swap_horiz),
-          label: Text('Re-issue'),
-        ),
-      ),
+          child: ButtonTheme(
+            textTheme: ButtonTextTheme.primary,
+            child: RaisedButton.icon(
+              onPressed: () {},
+              icon: Icon(Icons.swap_horiz),
+              label: Text('Re-issue'),
+            ),
+          )),
     ];
 
     var finePayBtn = Center(
-      child: RaisedButton.icon(
-        color: Colors.amber,
+      child: ButtonTheme(
+          child: RaisedButton.icon(
         icon: Icon(Icons.launch),
         label: Text('Pay fine'),
         onPressed: () {
-          gotoPage(context, RazorPayPage(fine));
+          gotoPage(context, RazorPayPage(model.fine));
         },
-      ),
+          )),
     );
 
-    if (fine > 0) children.insert(0, finePayBtn);
+    if (model.fine > 0) children.insert(0, finePayBtn);
 
     return Scaffold(
         appBar: new AppBar(
@@ -137,7 +137,23 @@ class BookPage extends StatelessWidget {
         drawer: AppDrawer(),
         body: Column(children: [
           IssuedBookCard(model: model),
-          Text("Total fine is $fine"),
+          Padding(
+              padding: EdgeInsets.symmetric(vertical: 20),
+              child: Text(
+                "Total fine is \u20B9 " + model.fine.toString(),
+                style: TextStyle(fontSize: 20.0),
+              )),
+          Padding(
+              padding: EdgeInsets.fromLTRB(20, 0, 20, 40),
+              child: Text(
+                "Book is due on " +
+                    model.dueDate.day.toString() +
+                    "/" +
+                    model.dueDate.month.toString() +
+                    "/" +
+                    model.dueDate.year.toString(),
+                style: TextStyle(fontSize: 20.0),
+              )),
           Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.center,

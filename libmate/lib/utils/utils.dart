@@ -48,4 +48,16 @@ class Debouncer {
   }
 }
 
+dynamic readBookData(response) {
+  var usable_body = response.body.replaceAllMapped(RegExp(r"NaN,"), (match) {
+    return "\"\",";
+  });
+  usable_body =
+      usable_body.replaceAllMapped(RegExp(r'(, )?"\w+": NaN'), (match) {
+    return "";
+  });
+
+  return json.decode(usable_body);
+}
+
 const config = {"razorkey": "rzp_test_U4H7R8ZUFz2iHt"};

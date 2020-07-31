@@ -1,13 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:fuzzy/fuzzy.dart';
 import 'package:libmate/datastore/model.dart';
+import 'package:libmate/datastore/state.dart';
 import 'package:libmate/views/about.dart';
 import 'package:libmate/views/accounts.dart';
 import 'package:libmate/views/contribute.dart';
-import 'package:libmate/views/friends.dart';
 import 'package:libmate/views/goals.dart';
 import 'package:libmate/views/home.dart';
+import 'package:libmate/views/issue.dart';
 import 'package:libmate/views/libcard.dart';
 import 'package:libmate/views/request.dart';
 import 'package:libmate/views/requested.dart';
@@ -29,43 +28,37 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool loaded;
+  int loadingComps;
   UserModel model;
-  var fuse;
-  List<BookModel> books;
+
+  void callback() {
+    loadingComps++;
+    print("Called $loadingComps");
+    if (loadingComps == 2) {
+      setState(() {
+        loaded = true;
+      });
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     loaded = false;
-    loadState();
+    loadingComps = 0;
+    loadState(callback);
+    loadBooks(callback);
   }
 
-  void loadBookData() {
-    Firestore.instance.collection('books').getDocuments().then((snapshot) {
-      final documents = snapshot.documents;
-      books = List<BookModel>();
+  void loadState(Function callback) {
+    void loader() async {
+      model = await UserModel.fromSharedPrefs();
+      loadUser(model);
+      callback();
+    }
 
-      for (var document in documents) {
-        final name = document.data["name"];
-        books.add(BookModel(name: name));
-      }
-    }).then((someRes) {
-      final wk =
-          WeightedKey(name: "keyer", getter: (obj) => obj.name, weight: 1);
-      final fo = FuzzyOptions(keys: [wk]);
-      fuse = Fuzzy(books, options: fo);
-      // in fuse.search, score of 0 is fullmatch, 1 is complete mismatch
-    });
-  }
-
-  void loadState() async {
-    model = await UserModel.fromSharedPrefs();
-
-    loadBookData();
-
-    setState(() {
-      loaded = true;
-    });
+    // to avoid clogging up initStae
+    loader();
   }
 
   @override
@@ -95,12 +88,12 @@ class _MyAppState extends State<MyApp> {
               initialRoute: "/home",
               routes: <String, WidgetBuilder>{
                 '/home': (BuildContext context) => new Home(),
-                '/search': (BuildContext context) => new SearchPage(fuse: fuse),
+                '/libcard': (BuildContext context) => new LibcardPage(),
+                '/search': (BuildContext context) => new SearchPage(),
                 '/speech': (BuildContext context) => new Speech(),
                 '/contribute': (BuildContext context) => new ContributePage(),
-                '/friends': (BuildContext context) => new FriendsPage(),
+                '/issue': (BuildContext context) => new IssuePage(),
                 '/goals': (BuildContext context) => new GoalsPage(),
-                '/libcard': (BuildContext context) => new LibcardPage(),
                 '/request': (BuildContext context) => new RequestPage(),
                 '/requested': (BuildContext context) => new RequestedPage(),
                 '/about': (BuildContext context) => new AboutPage(),

@@ -1,19 +1,22 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import 'package:libmate/datastore/state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserModel extends ChangeNotifier {
   // Basic Features of the user
   String uid, name, email, photoUrl, role;
-  List<BookModel> wishList;
+  List<BookModel> starList = [];
+  List<BorrowBookModel> borrowedBooks = [];
+  List<BorrowBookModel> pastBooks = [];
 
   UserModel({
     this.name,
     this.email,
     this.photoUrl,
     this.uid,
-  }) {
-    this.role = "student";
-  }
+    this.role = "student",
+  });
 
   void loginUser(UserModel userData) {
     this.name = userData.name;
@@ -87,40 +90,47 @@ class BookModel {
   String subject;
   String genre;
   String description;
+  Map<dynamic, dynamic> issues = Map<String, dynamic>();
 
   BookModel(
       {@required this.name,
-        this.author = "",
-        this.isbn = "",
-        this.image =
-        "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg",
-        this.subject = "",
-        this.genre = "",
-        this.description});
+      this.author = "",
+      this.isbn = "",
+      this.image =
+          "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg",
+      this.subject = "",
+      this.genre = "",
+      this.description});
 
   Map<String, BookModelBorrowState> copies;
   int issueCount, starCount;
 
-  BookModel.fromJSON(Map<String, dynamic> json) {
-    name = json["title"];
-    author = json["author"] ?? "";
-    genre = json["category"] ?? "";
-    isbn = (json["isbn"] ?? "").toString();
-    image = json["image"] ??
+  BookModel.fromJSON({Map<String, dynamic> json, String isbn}) {
+    this.name = json["name"] ?? json["title"];
+    this.author = json["author"] ?? json["authors"] ?? "";
+    this.genre = json["genre"] ?? json["category"] ?? "";
+    this.isbn = isbn;
+    this.image = json["image"] ??
         "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg";
+    this.issues = json["issues"] ?? Map();
+    this.subject = json["subject"] ?? json["category"] ?? "";
+    this.description = json["description"];
   }
 }
 
 enum BookModelBorrowState { BORROWED, RESERVED, AVAILABLE }
 
 class BorrowBookModel {
-  int accessionNumber;
-  DateTime borrowDate;
+  String accessionNumber;
+  DateTime borrowDate, returnDate;
   BookModel book;
   static const int fineRate = 2;
 
   BorrowBookModel(
-      {@required this.accessionNumber, this.borrowDate, @required this.book}) {
+      {@required this.accessionNumber,
+      this.borrowDate,
+      @required this.book,
+      this.returnDate}) {
     this.borrowDate = this.borrowDate ?? DateTime.now();
     assert(this.book != null);
   }
@@ -130,10 +140,26 @@ class BorrowBookModel {
   }
 
   get fine {
-    int delay = DateTime
-        .now()
-        .difference(this.borrowDate)
-        .inDays - 14;
+    int delay = DateTime.now().difference(this.borrowDate).inDays - 14;
     return (delay > 0 ? delay : 0) * fineRate;
+  }
+
+  BorrowBookModel.fromJSON(Map<dynamic, dynamic> json) {
+    accessionNumber = json["accNo"];
+    borrowDate = json["borrowDate"].toDate();
+    if (json["returnDate"] is DateTime)
+      returnDate = json["returnDate"];
+    else if (json["returnDate"] is Timestamp)
+      returnDate = json["returnDate"].toDate();
+    book = cachedBooks[json["book"]];
+  }
+
+  Map<String, dynamic> toJSON() {
+    return <String, dynamic>{
+      "accNo": accessionNumber,
+      "borrowDate": borrowDate,
+      "returnDate": returnDate,
+      "book": book.isbn,
+    };
   }
 }

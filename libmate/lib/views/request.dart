@@ -61,10 +61,13 @@ class _RequestPageState extends State<RequestPage> {
           'cnt': 1,
         });
       } else {
+        String reason = snapShot.data['reason'].length >= _reasonController.text.length
+            ? snapShot.data['reason']
+            : _reasonController.text;
         await Firestore.instance
             .collection("requested books")
             .document(_isbnController.text)
-            .updateData({'cnt': snapShot.data['cnt'] + 1});
+            .updateData({'cnt': snapShot.data['cnt'] + 1, 'reason': reason});
       }
 
       _isbnController.text = "";

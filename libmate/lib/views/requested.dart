@@ -17,8 +17,10 @@ class _RequestedPageState extends State<RequestedPage> {
 
   void requestedBooks() async {
     try {
-      final snapShot =
-          await Firestore.instance.collection('requested books').getDocuments();
+      final snapShot = await Firestore.instance
+          .collection('requested books')
+          .orderBy("cnt", descending: true)
+          .getDocuments();
       Set<RequestedBookModel> requestlist = Set<RequestedBookModel>();
 
       for (var document in snapShot.documents) {

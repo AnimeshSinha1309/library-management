@@ -17,6 +17,22 @@ class BookCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> catInfo = [
+      Text(
+        "Genre: " + (model.genre ?? ""),
+        style: TextStyle(
+          color: Colors.white,
+        ),
+      ),
+    ];
+    if (model.subject != null && model.subject != model.genre) {
+      catInfo.add(Text(
+        "Subject: " + (model.subject),
+        style: TextStyle(
+          color: Colors.white,
+        ),
+      ));
+    }
     return Card(
         elevation: 5,
         child: SizedBox(
@@ -25,7 +41,7 @@ class BookCard extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: NetworkImage(model.image),
+                image: NetworkImage(model.image ?? defImage),
                 fit: BoxFit.fitWidth,
                 alignment: Alignment.topCenter,
               ),
@@ -50,40 +66,29 @@ class BookCard extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Flexible(
-                              child: Text(
-                                model.name ?? "",
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
+                                Flexible(
+                                  child: Text(
+                                    model.name ?? "",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            Spacer(),
-                            Flexible(
-                                child: Text(
-                              model.author ?? "",
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
+                                Spacer(),
+                                Flexible(
+                                    child: Text(
+                                  model.author ?? "",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
                                   overflow: TextOverflow.ellipsis,
                                 )),
-                            Spacer(),
-                            Text(
-                              "Genre: " + (model.genre ?? ""),
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                            Text(
-                              "Subject: " + (model.subject ?? model.genre),
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
+                                Spacer()
+                              ] +
+                              catInfo,
                         ),
                       ),
                     ),
@@ -124,6 +129,14 @@ class BookPage extends StatelessWidget {
     return (await prefs.setStringList("readingList", readList)) ? 0 : 2;
   }
 
+  List<DataRow> _getAccessionTable() {
+    List<DataRow> rows = [];
+    model.issues.forEach((key, value) {
+      rows.add(DataRow(cells: [DataCell(Text(key)), DataCell(Text(value))]));
+    });
+    return rows;
+  }
+
   Future<String> addBook(BookModel model) async {
     int res = await saveReadingList(model);
     if (res == 0) {
@@ -139,22 +152,142 @@ class BookPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var copiesData = _getAccessionTable();
+    Widget copiesTable;
+    if (copiesData.length == 0)
+      copiesTable =
+          Text("No copies found, you should file a request for the book!");
+    else
+      copiesTable = DataTable(
+        columns: [
+          DataColumn(label: Text("Acc.No.")),
+          DataColumn(label: Text("Status"))
+        ],
+        rows: copiesData,
+      );
+
     return Scaffold(
         appBar: new AppBar(
-          title: new Text("Book"),
+          title: new Text("Book Details"),
         ),
         drawer: AppDrawer(),
         body: Builder(
-            builder: (context) => Column(children: [
-              BookCard(model: model),
-              Text("Copies: available 5, total 10"),
-              RaisedButton(
-                onPressed: () async {
-                  final String resp = await addBook(model);
-                  showToast(context, resp);
-                },
-                child: Text("Add to reading list"),
-              )
-            ])));
+            builder: (context) => Padding(
+                padding: EdgeInsets.all(25),
+                child: ListView(children: [
+                  Text(
+                    model.name,
+                    style: TextStyle(
+                        color: Colors.black87,
+                        fontSize: 28.0,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  SizedBox(height: 20),
+                  Row(children: [
+                    Image(
+                      image: NetworkImage(model.image),
+                      fit: BoxFit.fitWidth,
+                      alignment: Alignment.topCenter,
+                    ),
+                    Expanded(
+                        child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Column(children: [
+                              ButtonTheme(
+                                minWidth: 200,
+                                textTheme: ButtonTextTheme.primary,
+                                child: RaisedButton(
+                                  onPressed: () {
+                                    showToast(context, "NOT IMPLEMENTED");
+                                  },
+                                  child: Text("Issue Book"),
+                                ),
+                              ),
+                              ButtonTheme(
+                                minWidth: 200,
+                                textTheme: ButtonTextTheme.primary,
+                                child: RaisedButton(
+                                  onPressed: () async {
+                                    final String resp = await addBook(model);
+                                    showToast(context, resp);
+                                  },
+                                  child: Text("Add to Read List"),
+                                ),
+                              ),
+                              ButtonTheme(
+                                minWidth: 200,
+                                textTheme: ButtonTextTheme.primary,
+                                child: RaisedButton(
+                                  onPressed: () {
+                                    showToast(context, "NOT IMPLEMENTED");
+                                  },
+                                  child: Text("Edit Information"),
+                                ),
+                              ),
+                            ])))
+                  ]),
+                  SizedBox(height: 30),
+                  RichText(
+                    text: TextSpan(
+                        style: DefaultTextStyle.of(context).style,
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: "Subject: ",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(text: model.subject)
+                        ]),
+                  ),
+                  RichText(
+                    text: TextSpan(
+                        style: DefaultTextStyle.of(context).style,
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: "Genre: ",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(text: model.genre)
+                        ]),
+                  ),
+                  SizedBox(height: 10),
+                  RichText(
+                    text: TextSpan(
+                        style: DefaultTextStyle.of(context).style,
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: "Authors: ",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(text: model.author)
+                        ]),
+                  ),
+                  RichText(
+                    text: TextSpan(
+                        style: DefaultTextStyle.of(context).style,
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: "ISBN: ",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(text: model.isbn)
+                        ]),
+                  ),
+                  SizedBox(height: 10),
+                  RichText(
+                    text: TextSpan(
+                        style: DefaultTextStyle.of(context).style,
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: "Description: ",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(text: model.description)
+                        ]),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "Copies Status",
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+                  ),
+                  copiesTable
+                ]))));
   }
 }

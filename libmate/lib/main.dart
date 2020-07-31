@@ -6,6 +6,7 @@ import 'package:libmate/views/accounts.dart';
 import 'package:libmate/views/contribute.dart';
 import 'package:libmate/views/goals.dart';
 import 'package:libmate/views/home.dart';
+import 'package:libmate/views/admin.dart';
 import 'package:libmate/views/issue.dart';
 import 'package:libmate/views/libcard.dart';
 import 'package:libmate/views/request.dart';
@@ -88,6 +89,7 @@ class _MyAppState extends State<MyApp> {
               initialRoute: "/home",
               routes: <String, WidgetBuilder>{
                 '/home': (BuildContext context) => new Home(),
+                '/admin': (BuildContext context) => new AdminPage(),
                 '/libcard': (BuildContext context) => new LibcardPage(),
                 '/search': (BuildContext context) => new SearchPage(),
                 '/speech': (BuildContext context) => new Speech(),

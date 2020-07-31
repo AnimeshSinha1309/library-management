@@ -56,6 +56,7 @@ dependencies:
 
   flutter_launcher_icons: ^0.7.2
 
+  webview_flutter: ^0.3.22+1
 
 dev_dependencies:
   flutter_test:

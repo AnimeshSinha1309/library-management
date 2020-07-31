@@ -106,10 +106,10 @@ class Chatbot {
     var tokens = userInput.split(" ");
 
     if (!sanityCheck(tokens)) {
-      print("Sorry I do not understand that.");
-      print(
-          "Try asking me to 'recommend a maths book' or 'give a good book by michael nielsen about quantum physics'");
-      return;
+      return [
+        "Sorry I do not understand that.",
+        "Try asking me to 'recommend a maths book' or 'give a good book by michael nielsen about quantum physics'"
+      ];
     }
 
     var detectedSubjects = extractData(subjectsFuse, tokens);
@@ -119,6 +119,13 @@ class Chatbot {
 
     var result = await search(detectedAuthors, detectedSubjects);
 
-    return result;
+    return [result];
+  }
+
+  dynamic getWelcome() {
+    return [
+      "Welcome to the chatbot",
+      "You can ask me to recommend/suggest/give you a book"
+    ];
   }
 }

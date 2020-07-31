@@ -45,6 +45,11 @@ class _MyHomePageState extends State<GuidePage> {
       uid: "12345678",
       avatar: widget.currentUser.photoUrl,
     );
+    var welcomeMsgs = widget.bot.getWelcome();
+    for (var text in welcomeMsgs) {
+      messages.add(
+          ChatMessage(text: text, user: botUser, createdAt: DateTime.now()));
+    }
   }
 
   void systemMessage() {
@@ -67,15 +72,18 @@ class _MyHomePageState extends State<GuidePage> {
   }
 
   void getBotResponse(String message) async {
-    String res = await widget.bot.giveInput(message);
-    res = "answer";
-    var msg = ChatMessage(text: res, user: botUser, createdAt: DateTime.now());
-    onSend(msg, fromUser: false);
+    List<String> res = await widget.bot.giveInput(message);
+    for (var msgText in res) {
+      var msg =
+          ChatMessage(text: msgText, user: botUser, createdAt: DateTime.now());
+      onSend(msg, fromUser: false);
+    }
   }
 
   void onSend(ChatMessage message, {fromUser = true}) {
     var json = message.toJson();
-    var text = json["text"];
+    print(json);
+    var text = message.text;
 
     setState(() {
       messages.add(message);

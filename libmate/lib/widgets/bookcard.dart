@@ -17,6 +17,22 @@ class BookCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> catInfo = [
+      Text(
+        "Genre: " + (model.genre ?? ""),
+        style: TextStyle(
+          color: Colors.white,
+        ),
+      ),
+    ];
+    if (model.subject != null && model.subject != model.genre) {
+      catInfo.add(Text(
+        "Subject: " + (model.subject),
+        style: TextStyle(
+          color: Colors.white,
+        ),
+      ));
+    }
     return Card(
         elevation: 5,
         child: SizedBox(
@@ -25,7 +41,7 @@ class BookCard extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: NetworkImage(model.image),
+                image: NetworkImage(model.image ?? defImage),
                 fit: BoxFit.fitWidth,
                 alignment: Alignment.topCenter,
               ),
@@ -50,40 +66,29 @@ class BookCard extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Flexible(
-                              child: Text(
-                                model.name ?? "",
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
+                                Flexible(
+                                  child: Text(
+                                    model.name ?? "",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            Spacer(),
-                            Flexible(
-                                child: Text(
-                              model.author ?? "",
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            )),
-                            Spacer(),
-                            Text(
-                              "Genre: " + (model.genre ?? ""),
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                            Text(
-                              "Subject: " + (model.subject ?? model.genre),
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
+                                Spacer(),
+                                Flexible(
+                                    child: Text(
+                                  model.author ?? "",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                )),
+                                Spacer()
+                              ] +
+                              catInfo,
                         ),
                       ),
                     ),
@@ -147,6 +152,20 @@ class BookPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var copiesData = _getAccessionTable();
+    Widget copiesTable;
+    if (copiesData.length == 0)
+      copiesTable =
+          Text("No copies found, you should file a request for the book!");
+    else
+      copiesTable = DataTable(
+        columns: [
+          DataColumn(label: Text("Acc.No.")),
+          DataColumn(label: Text("Status"))
+        ],
+        rows: copiesData,
+      );
+
     return Scaffold(
         appBar: new AppBar(
           title: new Text("Book Details"),
@@ -178,9 +197,8 @@ class BookPage extends StatelessWidget {
                                 minWidth: 200,
                                 textTheme: ButtonTextTheme.primary,
                                 child: RaisedButton(
-                                  onPressed: () async {
-                                    final String resp = await addBook(model);
-                                    showToast(context, resp);
+                                  onPressed: () {
+                                    showToast(context, "NOT IMPLEMENTED");
                                   },
                                   child: Text("Issue Book"),
                                 ),
@@ -200,9 +218,8 @@ class BookPage extends StatelessWidget {
                                 minWidth: 200,
                                 textTheme: ButtonTextTheme.primary,
                                 child: RaisedButton(
-                                  onPressed: () async {
-                                    final String resp = await addBook(model);
-                                    showToast(context, resp);
+                                  onPressed: () {
+                                    showToast(context, "NOT IMPLEMENTED");
                                   },
                                   child: Text("Edit Information"),
                                 ),
@@ -214,7 +231,9 @@ class BookPage extends StatelessWidget {
                     text: TextSpan(
                         style: DefaultTextStyle.of(context).style,
                         children: <TextSpan>[
-                          TextSpan(text: "Subject: ", style: TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(
+                              text: "Subject: ",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                           TextSpan(text: model.subject)
                         ]),
                   ),
@@ -222,7 +241,9 @@ class BookPage extends StatelessWidget {
                     text: TextSpan(
                         style: DefaultTextStyle.of(context).style,
                         children: <TextSpan>[
-                          TextSpan(text: "Genre: ", style: TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(
+                              text: "Genre: ",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                           TextSpan(text: model.genre)
                         ]),
                   ),
@@ -231,7 +252,9 @@ class BookPage extends StatelessWidget {
                     text: TextSpan(
                         style: DefaultTextStyle.of(context).style,
                         children: <TextSpan>[
-                          TextSpan(text: "Authors: ", style: TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(
+                              text: "Authors: ",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                           TextSpan(text: model.author)
                         ]),
                   ),
@@ -239,7 +262,9 @@ class BookPage extends StatelessWidget {
                     text: TextSpan(
                         style: DefaultTextStyle.of(context).style,
                         children: <TextSpan>[
-                          TextSpan(text: "ISBN: ", style: TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(
+                              text: "ISBN: ",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                           TextSpan(text: model.isbn)
                         ]),
                   ),
@@ -248,19 +273,21 @@ class BookPage extends StatelessWidget {
                     text: TextSpan(
                         style: DefaultTextStyle.of(context).style,
                         children: <TextSpan>[
-                          TextSpan(text: "Description: ", style: TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(
+                              text: "Description: ",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                           TextSpan(text: model.description)
                         ]),
                   ),
-                  SizedBox(height: 20,),
-                  Text("Copies Available", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),),
-                  DataTable(
-                    columns: [
-                      DataColumn(label: Text("Acc.No.")),
-                      DataColumn(label: Text("Status"))
-                    ],
-                    rows: _getAccessionTable(),
-                  )
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "Copies Status",
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+                  ),
+                  copiesTable
                 ]))));
   }
 }

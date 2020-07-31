@@ -81,6 +81,9 @@ class UserModel extends ChangeNotifier {
   }
 }
 
+const String defImage =
+    "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg";
+
 class BookModel {
   // Basic book identifiers
   String name;
@@ -104,14 +107,12 @@ class BookModel {
 
   Map<String, BookModelBorrowState> copies;
   int issueCount, starCount;
-
   BookModel.fromJSON({Map<String, dynamic> json, String isbn}) {
     this.name = json["name"] ?? json["title"];
     this.author = json["author"] ?? json["authors"] ?? "";
     this.genre = json["genre"] ?? json["category"] ?? "";
     this.isbn = isbn;
-    this.image = json["image"] ??
-        "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg";
+    this.image = json["image"] ?? defImage;
     this.issues = json["issues"] ?? Map();
     this.subject = json["subject"] ?? json["category"] ?? "";
     this.description = json["description"];

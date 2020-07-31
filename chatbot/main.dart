@@ -10,25 +10,50 @@ String readUser() {
 }
 
 class Chatbot {
-  List<String> subjects;
-  List<String> authors;
+  dynamic subjectsFuse;
+  dynamic authorsFuse;
   List<String> actions = ["recommend", "suggest", "give"];
   RegExp actionRegex;
 
-  Chatbot({this.subjects, this.authors}) {
+  Chatbot({subjects, authors}) {
+    subjectsFuse = Fuzzy(subjects);
+    authorsFuse = Fuzzy(authors);
+
     actionRegex = RegExp(actions.join("|"));
   }
 
-  List<String> extractData(List<String> data, String str) {
+  List<String> extractData(dynamic dataFuse, List<String> strTokens) {
+    final int maxReturns = 5;
+
     List<String> detected;
-    for (var item in data) {
-      var regexInput = item.toLowerCase().split(" ").join("|");
-      var score = new RegExp(item).allMatches(str).length;
-      if (score > 0) {
-        detected.add(item);
+
+    var distinctTokens = strTokens.toSet().toList();
+    Map<String, double> scores = Map();
+
+    for (var token in strTokens) {
+      var res = dataFuse.search(token); // item, score relevant to us
+      for (var row in res) {
+        var item = row.item;
+        scores[item] = (scores[item] ?? 0) + row.score;
       }
     }
-    return detected;
+
+    var keysDesc = scores.keys.toList()
+      ..sort((a, b) => scores[b].compareTo(scores[a]));
+
+    if (keysDesc.length > maxReturns) {
+      keysDesc = keysDesc.sublist(0, maxReturns);
+    }
+    return keysDesc;
+
+    // for (var item in data) {
+    //   var regexInput = item.toLowerCase().split(" ").join("|");
+    //   var score = new RegExp(item).allMatches(str).length;
+    //   if (score > 0) {
+    //     detected.add(item);
+    //   }
+    // }
+    // return detected;
   }
 
   void giveInput(String userInput) {
@@ -40,8 +65,10 @@ class Chatbot {
     }
 
     var tokens = userInput.split(" ");
-    List<String> detectedSubjects = extractData(subjects, userInput);
-    List<String> detectedAuthors = extractData(authors, userInput);
+    List<String> detectedSubjects = extractData(subjectsFuse, tokens);
+    List<String> detectedAuthors = extractData(authorsFuse, tokens);
+    print(detectedAuthors);
+    print(detectedSubjects);
   }
 }
 

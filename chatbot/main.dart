@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:fuzzy/fuzzy.dart';
 
 void output(dynamic msg) {
   print(msg);
@@ -15,22 +16,32 @@ class Chatbot {
   RegExp actionRegex;
 
   Chatbot({this.subjects, this.authors}) {
-    actionRegex = new RegExp(actions.join("|"));
+    actionRegex = RegExp(actions.join("|"));
   }
 
-  void extractSubject() {}
+  List<String> extractData(List<String> data, String str) {
+    List<String> detected;
+    for (var item in data) {
+      var regexInput = item.toLowerCase().split(" ").join("|");
+      var score = new RegExp(item).allMatches(str).length;
+      if (score > 0) {
+        detected.add(item);
+      }
+    }
+    return detected;
+  }
 
   void giveInput(String userInput) {
     var match = actionRegex.allMatches(userInput);
 
-    if (match.length == 0) {
+    if (match.isEmpty) {
       output("Bad input");
       return;
     }
 
     var tokens = userInput.split(" ");
-
-    for (var token in tokens) {}
+    List<String> detectedSubjects = extractData(subjects, userInput);
+    List<String> detectedAuthors = extractData(authors, userInput);
   }
 }
 
@@ -44,7 +55,7 @@ void main() {
 
   // game loop
   while (true) {
-    String input = readUser();
+    var input = readUser();
 
     bot.giveInput(input);
   }

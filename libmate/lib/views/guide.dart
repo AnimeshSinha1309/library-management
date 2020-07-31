@@ -1,102 +1,222 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:libmate/views/drawer.dart';
-//user page  : two spearate pages for user(student) and admin
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:dash_chat/dash_chat.dart';
+
 class GuidePage extends StatefulWidget {
   @override
-  _GuidePageState createState() => _GuidePageState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _GuidePageState extends State<GuidePage> {
-  int booksRead = 100;
-  @override
+class _MyHomePageState extends State<GuidePage> {
+  final GlobalKey<DashChatState> _chatViewKey = GlobalKey<DashChatState>();
 
+  final ChatUser user = ChatUser(
+    name: "Fayeed",
+    firstName: "Fayeed",
+    lastName: "Pawaskar",
+    uid: "12345678",
+    avatar: "https://www.wrappixel.com/ampleadmin/assets/images/users/4.jpg",
+  );
+
+  final ChatUser otherUser = ChatUser(
+    name: "Mrfatty",
+    uid: "25649654",
+  );
+
+  List<ChatMessage> messages = List<ChatMessage>();
+  var m = List<ChatMessage>();
+
+  var i = 0;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void systemMessage() {
+    Timer(Duration(milliseconds: 300), () {
+      if (i < 6) {
+        setState(() {
+          messages = [...messages, m[i]];
+        });
+        i++;
+      }
+      Timer(Duration(milliseconds: 300), () {
+        _chatViewKey.currentState.scrollController
+          ..animateTo(
+            _chatViewKey.currentState.scrollController.position.maxScrollExtent,
+            curve: Curves.easeOut,
+            duration: const Duration(milliseconds: 300),
+          );
+      });
+    });
+  }
+
+  void onSend(ChatMessage message) async {
+    print(message.toJson());
+    var documentReference = Firestore.instance
+        .collection('messages')
+        .document(DateTime.now().millisecondsSinceEpoch.toString());
+
+    await Firestore.instance.runTransaction((transaction) async {
+      await transaction.set(
+        documentReference,
+        message.toJson(),
+      );
+    });
+    /* setState(() {
+      messages = [...messages, message];
+      print(messages.length);
+    });
+
+    if (i == 0) {
+      systemMessage();
+      Timer(Duration(milliseconds: 600), () {
+        systemMessage();
+      });
+    } else {
+      systemMessage();
+    } */
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.grey[100],
-        appBar: new AppBar(
-          title: new Text('Guide'),
-          centerTitle: true,
+      appBar: AppBar(
+        title: Text("Chat App"),
+      ),
+      body: StreamBuilder(
+          stream: Firestore.instance.collection('messages').snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    Theme.of(context).primaryColor,
+                  ),
+                ),
+              );
+            } else {
+              List<DocumentSnapshot> items = snapshot.data.documents;
+              var messages =
+                  items.map((i) => ChatMessage.fromJson(i.data)).toList();
+              return DashChat(
+                key: _chatViewKey,
+                inverted: false,
+                onSend: onSend,
+                sendOnEnter: true,
+                textInputAction: TextInputAction.send,
+                user: user,
+                inputDecoration:
+                    InputDecoration.collapsed(hintText: "Add message here..."),
+                dateFormat: DateFormat('yyyy-MMM-dd'),
+                timeFormat: DateFormat('HH:mm'),
+                messages: messages,
+                showUserAvatar: false,
+                showAvatarForEveryMessage: false,
+                scrollToBottom: true,
+                onPressAvatar: (ChatUser user) {
+                  print("OnPressAvatar: ${user.name}");
+                },
+                onLongPressAvatar: (ChatUser user) {
+                  print("OnLongPressAvatar: ${user.name}");
+                },
+                inputMaxLines: 5,
+                messageContainerPadding: EdgeInsets.only(left: 5.0, right: 5.0),
+                alwaysShowSend: true,
+                inputTextStyle: TextStyle(fontSize: 16.0),
+                inputContainerStyle: BoxDecoration(
+                  border: Border.all(width: 0.0),
+                  color: Colors.white,
+                ),
+                onQuickReply: (Reply reply) {
+                  setState(() {
+                    messages.add(ChatMessage(
+                        text: reply.value,
+                        createdAt: DateTime.now(),
+                        user: user));
 
-        ),
-        drawer: AppDrawer(),
-        body: Padding(
-            padding: EdgeInsets.fromLTRB(30.0,40.0,30.0,0.0),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                      'LibMate How tos',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        letterSpacing: 2.0,
-                      )
-                  ),
-                  SizedBox(height:10.0),
-                  Text(
-                      'Your digital library management system, Andaman college',
-                      style: TextStyle(
-                          color: Colors.black87,
-                          letterSpacing: 2.0,
-                          fontSize: 28.0,
-                          fontWeight: FontWeight.bold
+                    messages = [...messages];
+                  });
 
-                      )
-                  ),
-                  SizedBox(height:30.0),
-                  Text(
-                      'Personalized book recommendations',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        letterSpacing: 2.0,
-                      )
-                  ),
-                  SizedBox(height:30.0),
-                  Text(
-                      'Voice assistant and chatbot',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        letterSpacing: 2.0,
-                      )
-                  ),
-                  SizedBox(height:30.0),
-                  Text(
-                      'Issue/return books easily',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        letterSpacing: 2.0,
-                      )
-                  ),
-                  SizedBox(height:30.0),
-                  Text(
-                      'Get unlimited ebooks',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        letterSpacing: 2.0,
-                      )
-                  ),
-                  SizedBox(height:30.0),
-                  Text(
-                      'Create to dos',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        letterSpacing: 2.0,
-                      )
-                  ),
-                  SizedBox(height:30.0),
-                  Text(
-                      'Ratings based on number of books read',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        letterSpacing: 2.0,
-                      )
-                  ),
+                  Timer(Duration(milliseconds: 300), () {
+                    _chatViewKey.currentState.scrollController
+                      ..animateTo(
+                        _chatViewKey.currentState.scrollController.position
+                            .maxScrollExtent,
+                        curve: Curves.easeOut,
+                        duration: const Duration(milliseconds: 300),
+                      );
 
+                    if (i == 0) {
+                      systemMessage();
+                      Timer(Duration(milliseconds: 600), () {
+                        systemMessage();
+                      });
+                    } else {
+                      systemMessage();
+                    }
+                  });
+                },
+                onLoadEarlier: () {
+                  print("laoding...");
+                },
+                shouldShowLoadEarlier: false,
+                showTraillingBeforeSend: true,
+                trailing: <Widget>[
+                  IconButton(
+                    icon: Icon(Icons.photo),
+                    onPressed: () async {
+                      File result = await ImagePicker.pickImage(
+                        source: ImageSource.gallery,
+                        imageQuality: 80,
+                        maxHeight: 400,
+                        maxWidth: 400,
+                      );
 
+                      if (result != null) {
+                        final StorageReference storageRef =
+                            FirebaseStorage.instance.ref().child("chat_images");
 
-                ]
-            )
-        )
+                        StorageUploadTask uploadTask = storageRef.putFile(
+                          result,
+                          StorageMetadata(
+                            contentType: 'image/jpg',
+                          ),
+                        );
+                        StorageTaskSnapshot download =
+                            await uploadTask.onComplete;
 
+                        String url = await download.ref.getDownloadURL();
+
+                        ChatMessage message =
+                            ChatMessage(text: "", user: user, image: url);
+
+                        var documentReference = Firestore.instance
+                            .collection('messages')
+                            .document(DateTime.now()
+                                .millisecondsSinceEpoch
+                                .toString());
+
+                        Firestore.instance.runTransaction((transaction) async {
+                          await transaction.set(
+                            documentReference,
+                            message.toJson(),
+                          );
+                        });
+                      }
+                    },
+                  )
+                ],
+              );
+            }
+          }),
     );
   }
 }

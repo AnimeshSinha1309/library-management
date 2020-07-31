@@ -58,6 +58,7 @@ class AppDrawer extends StatelessWidget {
       _DrawerViewItem(Icons.account_circle, 'Accounts', '/accounts')
           .build(context),
       _DrawerViewItem(Icons.info, 'About', '/about').build(context),
+      _DrawerViewItem(Icons.location_on, 'Guide', '/guide').build(context),
     ];
   }
 

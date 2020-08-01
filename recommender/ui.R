@@ -10,29 +10,25 @@ source('functions/helpers.R')
 
 shinyUI(
     dashboardPage(
-          skin = "blue",
+          skin = "red",
           dashboardHeader(title = "Book Recommender"),
           
           dashboardSidebar(disable = TRUE),
 
           dashboardBody(includeCSS("css/books.css"),
               fluidRow(
-                  box(width = 12, title = "Step 1: Rate as many books as possible", status = "info", solidHeader = TRUE, collapsible = TRUE,
-                      div(class = "rateitems",
-                          uiOutput('ratings')
-                      )
+                  box(width = 12, title = "Book Rater", status = "info", solidHeader = FALSE, collapsible = FALSE,
+                      div(uiOutput('ratings'))
                   )
                 ),
               fluidRow(
                   useShinyjs(),
                   box(
-                    width = 12, status = "info", solidHeader = TRUE,
-                    title = "Step 2: Discover books you might like",
+                    width = 12, status = "info", solidHeader = FALSE,
                     br(),
                     withBusyIndicatorUI(
-                      actionButton("btn", "Click here to get your recommendations", class = "btn-warning")
+                      actionButton("btn", "Click here to get your recommendations", class = "btn")
                     ),
-                    br(),
                     tableOutput("results")
                   )
                )

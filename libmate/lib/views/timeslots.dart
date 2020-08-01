@@ -2,15 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:libmate/views/drawer.dart';
 import 'package:libmate/views/ticket.dart';
 class TimePage extends StatefulWidget {
+  var  day;
+  var option;
+  var date;
+  TimePage(this.date,this.option,this.day);
+
   @override
-  _TimePageState createState() => _TimePageState();
+  _TimePageState createState() => _TimePageState(date,option,day);
 }
 
 class _TimePageState extends State<TimePage> {
+  var  day;
+  var option;
+  var date;
+  var bookdate, time;
+  _TimePageState(this.date,this.option,this.day);
+
   Iterable<TimeOfDay> getTimes(TimeOfDay startTime, TimeOfDay endTime, Duration step) sync* {
     var hour = startTime.hour;
     var minute = startTime.minute;
-
+    @override
+    void initState() {
+      super.initState();
+    }
     do {
       yield TimeOfDay(hour: hour, minute: minute);
       minute += step.inMinutes;
@@ -79,7 +93,7 @@ class _TimePageState extends State<TimePage> {
                     onPressed: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => TicketPage()),
+                        MaterialPageRoute(builder: (context) => TicketPage(bookdate,time)),
                       );
                     },
                     child: Text(

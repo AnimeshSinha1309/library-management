@@ -5,12 +5,19 @@ import 'package:libmate/widgets/issueitem.dart';
 import 'package:provider/provider.dart';
 
 class TicketPage extends StatefulWidget {
+  var bookdate;
+  var time;
+
+  TicketPage(this.bookdate,this.time);
   @override
-  _TicketPageState createState() => _TicketPageState();
+  _TicketPageState createState() => _TicketPageState(bookdate,time);
 }
 
 class _TicketPageState extends State<TicketPage> {
-  String time = "1 pm";
+
+  var bookdate;
+  var time;
+  _TicketPageState(bookdate,time);
 
   @override
   void initState() {

@@ -9,6 +9,10 @@ class AppointmentPage extends StatefulWidget {
 }
 
 class _AppointmentPageState extends State<AppointmentPage > {
+ var date =  new DateTime.now();
+ var option = -1;
+// option = 0: Issue/Return book
+// and 1: sit in lib
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +42,7 @@ class _AppointmentPageState extends State<AppointmentPage > {
                         textTheme: ButtonTextTheme.primary,
                         child: RaisedButton.icon(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => TimePage()),
-                            );
+                            option = 0;
                           },
                           icon: Icon(Icons.assignment_return),
                           label: Text('Issue/Return book'),
@@ -53,17 +54,52 @@ class _AppointmentPageState extends State<AppointmentPage > {
                           textTheme: ButtonTextTheme.primary,
                           child: RaisedButton.icon(
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => TimePage()),
-                              );
+                                option = 1;
                             },
                             icon: Icon(Icons.person_pin),
                             label: Text('Sit in Library'),
                           ),
                         )),
                   ]),
-
+                  Text(
+                      "Select day",
+                      style: TextStyle(
+                        color: Colors.grey,
+                        letterSpacing: 2.0,
+                      )
+                  ),
+                  Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Center(
+                          child: ButtonTheme(
+                            textTheme: ButtonTextTheme.primary,
+                            child: RaisedButton.icon(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => TimePage(date,option,"today")),
+                                );
+                              },
+                              icon: Icon(Icons.today),
+                              label: Text('Today'),
+                            ),
+                          ),
+                        ),
+                        Center(
+                            child: ButtonTheme(
+                              textTheme: ButtonTextTheme.primary,
+                              child: RaisedButton.icon(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => TimePage(date,option,"tommorow")),
+                                  );
+                                },
+                                icon: Icon(Icons.arrow_forward),
+                                label: Text('Tommorow'),
+                              ),
+                            )),
+                      ]),
 
                 ]
             )

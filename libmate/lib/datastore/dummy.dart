@@ -30,6 +30,20 @@ List<JournalModel> dummyJournals = <JournalModel>[
       issue: "34",
       issn: "1745-7270"
   ),
+  JournalModel(
+      name: "Nature",
+      description:
+      "Biochemical reactions are extremely rapid, but the methods for imaging the enzymes that catalyse them can take hours. To get round this problem, structures can be determined at temperatures around 100 K, literally freezing an enzyme's movements and allowing the intermediates in its reaction cycle to be observed. This has been done for bacteriorhodopsin in studies reported by Edman et al. in this issue (Nature 401, 822–826; 1999) and Genick et al. (Science 286, 255–260; 1999).",
+      image:
+      "http://books.google.com/books/content?id=-s4DEy7o-a0C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+      title: "Frozen in Time",
+      impactfactor: "47.5",
+      chiefeditor: "Christopher Surridge ",
+      date: "21 October 1999",
+      volume: "5",
+      issue: "34",
+      issn: "1745-7270"
+  ),
 
 
 ];

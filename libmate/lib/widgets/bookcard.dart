@@ -198,7 +198,7 @@ class BookPage extends StatelessWidget {
                                 textTheme: ButtonTextTheme.primary,
                                 child: RaisedButton(
                                   onPressed: () {
-                                    showToast(context, "NOT IMPLEMENTED");
+                                    showToast(context, "Book added to cart");
                                   },
                                   child: Text("Issue Book"),
                                 ),

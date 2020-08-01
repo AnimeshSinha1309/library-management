@@ -44,10 +44,13 @@ class _TimePageState extends State<TimePage> {
           centerTitle: true,
         ),
         drawer: AppDrawer(),
-        body: Padding(
+        body:
+
+        Padding(
 
         padding: const EdgeInsets.all(8.0),
         child: Table(
+
             //          defaultColumnWidth:
             //              FixedColumnWidth(MediaQuery.of(context).size.width / 3),
                 border: TableBorder.all(
@@ -124,40 +127,7 @@ class _TimePageState extends State<TimePage> {
                 ])
                 ],
 
-//            child: Column(
-//                crossAxisAlignment: CrossAxisAlignment.start,
-//                children: <Widget>[
-////
-//                  RaisedButton(
-//                    color: Colors.red,
-//                    onPressed: (
-//
-//                        ){},
-//                    child: Text(
-//                      '$times.first',
-//                      style: TextStyle(color: Colors.white),
-//                    ),
-////                  ),
-//                  RaisedButton(
-//                    color: Colors.green,
-//                    onPressed: (){},
-//                    child: Text(
-//                      '11 am',
-//                      style: TextStyle(color: Colors.white),
-//                    ),
-//                  ),
-//                  RaisedButton(
-//                    color: Colors.red,
-//                    onPressed: (){},
-//                    child: Text(
-//                      '12 am',
-//                      style: TextStyle(color: Colors.white),
-//                    ),
-//                  ),
-//                ]
-            )
-        )
 
-    );
+    )));
   }
 }

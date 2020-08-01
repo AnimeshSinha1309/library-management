@@ -2,5 +2,3 @@
 .vscode/
 __pycache__/
 **/.flutter-plugins-dependencies
-.ipynb_checkpoints/
-app/db/

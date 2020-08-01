@@ -147,7 +147,10 @@ class BorrowBookModel {
 
   BorrowBookModel.fromJSON(Map<dynamic, dynamic> json) {
     accessionNumber = json["accNo"];
-    borrowDate = json["borrowDate"].toDate();
+    if (json["borrowDate"] != null)
+      borrowDate = (json["borrowDate"]).toDate();
+    else
+      borrowDate = DateTime.now();
     if (json["returnDate"] is DateTime)
       returnDate = json["returnDate"];
     else if (json["returnDate"] is Timestamp)
@@ -180,19 +183,16 @@ class JournalModel {
 
   JournalModel(
       {@required this.name,
-
-        this.image =
-        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fdejapong.com%2Fmaking-cover-art-for-nature%2F&psig=AOvVaw14M72qqXN5MBdAG-D5VkK1&ust=1596199113845000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCMCB3Kn_9OoCFQAAAAAdAAAAABAD",
-        this.title = "",
-        this.impactfactor = "",
-        this.chiefeditor="",
-        this.date = "",
-        this.volume = "",
-        this.issue = "",
-        this.description = "",
-        this.issn = ""
-
-      });
+      this.image =
+          "https://www.google.com/url?sa=i&url=https%3A%2F%2Fdejapong.com%2Fmaking-cover-art-for-nature%2F&psig=AOvVaw14M72qqXN5MBdAG-D5VkK1&ust=1596199113845000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCMCB3Kn_9OoCFQAAAAAdAAAAABAD",
+      this.title = "",
+      this.impactfactor = "",
+      this.chiefeditor = "",
+      this.date = "",
+      this.volume = "",
+      this.issue = "",
+      this.description = "",
+      this.issn = ""});
 
   JournalModel.fromJSON(Map<String, dynamic> json) {
     name = json["title"];
@@ -201,7 +201,7 @@ class JournalModel {
     chiefeditor = (json["chiefeditor"] ?? "");
     date = (json["chiefeditor"] ?? "");
     volume = (json["volume"] ?? "").toString();
-    issue = (json["issue"]??"").toString();
+    issue = (json["issue"] ?? "").toString();
     description = (json["description"] ?? "");
     issn = (json["issn"] ?? "");
     image = json["image"] ??

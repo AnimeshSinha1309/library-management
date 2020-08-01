@@ -99,7 +99,8 @@ class _MyAppState extends State<MyApp> {
                 '/requested': (BuildContext context) => new RequestedPage(),
                 '/about': (BuildContext context) => new AboutPage(),
                 '/accounts': (BuildContext context) => new AccountsPage(),
-                '/guide': (BuildContext context) => new GuidePage(),
+                '/guide': (BuildContext context) =>
+                    new GuidePage(currentUser: usermodel),
               });
         }));
   }

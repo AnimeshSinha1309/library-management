@@ -59,6 +59,7 @@ class AppDrawer extends StatelessWidget {
       _DrawerViewItem(Icons.account_circle, 'Accounts', '/accounts')
           .build(context),
       _DrawerViewItem(Icons.info, 'About', '/about').build(context),
+      _DrawerViewItem(Icons.location_on, 'Guide', '/guide').build(context),
     ];
   }
 
@@ -67,7 +68,7 @@ class AppDrawer extends StatelessWidget {
       //(login doesnt work) for testing other features start:
       _DrawerViewItem(Icons.home, 'Home', '/home').build(context),
       _DrawerViewItem(Icons.home, 'Admin', '/admin').build(context),
-      _DrawerViewItem(Icons.search, 'Search', '/search').build(context),
+      _DrawerViewItem(Icons.location_on, 'Guide', '/guide').build(context),
       _DrawerViewItem(Icons.search, 'Search Books', '/search').build(context),
       _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute')
           .build(context),

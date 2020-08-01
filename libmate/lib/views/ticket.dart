@@ -35,7 +35,7 @@ class _TicketPageState extends State<TicketPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Row(children: [
-                        Text('slot booked',
+                        Text('Slot booked',
                             style: TextStyle(
                                 color: Colors.black87,
                                 letterSpacing: 2.0,

@@ -41,7 +41,7 @@ class _SchedulePageState extends State<SchedulePage > {
     DateTime(today.year, today.month, today.day, 9, 0, 0);
     final DateTime endTime = startTime.add(const Duration(hours: 2));
     meetings.add(Meeting(
-        'Conference', startTime, endTime, const Color(0xFF0F8644), false));
+        'Nature: issue8, vol1', startTime, endTime, const Color(0xFF0F8644), false));
     return meetings;
   }
 }

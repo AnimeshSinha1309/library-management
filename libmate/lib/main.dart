@@ -17,6 +17,7 @@ import 'package:fuzzy/fuzzy.dart';
 import 'package:provider/provider.dart';
 import 'package:libmate/views/guide.dart';
 import 'package:libmate/views/journals.dart';
+import 'package:libmate/views/schedule.dart';
 
 void main() => runApp(MyApp());
 
@@ -89,6 +90,7 @@ class _MyAppState extends State<MyApp> {
                 '/home': (BuildContext context) => new Home(),
                 '/admin': (BuildContext context) => new AdminPage(),
                 '/libcard': (BuildContext context) => new LibcardPage(),
+                '/schedule': (BuildContext context) => new SchedulePage(),
                 '/search': (BuildContext context) => new SearchPage(),
                 '/speech': (BuildContext context) => new Speech(),
                 '/contribute': (BuildContext context) => new ContributePage(),

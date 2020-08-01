@@ -178,7 +178,7 @@ class _MyHomePageState extends State<GuidePage> {
               icon: Icon(Icons.photo),
               onPressed: () {
                 print("No idea what this does");
-                ;
+
               },
             )
           ],

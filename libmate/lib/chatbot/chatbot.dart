@@ -2,9 +2,19 @@ import 'dart:io';
 import 'package:fuzzy/fuzzy.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:libmate/datastore/model.dart';
 
 String readUser() {
   return stdin.readLineSync();
+}
+
+class ChatBook {
+  String name, author;
+
+  ChatBook.fromJSON(Map<String, dynamic> data) {
+    name = data["title"];
+    author = data["author"];
+  }
 }
 
 class Chatbot {
@@ -82,7 +92,7 @@ class Chatbot {
   }
 
   dynamic makeOneQuery(Map<String, String> query) async {
-    query["maxResults"] = "1";
+    query["maxResults"] = "3";
     Uri url = Uri.https("libmate.herokuapp.com", "/query", query);
     final result = await http.get(url); // call api;
     if (result.statusCode != 200) {
@@ -107,14 +117,24 @@ class Chatbot {
     return res;
   }
 
-  dynamic search(List<String> authors, List<String> subjects) async {
+  Future<List<ChatBook>> search(
+      List<String> authors, List<String> subjects) async {
     List<dynamic> finalRes = List();
 
     var res1 = await getData("author", authors);
-    var res2 = await getData("category", subjects);
+    var res2 = await getData("tag", subjects);
     finalRes.addAll(res1);
     finalRes.addAll(res2);
-    return finalRes;
+
+    finalRes = finalRes.toSet().toList();
+
+    List<ChatBook> output = [];
+    for (var res in finalRes) {
+      print(res);
+      output.add(ChatBook.fromJSON(res));
+    }
+
+    return output;
   }
 
   dynamic giveInput(String userInput) async {
@@ -140,8 +160,12 @@ class Chatbot {
 
     if (result.length == 0) {
       output.add("Sorry, I could not find any books related to that criteria");
-    } else
-      output.addAll(result);
+    } else {
+      for (var book in result) {
+        output.add("Title: ${book.name} by ${book.author}");
+      }
+    }
+
     return output;
   }
 

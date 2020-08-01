@@ -13,7 +13,7 @@ class AppDrawer extends StatelessWidget {
 
       if (model.isLoggedIn()) {
         firstChild = UserAccountsDrawerHeader(
-          accountName: Text(model.name),
+          accountName: Text(model.name + "  (" + model.role + ")"),
           accountEmail: Text(model.email),
           currentAccountPicture: CircleAvatar(
             backgroundImage: NetworkImage(model.photoUrl),
@@ -40,6 +40,7 @@ class AppDrawer extends StatelessWidget {
   List<Widget> loggedInDrawerList(context) {
     return <Widget>[
       _DrawerViewItem(Icons.home, 'Home', '/home').build(context),
+      _DrawerViewItem(Icons.home, 'Admin', '/admin').build(context),
       _DrawerViewItem(Icons.search, 'Search', '/search').build(context),
       _DrawerViewItem(Icons.keyboard_voice, 'Speech', '/speech').build(context),
       _DrawerViewItem(Icons.location_on, 'Guide', '/guide').build(context),
@@ -66,9 +67,13 @@ class AppDrawer extends StatelessWidget {
     return <Widget>[
       //(login doesnt work) for testing other features start:
       _DrawerViewItem(Icons.home, 'Home', '/home').build(context),
+      _DrawerViewItem(Icons.home, 'Admin', '/admin').build(context),
       _DrawerViewItem(Icons.search, 'Search', '/search').build(context),
+      _DrawerViewItem(Icons.search, 'Search Books', '/search').build(context),
       _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute')
           .build(context),
+      _DrawerViewItem(Icons.book, 'Journals', '/journal').build(context),
+      _DrawerViewItem(Icons.people, 'Friends', '/friends').build(context),
       _DrawerViewItem(Icons.library_books, 'Reading List', '/goals')
           .build(context),
       _DrawerViewItem(Icons.card_membership, 'Library Card', '/libcard')

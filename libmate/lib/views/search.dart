@@ -8,6 +8,7 @@ import 'package:libmate/datastore/model.dart';
 import 'package:libmate/utils/utils.dart';
 import 'package:libmate/views/drawer.dart';
 import 'package:libmate/widgets/bookcard.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class SearchPage extends StatefulWidget {
   final fuse;
@@ -19,6 +20,17 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  stt.SpeechToText _speech;
+  bool _isListening = false;
+  // String _text = "";
+  double _confidence = 1.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _speech = stt.SpeechToText();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,6 +128,30 @@ class _SearchPageState extends State<SearchPage> {
   final _formKey = GlobalKey<FormState>();
   final _debouncer = Debouncer(milliseconds: 500);
 
+  Future _listen(String id) async {
+    if (!_isListening) {
+      bool available = await _speech.initialize(
+        onStatus: (val) => print('onStatus: $val'),
+        onError: (val) => print('onError: $val'),
+      );
+      if (available) {
+        setState(() => _isListening = true);
+        _speech.listen(
+          onResult: (val) => setState(() {
+            searchControllers[id].text = val.recognizedWords;
+            print(searchControllers[id].text);
+            if (val.hasConfidenceRating && val.confidence > 0) {
+              _confidence = val.confidence;
+            }
+          }),
+        );
+      }
+    } else {
+      setState(() => _isListening = false);
+      _speech.stop();
+    }
+  }
+
   buildField(String label, String id) {
     if (!searchControllers.containsKey(id)) {
       var controller = TextEditingController();
@@ -125,7 +161,13 @@ class _SearchPageState extends State<SearchPage> {
       searchControllers[id] = controller;
     }
     return TextFormField(
-        decoration: InputDecoration(labelText: label),
+        decoration: InputDecoration(
+            labelText: label,
+            suffixIcon: new IconButton(
+                onPressed: () async {
+                  await _listen(id);
+                },
+                icon: Icon(_isListening ? Icons.mic : Icons.mic_none))),
         controller: searchControllers[id]);
   }
 

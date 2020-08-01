@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:libmate/views/drawer.dart';
 import 'package:libmate/views/ticket.dart';
+import 'package:libmate/datastore/model.dart';
 import 'package:libmate/utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 
 class TimePage extends StatefulWidget {
+  final UserModel user;
+
+  TimePage({this.user});
+
   @override
   _TimePageState createState() => _TimePageState();
 }
@@ -123,7 +128,7 @@ class _TimePageState extends State<TimePage> {
             });
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => TicketPage()),
+              MaterialPageRoute(builder: (context) => TicketPage(slot: slot)),
             );
           } else {
             showToast(context, 'Sorry, This slot is not available!');

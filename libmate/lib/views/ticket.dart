@@ -5,16 +5,23 @@ import 'package:libmate/widgets/issueitem.dart';
 import 'package:provider/provider.dart';
 
 class TicketPage extends StatefulWidget {
+  final String slot;
+
+  TicketPage({this.slot});
+
   @override
   _TicketPageState createState() => _TicketPageState();
 }
 
 class _TicketPageState extends State<TicketPage> {
-  String time = "1 pm";
+  String time;
+  String date;
 
   @override
   void initState() {
     super.initState();
+    date = widget.slot.split('_')[0];
+    time = widget.slot.split('_')[1];
   }
 
   @override
@@ -63,7 +70,7 @@ class _TicketPageState extends State<TicketPage> {
 
                       Column(
                         children: <Widget>[
-                          Text('1 August 2020',
+                          Text('$date',
                               style: TextStyle(
                                 color: Colors.grey,
                                 letterSpacing: 2.0,

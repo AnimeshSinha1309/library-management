@@ -92,7 +92,7 @@ class _MyAppState extends State<MyApp> {
                 '/home': (BuildContext context) => new Home(),
                 '/admin': (BuildContext context) => new AdminPage(),
                 '/libcard': (BuildContext context) => new LibcardPage(),
-                '/appointment': (BuildContext context) => new AppointmentPage(),
+                '/appointment': (BuildContext context) => new AppointmentPage(user: model),
                 '/schedule': (BuildContext context) => new SchedulePage(),
                 '/search': (BuildContext context) => new SearchPage(),
                 '/speech': (BuildContext context) => new Speech(),

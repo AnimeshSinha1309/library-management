@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:libmate/views/drawer.dart';
+import 'package:libmate/datastore/model.dart';
 import 'package:libmate/views/timeslots.dart';
 
 class AppointmentPage extends StatefulWidget {
+  final UserModel user;
+
+  AppointmentPage({this.user});
+
   @override
   _AppointmentPageState createState() => _AppointmentPageState();
 }
@@ -54,7 +59,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => TimePage()),
+                                    builder: (context) => TimePage(user: widget.user)),
                               );
                             },
                             icon: Icon(Icons.person_pin),

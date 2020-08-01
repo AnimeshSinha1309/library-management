@@ -10,77 +10,86 @@ import 'dart:convert';
 const String defImage =
     "https://www.peterharrington.co.uk/blog/wp-content/uploads/2014/09/shelves.jpg";
 
-class RequestPage extends StatefulWidget {
+class AutoTaggerPage extends StatefulWidget {
   @override
-  _RequestPageState createState() => _RequestPageState();
+  _AutoTaggerPageState createState() => _AutoTaggerPageState();
 }
 
-class _RequestPageState extends State<RequestPage> {
+class _AutoTaggerPageState extends State<AutoTaggerPage> {
   final _formKey = GlobalKey<FormState>();
 
   final _isbnController = TextEditingController();
   final _nameController = TextEditingController();
-  final _reasonController = TextEditingController();
-  String _subject = "";
+  final _authorsController = TextEditingController();
+  final _publisherController = TextEditingController();
+  final _subjectController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  final _genreController = TextEditingController();
   String _image = defImage;
 
-  Future<bool> doesExist() async {
-    final snapShot = await Firestore.instance
-        .collection("books")
-        .document(_isbnController.text)
-        .get();
-    if (snapShot == null ||
-        !snapShot.exists ||
-        snapShot.data['issues'].length == 0 ||
-        !snapShot.data['issues'].containsValue('available')) {
-      return false;
-    }
-    return true;
+  void cleanFields() {
+    _isbnController.text = "";
+    _nameController.text = "";
+    _authorsController.text = "";
+    _publisherController.text = "";
+    _subjectController.text = "";
+    _descriptionController.text = "";
+    _genreController.text = "";
   }
 
   Future<String> _sendRequest() async {
-    final res = await doesExist();
-    if (res) {
-      return "This book is present in the library";
-    }
-
     try {
+      if(_nameController.text == "") {
+        await _autofill();
+      }
       final snapShot = await Firestore.instance
-          .collection("requested books")
+          .collection("books")
           .document(_isbnController.text)
           .get();
-      if (snapShot == null || !snapShot.exists) {
-        if (_nameController.text == "") {
-          await _autofill();
-        }
-        await Firestore.instance
-            .collection("requested books")
+      Map<dynamic, dynamic> map = Map<dynamic, dynamic>();
+      if (!snapShot.exists) {
+        map['1'] = 'available';
+        Firestore.instance
+            .collection("books")
             .document(_isbnController.text)
             .setData({
-          'name': _nameController.text,
-          'subject': _subject,
-          'reason': _reasonController.text,
+          'author': _authorsController.text,
+          'description': _descriptionController.text,
+          'genre': _genreController.text,
           'image': _image,
-          'cnt': 1,
+          'name': _nameController.text,
+          'subject': _subjectController.text,
+          'issues': map,
         });
       } else {
-        String reason =
-            snapShot.data['reason'].length >= _reasonController.text.length
-                ? snapShot.data['reason']
-                : _reasonController.text;
-        await Firestore.instance
-            .collection("requested books")
-            .document(_isbnController.text)
-            .updateData({'cnt': snapShot.data['cnt'] + 1, 'reason': reason});
-      }
+        map.addAll(snapShot.data['issues']);
+        String field = '1';
+        snapShot.data['issues'].forEach((key, value) {
+          if (key.compareTo(field) == 0) {
+            field = (int.parse(field) + 1).toString();
+          }
+        });
+        map[field] = 'available';
 
-      _isbnController.text = "";
-      _nameController.text = "";
-      _reasonController.text = "";
-      return "Request Submitted!";
+        Firestore.instance
+            .collection("books")
+            .document(_isbnController.text)
+            .updateData({
+          'author': _authorsController.text,
+          'description': _descriptionController.text,
+          'genre': _genreController.text,
+          'image': _image,
+          'name': _nameController.text,
+          'subject': _subjectController.text,
+          'issues': map,
+        });
+
+        cleanFields();
+      }
     } catch (e) {
       return "Error sending request!!";
     }
+    return "hello";
   }
 
   Future<String> _autofill() async {
@@ -91,19 +100,46 @@ class _RequestPageState extends State<RequestPage> {
       return "Book Not Found!!";
     }
     data = data['items'][0]['volumeInfo'];
+    String text = "";
+
     _nameController.text = data['title'];
-    _subject = "";
-    if (data['categories'] != null) {
-      for (var catg in data['categories']) {
-        _subject += catg + ", ";
+    text += _nameController.text;
+
+    _authorsController.text = "";
+    if (data['authors'] != null) {
+      for (var author in data['authors']) {
+        _authorsController.text += author + "; ";
       }
-      _subject = _subject.substring(0, _subject.length - 2);
+      _authorsController.text = _authorsController.text
+          .substring(0, _authorsController.text.length - 2);
+      text += " " + _authorsController.text;
     }
+
+    _publisherController.text = "";
+    if (data['publisher'] != null) {
+      _publisherController.text = data['publisher'];
+    }
+
+    _descriptionController.text = "";
+    if (data['description'] != null) {
+      _descriptionController.text = data['description'];
+      text += " " + _descriptionController.text;
+    }
+
+    var res = await http.get('http://54.226.130.180/predict?text=${text}');
+
+    var gen = res.body;
+
+    _subjectController.text = gen.split(';')[0] ?? "";
+
+    _genreController.text = gen.split(';')[1] ?? "";
+
     _image = defImage;
     if (data['imageLinks'] != null && data['imageLinks']['thumbnail'] != null) {
       _image = data['imageLinks']['thumbnail'];
     }
-    return "Auto Filled!";
+
+    return "Auto Tagged!";
   }
 
   Future _scanBarcode() async {
@@ -122,7 +158,7 @@ class _RequestPageState extends State<RequestPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
-        title: new Text('Request Page'),
+        title: new Text('Auto Tagger Page'),
       ),
       drawer: AppDrawer(),
       body: Builder(
@@ -154,7 +190,6 @@ class _RequestPageState extends State<RequestPage> {
                         ),
                         TextFormField(
                           keyboardType: TextInputType.text,
-                          enabled: false,
                           decoration:
                               InputDecoration(hintText: "Name of the Book"),
                           controller: _nameController,
@@ -164,11 +199,39 @@ class _RequestPageState extends State<RequestPage> {
                         ),
                         TextFormField(
                           keyboardType: TextInputType.text,
+                          decoration:
+                              InputDecoration(hintText: "Authors of the Book"),
+                          controller: _authorsController,
+                          validator: (value) {
+                            return null;
+                          },
+                        ),
+                        TextFormField(
+                          keyboardType: TextInputType.text,
+                          decoration:
+                              InputDecoration(hintText: "Genre of the Book"),
+                          controller: _genreController,
+                          validator: (value) {
+                            return null;
+                          },
+                        ),
+                        TextFormField(
+                          keyboardType: TextInputType.text,
+                          decoration:
+                              InputDecoration(hintText: "Subject of the Book"),
+                          controller: _subjectController,
+                          validator: (value) {
+                            return null;
+                          },
+                        ),
+                        TextFormField(
+                          keyboardType: TextInputType.text,
                           decoration: InputDecoration(
-                              hintText: "Reasons, Cosigners, etc."),
-                          controller: _reasonController,
-                          minLines: 1,
-                          maxLines: 4,
+                              hintText: "Publisher of the Book"),
+                          controller: _publisherController,
+                          validator: (value) {
+                            return null;
+                          },
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -186,7 +249,7 @@ class _RequestPageState extends State<RequestPage> {
                                   }
                                 },
                                 child: Text(
-                                  'Submit',
+                                  'Add Book',
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),
@@ -203,7 +266,7 @@ class _RequestPageState extends State<RequestPage> {
                                   }
                                 },
                                 child: Text(
-                                  'Autofill',
+                                  'Auto Tag',
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),

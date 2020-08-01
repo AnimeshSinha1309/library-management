@@ -4,6 +4,7 @@ import 'package:libmate/datastore/state.dart';
 import 'package:libmate/views/about.dart';
 import 'package:libmate/views/accounts.dart';
 import 'package:libmate/views/contribute.dart';
+import 'package:libmate/views/autoTagger.dart';
 import 'package:libmate/views/goals.dart';
 import 'package:libmate/views/home.dart';
 import 'package:libmate/views/admin.dart';
@@ -92,6 +93,7 @@ class _MyAppState extends State<MyApp> {
                 '/search': (BuildContext context) => new SearchPage(),
                 '/speech': (BuildContext context) => new Speech(),
                 '/contribute': (BuildContext context) => new ContributePage(),
+                '/autoTagger': (BuildContext context) => new AutoTaggerPage(),
                 '/issue': (BuildContext context) => new IssuePage(),
                 '/goals': (BuildContext context) => new GoalsPage(),
                 '/journal': (BuildContext context) => new JournalPage(),

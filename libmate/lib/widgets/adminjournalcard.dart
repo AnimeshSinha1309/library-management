@@ -171,17 +171,6 @@ class AdminjournalPage extends StatelessWidget {
                                 minWidth: 200,
                                 textTheme: ButtonTextTheme.primary,
                                 child: RaisedButton(
-                                  onPressed: () async {
-                                    final String resp = await addJournal(model);
-                                    showToast(context, resp);
-                                  },
-                                  child: Text("Add to Read List"),
-                                ),
-                              ),
-                              ButtonTheme(
-                                minWidth: 200,
-                                textTheme: ButtonTextTheme.primary,
-                                child: RaisedButton(
                                   onPressed: () {
                                     showToast(context, "NOT IMPLEMENTED");
                                   },

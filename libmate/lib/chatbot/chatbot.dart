@@ -11,12 +11,15 @@ class Chatbot {
   dynamic subjectsFuse;
   dynamic authorsFuse;
   List<String> actions = ["recommend", "suggest", "give"];
+  dynamic helloFuse;
   dynamic actionFuse;
 
   Chatbot({subjects, authors}) {
     subjectsFuse = Fuzzy(subjects);
     authorsFuse = Fuzzy(authors);
 
+    var greetings = ["hello", "hi", "hey", "yo"];
+    helloFuse = Fuzzy(greetings);
     actionFuse = Fuzzy(actions);
   }
 
@@ -49,6 +52,18 @@ class Chatbot {
     for (var token in userTokens) {
       var res = actionFuse.search(token);
 
+      if (!res.isEmpty && res[0].score < threshold) return true;
+    }
+    return false;
+  }
+
+  bool helloCheck(List<String> userTokens) {
+    final threshold = 0.5;
+
+    for (var token in userTokens) {
+      var res = helloFuse.search(token);
+
+      print(res);
       if (!res.isEmpty && res[0].score < threshold) return true;
     }
     return false;
@@ -104,13 +119,17 @@ class Chatbot {
 
   dynamic giveInput(String userInput) async {
     var tokens = userInput.split(" ");
+    bool hello = helloCheck(tokens);
 
     if (!sanityCheck(tokens)) {
       return [
-        "Sorry I do not understand that.",
+        hello ? "Hi there!" : "Sorry I do not understand that.",
         "Try asking me to 'recommend a maths book' or 'give a good book by michael nielsen about quantum physics'"
       ];
     }
+
+    List<String> output = [];
+    if (hello) output.add("Hey there!");
 
     var detectedSubjects = extractData(subjectsFuse, tokens);
     var detectedAuthors = extractData(authorsFuse, tokens);
@@ -119,7 +138,11 @@ class Chatbot {
 
     var result = await search(detectedAuthors, detectedSubjects);
 
-    return [result];
+    if (result.length == 0) {
+      output.add("Sorry, I could not find any books related to that criteria");
+    } else
+      output.addAll(result);
+    return output;
   }
 
   dynamic getWelcome() {

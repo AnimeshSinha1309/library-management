@@ -18,8 +18,9 @@ import 'package:fuzzy/fuzzy.dart';
 import 'package:provider/provider.dart';
 import 'package:libmate/views/guide.dart';
 import 'package:libmate/views/journals.dart';
-import 'package:libmate/views/schedule.dart';
+import 'package:libmate/views/calendar.dart';
 import 'package:libmate/views/appointment.dart';
+import 'package:libmate/views/admin_periodicalcard.dart';
 
 void main() => runApp(MyApp());
 
@@ -89,11 +90,15 @@ class _MyAppState extends State<MyApp> {
               ),
               initialRoute: "/home",
               routes: <String, WidgetBuilder>{
-                '/home': (BuildContext context) => new Home(),
+                //                admin pages
                 '/admin': (BuildContext context) => new AdminPage(),
+                '/schedule': (BuildContext context) => new SchedulePage(),
+                '/periodical':(BuildContext context) => new PeriodicalPage(),
+                '/home': (BuildContext context) => new Home(),
+
                 '/libcard': (BuildContext context) => new LibcardPage(),
                 '/appointment': (BuildContext context) => new AppointmentPage(),
-                '/schedule': (BuildContext context) => new SchedulePage(),
+
                 '/search': (BuildContext context) => new SearchPage(),
                 '/speech': (BuildContext context) => new Speech(),
                 '/contribute': (BuildContext context) => new ContributePage(),

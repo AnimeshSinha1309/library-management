@@ -70,24 +70,13 @@ class _TicketPageState extends State<TicketPage> {
                               )),
 
                         ],
+
                       ),
                     ]
                 )
             ),
           );
 
-          var dueBooks = SliverList(
-            delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) =>
-                    IssuedBookCard(model: model.borrowedBooks[index]),
-                childCount: model.borrowedBooks.length),
-          );
-          var pastBooks = SliverList(
-            delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) =>
-                    IssuedBookCard(model: model.borrowedBooks[index]),
-                childCount: model.pastBooks.length),
-          );
 
           return Scaffold(
               backgroundColor: Colors.grey[100],
@@ -97,7 +86,7 @@ class _TicketPageState extends State<TicketPage> {
               ),
               drawer: AppDrawer(),
               body: CustomScrollView(
-                slivers: [statsGroup, dueBooks, pastBooks],
+                slivers: [statsGroup],
               ));
         });
   }

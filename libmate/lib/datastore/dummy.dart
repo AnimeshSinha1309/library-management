@@ -14,7 +14,9 @@ List<JournalModel> dummyJournals = <JournalModel>[
       date: "21 October 1999",
       volume: "5",
       issue: "34",
-      issn: "1745-7270"
+      issn: "1745-7270",
+      subscription: "yearly",
+      charges: "Rs 1200",
     ),
   JournalModel(
       name: "Nature",
@@ -28,7 +30,10 @@ List<JournalModel> dummyJournals = <JournalModel>[
       date: "21 October 1999",
       volume: "5",
       issue: "34",
-      issn: "1745-7270"
+      issn: "1745-7270",
+      subscription: "yearly",
+      charges: "Rs 1200",
+
   ),
   JournalModel(
       name: "Nature",
@@ -42,7 +47,10 @@ List<JournalModel> dummyJournals = <JournalModel>[
       date: "21 October 1999",
       volume: "5",
       issue: "34",
-      issn: "1745-7270"
+      issn: "1745-7270",
+      subscription: "yearly",
+      charges: "Rs 1200",
+
   ),
 
 

@@ -177,6 +177,8 @@ class JournalModel {
   String issue;
   String description;
   String issn;
+  String subscription;
+  String charges;
 
   JournalModel(
       {@required this.name,
@@ -190,12 +192,16 @@ class JournalModel {
         this.volume = "",
         this.issue = "",
         this.description = "",
-        this.issn = ""
+        this.issn = "",
+        this.subscription = "",
+        this.charges = ""
 
       });
 
   JournalModel.fromJSON(Map<String, dynamic> json) {
     name = json["title"];
+    subscription = json['subscription'];
+    charges = json['charges'];
     title = json["topic"] ?? "";
     impactfactor = json["impactfactor"] ?? "";
     chiefeditor = (json["chiefeditor"] ?? "");

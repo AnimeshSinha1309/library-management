@@ -30,11 +30,8 @@ class _TimePageState extends State<TimePage> {
 
     print(times);
   }
-//  final startTime = TimeOfDay(hour: 9, minute: 0);
-//  final endTime = TimeOfDay(hour: 22, minute: 0);
-//  genslots(startTime,endTime);
 
-  List<String> times = ['9:30 AM','10:00 AM','10:30 AM','11:00 AM','11:30 AM'];
+  List<String> times = ['11 AM','10:00 AM','10:30 AM','11:00 AM','11:30 AM'];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,14 +42,9 @@ class _TimePageState extends State<TimePage> {
         ),
         drawer: AppDrawer(),
         body:
-
         Padding(
-
         padding: const EdgeInsets.all(8.0),
         child: Table(
-
-            //          defaultColumnWidth:
-            //              FixedColumnWidth(MediaQuery.of(context).size.width / 3),
                 border: TableBorder.all(
                 color: Colors.black26, width: 1, style: BorderStyle.none),
                 children: [

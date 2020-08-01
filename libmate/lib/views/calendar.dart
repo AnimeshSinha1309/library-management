@@ -5,7 +5,7 @@ import 'package:libmate/widgets/gauth.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'dart:async';
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SchedulePage extends StatefulWidget {
   @override
@@ -25,7 +25,7 @@ class _SchedulePageState extends State<SchedulePage > {
         drawer: AppDrawer(),
         body: SfCalendar(
           view: CalendarView.month,
-          dataSource: MeetingDataSource(_getDataSource()),
+          dataSource: MeetingDataSource(_getDataSource("Nature vol8")),
           // by default the month appointment display mode set as Indicator, we can
           // change the display mode as appointment using the appointment display mode
           // property
@@ -34,14 +34,14 @@ class _SchedulePageState extends State<SchedulePage > {
         ));
   }
 
-  List<Meeting> _getDataSource() {
+  List<Meeting> _getDataSource($periodical) {
     meetings = <Meeting>[];
     final DateTime today = DateTime.now();
     final DateTime startTime =
     DateTime(today.year, today.month, today.day, 9, 0, 0);
     final DateTime endTime = startTime.add(const Duration(hours: 2));
     meetings.add(Meeting(
-        'Nature: issue8, vol1', startTime, endTime, const Color(0xFF0F8644), false));
+        $periodical, startTime, endTime, const Color(0xFF0F8644), false));
     return meetings;
   }
 }

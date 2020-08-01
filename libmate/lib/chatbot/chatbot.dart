@@ -73,7 +73,6 @@ class Chatbot {
     for (var token in userTokens) {
       var res = helloFuse.search(token);
 
-      print(res);
       if (!res.isEmpty && res[0].score < threshold) return true;
     }
     return false;
@@ -130,7 +129,6 @@ class Chatbot {
 
     List<ChatBook> output = [];
     for (var res in finalRes) {
-      print(res);
       output.add(ChatBook.fromJSON(res));
     }
 
@@ -153,8 +151,20 @@ class Chatbot {
 
     var detectedSubjects = extractData(subjectsFuse, tokens);
     var detectedAuthors = extractData(authorsFuse, tokens);
+    print("Detected stuff");
     print(detectedAuthors);
     print(detectedSubjects);
+
+    output.add("Recommending books based on");
+    String author = "Authors: ";
+    String subjects = "Subjects: ";
+
+    for (var a in detectedAuthors) author += a;
+    for (var s in detectedSubjects) subjects += s;
+    if (detectedAuthors.length == 0) author += "none";
+    if (detectedSubjects.length == 0) subjects += "none";
+
+    output.add(author + "; " + subjects);
 
     var result = await search(detectedAuthors, detectedSubjects);
 

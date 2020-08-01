@@ -22,10 +22,8 @@ class BookCartState extends State<BookCartUI> {
     final prefs = await SharedPreferences.getInstance();
     List<String> readlist = prefs.getStringList(key) ?? [];
     Set<BookModel> booklist = Set<BookModel>();
-    print(readlist);
     for (var book in readlist) {
       var dec = json.decode(book);
-      print(dec);
       booklist.add(BookModel.fromJSON(json: dec));
     }
     return booklist;

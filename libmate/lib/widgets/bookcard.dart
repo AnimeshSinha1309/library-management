@@ -136,17 +136,15 @@ class BookPage extends StatelessWidget {
     List<String> issueCart = prefs.getStringList(key) ?? [];
     if (issueCart.length > maxBooks) return 1;
 
-    String sBook = json.encode(model.toJSON());
-    bool found = false;
-    for (var it = 0, name = sBook.split(',')[0]; it < issueCart.length; it++) {
-      if (issueCart[it].split(',')[0] == name) {
-        issueCart[it] = sBook;
-        found = true;
-        break;
+    String nBookName = model.name;
+    for (var issued in issueCart) {
+      var js = json.decode(issued);
+      if (BookModel.fromJSON(json: js).name == nBookName) {
+        return 3;
       }
     }
 
-    if (!found) issueCart.add(sBook);
+    issueCart.add(jsonEncode(model.toJSON()));
 
     return (await prefs.setStringList(key, issueCart)) ? 0 : 2;
   }
@@ -167,6 +165,8 @@ class BookPage extends StatelessWidget {
       return "Exceeded max size of cart";
     } else if (res == 2) {
       return "Error saving cart";
+    } else if (res == 3) {
+      return "Book already present";
     } else {
       return "Unknown Error";
     }

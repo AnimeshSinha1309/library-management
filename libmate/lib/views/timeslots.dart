@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:libmate/views/drawer.dart';
-
+import 'package:libmate/views/ticket.dart';
 class TimePage extends StatefulWidget {
   @override
   _TimePageState createState() => _TimePageState();
@@ -30,6 +30,10 @@ class _TimePageState extends State<TimePage> {
 
     print(times);
   }
+//  final startTime = TimeOfDay(hour: 9, minute: 0);
+//  final endTime = TimeOfDay(hour: 22, minute: 0);
+//  genslots(startTime,endTime);
+
   List<String> times = ['9:30 AM','10:00 AM','10:30 AM','11:00 AM','11:30 AM'];
   @override
   Widget build(BuildContext context) {
@@ -40,42 +44,95 @@ class _TimePageState extends State<TimePage> {
           centerTitle: true,
         ),
         drawer: AppDrawer(),
-        body: Padding(
-            padding: EdgeInsets.fromLTRB(30.0,40.0,30.0,0.0),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
+        body:
 
-                  RaisedButton(
-                    color: Colors.red,
-                    onPressed: (
+        Padding(
 
-                        ){},
+        padding: const EdgeInsets.all(8.0),
+        child: Table(
+
+            //          defaultColumnWidth:
+            //              FixedColumnWidth(MediaQuery.of(context).size.width / 3),
+                border: TableBorder.all(
+                color: Colors.black26, width: 1, style: BorderStyle.none),
+                children: [
+
+                TableRow(children: [
+                TableCell(child: Center(child: RaisedButton(
+                              color: Colors.red,
+                              onPressed: (){},
+                              child: Text(
+                              '11 am',
+                              style: TextStyle(color: Colors.white),
+                              ),
+                              ),)),
+                  TableCell(child: Center(child: RaisedButton(
+                    color: Colors.green,
+                    onPressed: (){},
                     child: Text(
-                      '$times.first',
+                      '12 am',
                       style: TextStyle(color: Colors.white),
                     ),
-                  ),
-                  RaisedButton(
+                  ),)),
+                  TableCell(child: Center(child: RaisedButton(
+                    color: Colors.green,
+                    onPressed: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => TicketPage()),
+                      );
+                    },
+                    child: Text(
+                      '1 pm',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),)),
+                  TableCell(child: Center(child: RaisedButton(
+                    color: Colors.green,
+                    onPressed: (){},
+                    child: Text(
+                      '2 pm',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),)),
+                ]),
+                TableRow(children: [
+                  TableCell(child: Center(child: RaisedButton(
+                    color: Colors.red,
+                    onPressed: (){},
+                    child: Text(
+                      '3 pm',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),)),
+                  TableCell(child: Center(child: RaisedButton(
                     color: Colors.green,
                     onPressed: (){},
                     child: Text(
                       '11 am',
                       style: TextStyle(color: Colors.white),
                     ),
-                  ),
-                  RaisedButton(
+                  ),)),
+                  TableCell(child: Center(child: RaisedButton(
+                    color: Colors.green,
+                    onPressed: (){},
+                    child: Text(
+                      '4 pm',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),)),
+                  TableCell(child: Center(child: RaisedButton(
                     color: Colors.red,
                     onPressed: (){},
                     child: Text(
-                      '12 am',
+                      '5 pm',
                       style: TextStyle(color: Colors.white),
                     ),
-                  ),
-                ]
-            )
-        )
+                  ),)),
+                ])
+                ],
 
-    );
+
+    )));
   }
 }

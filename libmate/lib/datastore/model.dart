@@ -111,11 +111,23 @@ class BookModel {
     this.name = json["name"] ?? json["title"];
     this.author = json["author"] ?? json["authors"] ?? "";
     this.genre = json["genre"] ?? json["category"] ?? "";
-    this.isbn = isbn;
+    this.isbn = isbn ?? json['isbn'];
     this.image = json["image"] ?? defImage;
     this.issues = json["issues"] ?? Map();
     this.subject = json["subject"] ?? json["category"] ?? "";
     this.description = json["description"];
+  }
+
+  toJSON() {
+    return {
+      "name": name,
+      "author": author,
+      "isbn": isbn,
+      "image": image,
+      "subject": subject,
+      "genre": genre,
+      "description": description
+    };
   }
 }
 
@@ -206,31 +218,5 @@ class JournalModel {
     issn = (json["issn"] ?? "");
     image = json["image"] ??
         "https://www.google.com/url?sa=i&url=https%3A%2F%2Fdejapong.com%2Fmaking-cover-art-for-nature%2F&psig=AOvVaw14M72qqXN5MBdAG-D5VkK1&ust=1596199113845000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCMCB3Kn_9OoCFQAAAAAdAAAAABAD";
-  }
-}
-
-class BookCart {
-  List<BorrowBookModel> cart;
-  final int limit = 2;
-
-  String addBook(BorrowBookModel book) {
-    if (cart.length < limit) {
-      for (var exist in cart) {
-        if (exist.book.name == book.book.name) return "Book already borrowed";
-      }
-      cart.add(book);
-      return "";
-    } else
-      return "Cart size is full";
-  }
-
-  dynamic toJSON() {
-    var res = [];
-
-    for (var book in cart) {
-      res.add(book.toJSON());
-    }
-
-    return res;
   }
 }

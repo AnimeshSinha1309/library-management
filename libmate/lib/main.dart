@@ -17,6 +17,8 @@ import 'package:fuzzy/fuzzy.dart';
 import 'package:provider/provider.dart';
 import 'package:libmate/views/guide.dart';
 import 'package:libmate/views/journals.dart';
+import 'package:libmate/widgets/cart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(MyApp());
 
@@ -56,7 +58,16 @@ class _MyAppState extends State<MyApp> {
       callback();
     }
 
+    void logouter() async {
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setBool("logged_in", false);
+      prefs.remove("issuecart");
+      loader();
+    }
+
     // to avoid clogging up initStae
+
+    // logouter();
     loader();
   }
 
@@ -101,6 +112,7 @@ class _MyAppState extends State<MyApp> {
                 '/accounts': (BuildContext context) => new AccountsPage(),
                 '/guide': (BuildContext context) =>
                     new GuidePage(currentUser: usermodel),
+                '/cart': (BuildContext context) => new BookCartUI()
               });
         }));
   }

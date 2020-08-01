@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:libmate/utils/utils.dart';
+import 'package:libmate/views/drawer.dart';
 
 class Checkout extends StatelessWidget {
   String data;
@@ -11,13 +13,7 @@ class Checkout extends StatelessWidget {
         drawer: AppDrawer(),
         appBar: AppBar(title: Text("Issue book")),
         body: Column(children: [
-          QrImage(data: data, version: Qrversions.auto, size: 200.0),
-          RaisedButton(
-              child: Text("Checkout"),
-              onPressed: () {
-                String data = jsonEncode(toJSON());
-                gotoPage(context, Checkout(data));
-              })
+          QrImage(data: data, version: QrVersions.auto, size: 200.0),
         ]));
   }
 }

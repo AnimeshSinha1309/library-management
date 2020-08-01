@@ -106,8 +106,9 @@ class BookPage extends StatelessWidget {
   BookPage({@required this.model});
 
   Future<int> saveReadingList(BookModel model) async {
+    final key = "readingList";
     final prefs = await SharedPreferences.getInstance();
-    List<String> readList = prefs.getStringList("readingList") ?? [];
+    List<String> readList = prefs.getStringList(key) ?? [];
     if (readList.length > maxBooks) return 1;
 
     ToRead rBook = new ToRead();
@@ -126,7 +127,28 @@ class BookPage extends StatelessWidget {
 
     if (!found) readList.add(sBook);
 
-    return (await prefs.setStringList("readingList", readList)) ? 0 : 2;
+    return (await prefs.setStringList(key, readList)) ? 0 : 2;
+  }
+
+  Future<int> saveCart(BookModel model) async {
+    final key = "issuecart";
+    final prefs = await SharedPreferences.getInstance();
+    List<String> issueCart = prefs.getStringList(key) ?? [];
+    if (issueCart.length > maxBooks) return 1;
+
+    String sBook = json.encode(model.toJSON());
+    bool found = false;
+    for (var it = 0, name = sBook.split(',')[0]; it < issueCart.length; it++) {
+      if (issueCart[it].split(',')[0] == name) {
+        issueCart[it] = sBook;
+        found = true;
+        break;
+      }
+    }
+
+    if (!found) issueCart.add(sBook);
+
+    return (await prefs.setStringList(key, issueCart)) ? 0 : 2;
   }
 
   List<DataRow> _getAccessionTable() {
@@ -135,6 +157,19 @@ class BookPage extends StatelessWidget {
       rows.add(DataRow(cells: [DataCell(Text(key)), DataCell(Text(value))]));
     });
     return rows;
+  }
+
+  Future<String> addBookCart(BookModel model) async {
+    int res = await saveCart(model);
+    if (res == 0) {
+      return "Added to cart";
+    } else if (res == 1) {
+      return "Exceeded max size of cart";
+    } else if (res == 2) {
+      return "Error saving cart";
+    } else {
+      return "Unknown Error";
+    }
   }
 
   Future<String> addBook(BookModel model) async {
@@ -197,8 +232,9 @@ class BookPage extends StatelessWidget {
                                 minWidth: 200,
                                 textTheme: ButtonTextTheme.primary,
                                 child: RaisedButton(
-                                  onPressed: () {
-                                    showToast(context, "Book added to cart");
+                                  onPressed: () async {
+                                    showToast(
+                                        context, await addBookCart(model));
                                   },
                                   child: Text("Issue Book"),
                                 ),

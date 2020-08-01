@@ -1,0 +1,81 @@
+import 'package:flutter/material.dart';
+import 'package:libmate/views/drawer.dart';
+
+class TimePage extends StatefulWidget {
+  @override
+  _TimePageState createState() => _TimePageState();
+}
+
+class _TimePageState extends State<TimePage> {
+  Iterable<TimeOfDay> getTimes(TimeOfDay startTime, TimeOfDay endTime, Duration step) sync* {
+    var hour = startTime.hour;
+    var minute = startTime.minute;
+
+    do {
+      yield TimeOfDay(hour: hour, minute: minute);
+      minute += step.inMinutes;
+      while (minute >= 60) {
+        minute -= 60;
+        hour++;
+      }
+    } while (hour < endTime.hour ||
+        (hour == endTime.hour && minute <= endTime.minute));
+  }
+  void genslots(startTime,endTime){
+    final step = Duration(minutes: 30);
+
+    final times = getTimes(startTime, endTime, step)
+        .map((tod) => tod.format(context))
+        .toList();
+
+    print(times);
+  }
+  List<String> times = ['9:30 AM','10:00 AM','10:30 AM','11:00 AM','11:30 AM'];
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: Colors.grey[100],
+        appBar: new AppBar(
+          title: new Text('Select time'),
+          centerTitle: true,
+        ),
+        drawer: AppDrawer(),
+        body: Padding(
+            padding: EdgeInsets.fromLTRB(30.0,40.0,30.0,0.0),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+
+                  RaisedButton(
+                    color: Colors.red,
+                    onPressed: (
+
+                        ){},
+                    child: Text(
+                      '$times.first',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  RaisedButton(
+                    color: Colors.green,
+                    onPressed: (){},
+                    child: Text(
+                      '11 am',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  RaisedButton(
+                    color: Colors.red,
+                    onPressed: (){},
+                    child: Text(
+                      '12 am',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ]
+            )
+        )
+
+    );
+  }
+}

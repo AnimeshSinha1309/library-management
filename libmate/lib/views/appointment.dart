@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:libmate/datastore/model.dart';
 import 'package:libmate/views/drawer.dart';
-import 'package:libmate/widgets/gauth.dart';
-import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'dart:async';
+import 'package:libmate/views/timeslots.dart';
 
 
 class AppointmentPage extends StatefulWidget {
@@ -51,7 +47,12 @@ class _AppointmentPageState extends State<AppointmentPage > {
                         child: ButtonTheme(
                           textTheme: ButtonTextTheme.primary,
                           child: RaisedButton.icon(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => TimePage()),
+                              );
+                            },
                             icon: Icon(Icons.person_pin),
                             label: Text('Sit in Library'),
                           ),

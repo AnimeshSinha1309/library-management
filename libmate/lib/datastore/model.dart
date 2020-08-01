@@ -147,7 +147,10 @@ class BorrowBookModel {
 
   BorrowBookModel.fromJSON(Map<dynamic, dynamic> json) {
     accessionNumber = json["accNo"];
-    borrowDate = json["borrowDate"].toDate();
+    if (json["borrowDate"] != null)
+      borrowDate = (json["borrowDate"]).toDate();
+    else
+      borrowDate = DateTime.now();
     if (json["returnDate"] is DateTime)
       returnDate = json["returnDate"];
     else if (json["returnDate"] is Timestamp)

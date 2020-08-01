@@ -3,6 +3,8 @@ import datetime
 import random
 import numpy as np
 
+category_counts = {"maths": 12, "science": 3, "fiction": 5}
+
 issue_dates = []
 return_dates = []
 num_entries = 1000
@@ -80,6 +82,11 @@ def plot_fines_pie():
     plt.show()
 
 
+def plot_category_counts():
+    plt.bar(category_counts.keys(), category_counts.values(), 0.5, color='g')
+    plt.show()
+
+
 if __name__ == "__main__":
     setup()
     # plot_issue_day_of_week()
@@ -87,3 +94,4 @@ if __name__ == "__main__":
     # plot_return_duration()
     # plot_fines()
     # plot_fines_pie()
+    plot_category_counts()

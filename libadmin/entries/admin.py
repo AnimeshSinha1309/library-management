@@ -1,5 +1,5 @@
 from django.contrib import admin
-from libmate_admin.models import *
+from entries.models import *
 
 # Register your models here.
 class JournalsAdmin(admin.ModelAdmin):

@@ -37,7 +37,12 @@ class _AppointmentPageState extends State<AppointmentPage > {
                       child: ButtonTheme(
                         textTheme: ButtonTextTheme.primary,
                         child: RaisedButton.icon(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => TimePage()),
+                            );
+                          },
                           icon: Icon(Icons.assignment_return),
                           label: Text('Issue/Return book'),
                         ),

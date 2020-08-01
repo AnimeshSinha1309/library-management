@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:libmate/views/drawer.dart';
-
+import 'package:libmate/views/ticket.dart';
 class TimePage extends StatefulWidget {
   @override
   _TimePageState createState() => _TimePageState();
@@ -76,7 +76,12 @@ class _TimePageState extends State<TimePage> {
                   ),)),
                   TableCell(child: Center(child: RaisedButton(
                     color: Colors.green,
-                    onPressed: (){},
+                    onPressed: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => TicketPage()),
+                      );
+                    },
                     child: Text(
                       '1 pm',
                       style: TextStyle(color: Colors.white),

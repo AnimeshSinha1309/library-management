@@ -62,46 +62,36 @@ class JournalCard extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
+                            Flexible(
+                              child: Text(
+                                (model.title ?? model.title),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              )),
+                            Flexible(
+                              child: Text(
+                                "volume: " + (model.volume ?? "")+ " issue: " + (model.issue ?? ""),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              )),
+                            Flexible(
+                              child: Text(
+                                      "date: " + (model.date ?? ""),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    )),
 
-                            Text(
-                              "title: " + (model.title ?? model.title),
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                            Text(
-                              "volume: " + (model.volume ?? ""),
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                            Text(
-                              "issue: " + (model.issue ?? ""),
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                            Text(
-                              "date: " + (model.date ?? ""),
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                            Text(
-                              "issn: " + (model.issn ?? ""),
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  )),
+                    )),
+              ),
             ),
-          ),
-        ));
+          ));
   }
 }
 class JournalPage extends StatelessWidget {

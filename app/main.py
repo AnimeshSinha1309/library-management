@@ -17,6 +17,15 @@ def apply_headers(response):
 def hello():
     return "Hello World"
 
+@app.route("/add-book",methods=['POST'])
+def addbook():
+    dict = request.form
+    bookdb_path = './app/db/books-data.csv'
+    df = pd.read_csv(bookdb_path)    
+    df = df.append(dict,ignore_index = True)
+    df.to_csv(bookdb_path,index = False)
+    return "Saved"
+
 @app.route("/query",methods=['GET'])
 def query():
     dict = request.args

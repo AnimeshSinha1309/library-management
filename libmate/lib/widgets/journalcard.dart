@@ -124,6 +124,7 @@ class JournalPage extends StatelessWidget {
     return (await prefs.setStringList("readingList", readList)) ? 0 : 2;
   }
 
+
   Future<String> addJournal(JournalModel model) async {
     int res = await saveReadingList(model);
     if (res == 0) {
@@ -139,30 +140,187 @@ class JournalPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+//    return Scaffold(
+//        appBar: new AppBar(
+//          title: new Text(model.title),
+//        ),
+//        drawer: AppDrawer(),
+//        body: Builder(
+//            builder: (context) => Column(children: [
+//              JournalCard(model: model),
+//              Text("Impact Factor: "+model.impactfactor),
+//              Text("Chief Editor: "+model.chiefeditor),
+//              new Expanded(flex: 1,
+//                child: new SingleChildScrollView(
+//                    scrollDirection: Axis.vertical,//.horizontal
+//                    child: new Text(
+//                        model.description)),
+//              ),
+//
+//              RaisedButton(
+//                onPressed: () async {
+//                  final String resp = await addJournal(model);
+//                  showToast(context, resp);
+//                },
+//                child: Text("Add to reading list"),
+//              )
+//            ])));
+//  }
+//}
     return Scaffold(
         appBar: new AppBar(
-          title: new Text(model.title),
+          title: new Text("Book Details"),
         ),
         drawer: AppDrawer(),
         body: Builder(
-            builder: (context) => Column(children: [
-              JournalCard(model: model),
-              Text("Impact Factor: "+model.impactfactor),
-              Text("Chief Editor: "+model.chiefeditor),
-              new Expanded(flex: 1,
-                child: new SingleChildScrollView(
-                    scrollDirection: Axis.vertical,//.horizontal
-                    child: new Text(
-                        model.description)),
-              ),
+            builder: (context) => Padding(
+                padding: EdgeInsets.all(25),
+                child: ListView(children: [
+                  Text(
+                    model.name,
+                    style: TextStyle(
+                        color: Colors.black87,
+                        fontSize: 28.0,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  SizedBox(height: 20),
+                  Row(children: [
+                    Image(
+                      image: NetworkImage(model.image),
+                      fit: BoxFit.fitWidth,
+                      alignment: Alignment.topCenter,
+                    ),
+                    Expanded(
+                        child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Column(children: [
+//                              ButtonTheme(
+//                                minWidth: 200,
+//                                textTheme: ButtonTextTheme.primary,
+//                                child: RaisedButton(
+//                                  onPressed: () {
+//                                    showToast(context, "NOT IMPLEMENTED");
+//                                  },
+//                                  child: Text("Issue Book"),
+//                                ),
+//                              ),
+                              ButtonTheme(
+                                minWidth: 200,
+                                textTheme: ButtonTextTheme.primary,
+                                child: RaisedButton(
+                                  onPressed: () async {
+                                    final String resp = await addJournal(model);
+                                    showToast(context, resp);
+                                  },
+                                  child: Text("Add to Read List"),
+                                ),
+                              ),
+                              ButtonTheme(
+                                minWidth: 200,
+                                textTheme: ButtonTextTheme.primary,
+                                child: RaisedButton(
+                                  onPressed: () {
+                                    showToast(context, "NOT IMPLEMENTED");
+                                  },
+                                  child: Text("Edit Information"),
+                                ),
+                              ),
+                            ])))
+                  ]),
+                  SizedBox(height: 30),
+                  RichText(
+                    text: TextSpan(
+                        style: DefaultTextStyle.of(context).style,
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: model.title,
+                              style: TextStyle(fontWeight: FontWeight.bold))
+                        ]),
+                  ),
+                  SizedBox(height: 10),
+                  RichText(
+                    text: TextSpan(
+                        style: DefaultTextStyle.of(context).style,
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: "volume: ",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(text: model.volume),
+                          TextSpan(
+                              text: "issue: ",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(text: model.issue)
+                        ]),
+                  ),
+                  RichText(
+                    text: TextSpan(
+                        style: DefaultTextStyle.of(context).style,
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: "date: ",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(text: model.date)
+                        ]),
+                  ),
+                  SizedBox(height: 10),
+                  RichText(
+                    text: TextSpan(
+                        style: DefaultTextStyle.of(context).style,
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: "publisher: ",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(text: model.name)
+                        ]),
+                  ),
+                  SizedBox(height: 10),
+                  RichText(
+                    text: TextSpan(
+                        style: DefaultTextStyle.of(context).style,
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: "impact factor: ",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(text: model.impactfactor)
+                        ]),
+                  ),
+                  SizedBox(height: 10),
+                  RichText(
+                    text: TextSpan(
+                        style: DefaultTextStyle.of(context).style,
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: "cheif editor: ",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(text: model.chiefeditor)
+                        ]),
+                  ),
 
-              RaisedButton(
-                onPressed: () async {
-                  final String resp = await addJournal(model);
-                  showToast(context, resp);
-                },
-                child: Text("Add to reading list"),
-              )
-            ])));
+                  RichText(
+                    text: TextSpan(
+                        style: DefaultTextStyle.of(context).style,
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: "ISSN: ",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(text: model.issn)
+                        ]),
+                  ),
+                  SizedBox(height: 10),
+                  RichText(
+                    text: TextSpan(
+                        style: DefaultTextStyle.of(context).style,
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: "Description: ",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(text: model.description)
+                        ]),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                ]))));
   }
 }
+

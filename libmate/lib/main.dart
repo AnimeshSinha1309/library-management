@@ -16,9 +16,7 @@ import 'package:libmate/views/speech.dart';
 import 'package:fuzzy/fuzzy.dart';
 import 'package:provider/provider.dart';
 import 'package:libmate/views/guide.dart';
-import 'package:libmate/views/razorpay.dart';
-import 'package:libmate/views/razorpay.dart';
-import 'package:provider/provider.dart';
+import 'package:libmate/views/journals.dart';
 
 void main() => runApp(MyApp());
 
@@ -96,6 +94,7 @@ class _MyAppState extends State<MyApp> {
                 '/contribute': (BuildContext context) => new ContributePage(),
                 '/issue': (BuildContext context) => new IssuePage(),
                 '/goals': (BuildContext context) => new GoalsPage(),
+                '/journal': (BuildContext context) => new JournalPage(),
                 '/request': (BuildContext context) => new RequestPage(),
                 '/requested': (BuildContext context) => new RequestedPage(),
                 '/about': (BuildContext context) => new AboutPage(),

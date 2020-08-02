@@ -15,26 +15,26 @@ Future loadSCache() async {
       .map<BookModel>((item) => BookModel.fromJSON(json: item))
       .toList();
   fuse = Fuzzy(searchData,
-      options: FuzzyOptions(
-          keys: [
-            WeightedKey(
-                name: "name_key", getter: (BookModel o) => o.name, weight: 1.0),
-            WeightedKey(name: "author_key",
-                getter: (BookModel o) => o.author,
-                weight: 0.4),
-            WeightedKey(name: "desc_key",
-                getter: (BookModel o) => o.description,
-                weight: 0.2),
-            WeightedKey(name: "genre_key",
-                getter: (BookModel o) => o.genre + ' ' + o.subject,
-                weight: 0.8),
-          ]));
+      options: FuzzyOptions(keys: [
+        WeightedKey(
+            name: "name_key", getter: (BookModel o) => o.name, weight: 1.0),
+        WeightedKey(
+            name: "author_key", getter: (BookModel o) => o.author, weight: 0.4),
+        WeightedKey(
+            name: "desc_key",
+            getter: (BookModel o) => o.description,
+            weight: 0.2),
+        WeightedKey(
+            name: "genre_key",
+            getter: (BookModel o) => o.genre + ' ' + o.subject,
+            weight: 0.8),
+      ]));
 }
 
 List<BookModel> searchCache(Map query) {
   String searchString = "";
   query.forEach((key, value) {
-    searchString += value + ' ';
+    if (key != "springer") searchString += value + ' ';
   });
   var result = fuse.search(searchString);
   List<BookModel> ans = [];

@@ -106,9 +106,11 @@ class BookModel {
         this.description});
 
   Map<String, BookModelBorrowState> copies;
+  bool isSp;
   int issueCount, starCount;
 
-  BookModel.fromJSON({Map<String, dynamic> json, String isbn}) {
+  BookModel.fromJSON(
+      {Map<String, dynamic> json, String isbn, this.isSp = false}) {
     this.name = json["name"] ?? json["title"];
     this.author = json["author"] ?? json["authors"] ?? "";
     this.genre = json["genre"] ?? json["category"] ?? "";
@@ -180,7 +182,9 @@ class BorrowBookModel {
     return (delay > 0 ? delay : 0) * fineRate;
   }
 
-  BorrowBookModel.fromJSON(Map<dynamic, dynamic> json) {
+  BorrowBookModel.fromJSON(
+    Map<dynamic, dynamic> json,
+  ) {
     accessionNumber = json["accNo"];
     if (json["borrowDate"] != null)
       borrowDate = (json["borrowDate"]).toDate();

@@ -28,6 +28,7 @@ dependencies:
   permission_handler: ^3.1.0
   fluttertoast: ^7.0.2
 
+  url_launcher:
 
   #payments
   razorpay_flutter: ^1.2.2

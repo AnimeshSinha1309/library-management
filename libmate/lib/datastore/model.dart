@@ -186,13 +186,19 @@ class BorrowBookModel {
     Map<dynamic, dynamic> json,
   ) {
     accessionNumber = json["accNo"];
-    if (json["borrowDate"] != null)
-      borrowDate = DateTime.parse(json["borrowDate"]);
-    else
+
+    if (json["borrowDate"] == null)
       borrowDate = DateTime.now();
+    else if (json["borrowDate"] is String)
+      borrowDate = DateTime.parse(json["borrowDate"]);
+    else if (json["borrowDate"] is Timestamp)
+      borrowDate = json["borrowDate"].toDate();
+
     if (json["returnDate"] is DateTime)
       returnDate = json["returnDate"];
     else if (json["returnDate"] is Timestamp)
+      returnDate = json["returnDate"].toDate();
+    else if (json["returnDate"] is String)
       returnDate = DateTime.parse(json["returnDate"]);
     book = cachedBooks[json["book"]];
   }

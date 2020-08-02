@@ -82,6 +82,14 @@ class BookCartState extends State<BookCartUI> {
               top: true,
               child: CustomScrollView(
                 slivers: [
+                  SliverToBoxAdapter(
+                      child: Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Text('Books being Issued',
+                              style: TextStyle(
+                                  color: Colors.black87,
+                                  fontSize: 25.0,
+                                  fontWeight: FontWeight.bold)))),
                   SliverGrid(
                     gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                       maxCrossAxisExtent: 200.0,
@@ -95,12 +103,20 @@ class BookCartState extends State<BookCartUI> {
                       childCount: books == null ? 0 : booklist.length,
                     ),
                   ),
+                  SliverToBoxAdapter(
+                      child: Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Text('Books being Returned',
+                              style: TextStyle(
+                                  color: Colors.black87,
+                                  fontSize: 25.0,
+                                  fontWeight: FontWeight.bold)))),
                   SliverGrid(
                     gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 200.0,
+                      maxCrossAxisExtent: 400.0,
                       mainAxisSpacing: 10.0,
                       crossAxisSpacing: 10.0,
-                      childAspectRatio: 0.75,
+                      childAspectRatio: 2.25,
                     ),
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) =>

@@ -10,6 +10,17 @@ import 'package:libmate/views/drawer.dart';
 import 'package:libmate/widgets/bookcard.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
+void printWrapped(String text) {
+  final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
+  pattern.allMatches(text).forEach((match) => print(match.group(0)));
+}
+
+class Item {
+  Item(this.name, this.icon);
+  final String name;
+  final Widget icon;
+}
+
 class SearchPage extends StatefulWidget {
   final fuse;
 
@@ -22,11 +33,59 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   stt.SpeechToText _speech;
   bool _isListening = false;
+  List<Item> users = <Item>[
+    Item(
+        'General',
+        Icon(
+          Icons.book,
+          color: const Color(0xFF167F67),
+        )),
+    Item(
+      'Springer books',
+      Image.asset("assets/springer.png", height: 50),
+    ),
+    Item(
+      'Springer journals',
+      Image.asset("assets/springer.png", height: 50),
+    )
+  ];
+
+  Item selectedUser;
 
   @override
   void initState() {
     super.initState();
     _speech = stt.SpeechToText();
+    selectedUser = users[0];
+  }
+
+  Widget getSelectMenu() {
+    return DropdownButton<Item>(
+      hint: Text("Select item"),
+      value: selectedUser,
+      onChanged: (Item Value) {
+        setState(() {
+          selectedUser = Value;
+        });
+      },
+      items: users.map((Item user) {
+        return DropdownMenuItem<Item>(
+          value: user,
+          child: Row(
+            children: <Widget>[
+              user.icon,
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                user.name,
+                style: TextStyle(color: Colors.black),
+              ),
+            ],
+          ),
+        );
+      }).toList(),
+    );
   }
 
   @override
@@ -62,6 +121,16 @@ class _SearchPageState extends State<SearchPage> {
 
   void scheduleSearch() async {
     Map<String, String> query = Map<String, String>();
+
+    var type = selectedUser.name;
+    bool isSp = true;
+    if (type == "Springer journals") {
+      query["springer"] = "1";
+    } else if (type == "Springer books") {
+      query["springer"] = "0";
+    } else
+      isSp = false;
+
     searchControllers.forEach((key, value) {
       if (value.text.length > 0) query[key] = value.text;
     });
@@ -85,7 +154,8 @@ class _SearchPageState extends State<SearchPage> {
     var response = readBookData(result);
     List<BookModel> searchResults = List();
     for (var res in response) {
-      searchResults.add(BookModel.fromJSON(json: res));
+      print(isSp);
+      searchResults.add(BookModel.fromJSON(json: res, isSp: isSp));
     }
     // Set the state again
     setState(() {
@@ -225,6 +295,7 @@ class _SearchPageState extends State<SearchPage> {
                       buildField("Author", "author"),
                       buildField("Category", "tag"),
                       buildField("Publisher", "publisher"),
+                      getSelectMenu()
                     ])),
               ),
             ],

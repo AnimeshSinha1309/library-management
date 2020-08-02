@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 import 'package:libmate/datastore/model.dart';
 import 'package:libmate/utils/utils.dart';
@@ -53,8 +54,14 @@ class BookCard extends StatelessWidget {
                       splashFactory: InkRipple.splashFactory,
                       splashColor: Colors.white,
                       onTap: () {
-                        if (shouldOpenPage)
-                          gotoPage(context, BookPage(model: model));
+                        if (shouldOpenPage) {
+                          print(model.isSp);
+                          gotoPage(
+                              context,
+                              !model.isSp
+                                  ? BookPage(model: model)
+                                  : JournalBookPage(model: model));
+                        }
                       },
                       child: Container(
                         padding: EdgeInsets.all(8),
@@ -315,6 +322,69 @@ class BookPage extends StatelessWidget {
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
                   ),
                   copiesTable
+                ]))));
+  }
+}
+
+class JournalBookPage extends StatelessWidget {
+  final BookModel model;
+
+  JournalBookPage({@required this.model});
+
+  _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: new AppBar(
+          title: new Text("Springer Book Details"),
+        ),
+        drawer: AppDrawer(),
+        body: Builder(
+            builder: (context) => Padding(
+                padding: EdgeInsets.all(25),
+                child: ListView(children: [
+                  Text(
+                    model.name,
+                    style: TextStyle(
+                        color: Colors.black87,
+                        fontSize: 28.0,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  SizedBox(height: 20),
+                  Row(children: [
+                    Image(
+                      image: NetworkImage(model.image),
+                      fit: BoxFit.fitWidth,
+                      alignment: Alignment.topCenter,
+                    )
+                  ]),
+                  RichText(
+                    text: TextSpan(
+                        style: DefaultTextStyle.of(context).style,
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: "Authors: ",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(text: model.author)
+                        ]),
+                  ),
+                  ButtonTheme(
+                    minWidth: 200,
+                    textTheme: ButtonTextTheme.primary,
+                    child: RaisedButton(
+                      onPressed: () {
+                        //_launchURL(model.URL);
+                      },
+                      child: Text("Open in springer"),
+                    ),
+                  ),
                 ]))));
   }
 }

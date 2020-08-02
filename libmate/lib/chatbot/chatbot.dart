@@ -1,8 +1,8 @@
 import 'dart:io';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:libmate/datastore/model.dart';
+import 'package:libmate/datastore/state.dart';
 import 'package:libmate/utils/utils.dart';
 
 String readUser() {
@@ -28,6 +28,7 @@ class ChatBook {
 }
 
 class Chatbot {
+  UserModel user;
   List<String> recActions = ["recommend", "suggest", "give", "tell"];
   List<String> tagPrec = ["on"];
   List<String> authPrec = ["by"];
@@ -39,9 +40,11 @@ class Chatbot {
   Map<String, int> mapper;
 
   int context;
+  List<ChatBook> currBooks;
 
-  Chatbot() {
+  Chatbot(this.user) {
     context = 0;
+    currBooks = [];
   }
 
   List<String> extractStuff(List<String> prec, String userInput) {
@@ -76,6 +79,14 @@ class Chatbot {
     return checkExists(recActions, userInput);
   }
 
+  bool descriptionCheck(String userInput) {
+    return checkExists(descrActions, userInput);
+  }
+
+  bool issueCheck(String userInput) {
+    return checkExists(issueActions, userInput);
+  }
+
   bool helloCheck(String userInput) {
     return checkExists(greetings, userInput);
   }
@@ -105,22 +116,8 @@ class Chatbot {
     return res;
   }
 
-  // context = 0 => greeting, ask for book recommendation
-  // context = 1 => book recommendation shown
-
-  dynamic giveInput(String userInput) async {
-    bool hello = helloCheck(userInput);
-
-    if (context == 0 && !sanityCheck(userInput)) {
-      return [
-        hello ? "Hi there!" : "Sorry I do not understand that.",
-        "Try asking me to 'recommend a maths book' or 'give a good book by michael nielsen about quantum physics'"
-      ];
-    }
-
+  Future<List<String>> recommender(String userInput) async {
     List<String> output = [];
-    if (hello) output.add("Hey there!");
-
     var detectedSubjects = extractTag(userInput);
     var detectedAuthors = extractAuthor(userInput);
 
@@ -147,6 +144,7 @@ class Chatbot {
     output.add(author + "; " + subjects);
 
     var result = await search(aTokens, sTokens);
+    currBooks = result;
 
     if (result.length == 0) {
       output.add("Sorry, I could not find any books related to that criteria");
@@ -159,35 +157,87 @@ class Chatbot {
     return output;
   }
 
+  int getOrdinal(String str) {
+    List<String> ordinals = ["first", "second", "third", "fourth", "fifth"];
+    int i = 0;
+    for (var ordinal in ordinals) {
+      if (RegExp(ordinal, caseSensitive: false).hasMatch(str)) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  List<String> description(String str) {
+    List<String> out = [];
+    int ord = getOrdinal(str);
+    if (ord != -1) {
+      out.add("Book ${currBooks[ord].name}");
+      out.add(currBooks[ord].description);
+    } else {
+      out.add("Sorry I did not understand the book number");
+    }
+    return out;
+  }
+
+  Future<List<String>> issue(String str) async {
+    List<String> out = [];
+    int ord = getOrdinal(str);
+    if (ord != -1) {
+      await issueBook(currBooks[ord].isbn, user);
+      out.add("Book ${currBooks[ord].name} added to cart");
+    } else {
+      out.add("Sorry I did not understand the book number");
+    }
+    return out;
+  }
+
+  dynamic giveInput(String userInput) async {
+    bool hello = helloCheck(userInput);
+    String err = "";
+    List<String> out;
+
+    bool recch = sanityCheck(userInput);
+    bool desch = descriptionCheck(userInput);
+    bool issch = issueCheck(userInput);
+
+    if (context == 0 && !recch) {
+      err =
+          "Try asking me to 'recommend a book on math' or 'give a good book by michael nielsen on quantum physics'";
+    } else if (context == 1 && !desch) {
+      if (!issch) {
+        if (!recch) {
+          err =
+              "Try asking me to describe the third book or issue the first book, or just another recommendation";
+        } else {
+          context = 0;
+          out = await recommender(userInput);
+        }
+      } else {
+        await issue(userInput);
+      }
+    } else if (context == 0) {
+      out = await recommender(userInput);
+    } else if (context == 1) {
+      out = description(userInput);
+    }
+
+    if (err.length > 0) {
+      String firstMsg = hello ? "Hi there!" : "Sorry I do not understand that.";
+      return [firstMsg, err];
+    }
+
+    List<String> output = [];
+    if (hello) output.add("Hey there!");
+
+    output.addAll(out);
+    return output;
+  }
+
   dynamic getWelcome() {
     return [
       "Welcome to the chatbot",
       "You can ask me to recommend/suggest/give you a book"
     ];
-  }
-
-  Future<void> loadDb() async {
-    final input = await rootBundle.loadString('assets/db.json');
-    dynamic db = jsonDecode(input);
-
-    books = List();
-    mapper = Map();
-
-    for (int i = 0; i < db['id'].length; i++) {
-      var idx = i.toString();
-      var author = db['author'][idx];
-      var name = db['title'][idx];
-      var isb = db['isbn'][idx];
-      var desc = db['description'][idx];
-      var tag = db['tag'][idx];
-      if (name == null || author == null || isb == null || desc == null)
-        continue;
-
-      var isbn = isb.toInt().toString();
-      var entry = ChatBook(
-          name: name, author: author, description: desc, tag: tag, isbn: isbn);
-      mapper[isbn] = books.length;
-      books.add(entry);
-    }
   }
 }

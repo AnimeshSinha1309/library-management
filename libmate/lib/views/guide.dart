@@ -15,7 +15,7 @@ class GuidePage extends StatefulWidget {
   UserModel currentUser;
   Chatbot bot;
   GuidePage({@required this.currentUser}) {
-    bot = Chatbot();
+    bot = Chatbot(currentUser);
   }
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -35,8 +35,7 @@ class _MyHomePageState extends State<GuidePage> {
 
   var i = 0;
 
-  botload() async {
-    await widget.bot.loadDb();
+  botload() {
     var welcomeMsgs = widget.bot.getWelcome();
     for (var text in welcomeMsgs) {
       messages.add(

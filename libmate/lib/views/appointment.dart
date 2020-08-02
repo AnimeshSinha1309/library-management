@@ -3,7 +3,7 @@ import 'package:libmate/views/drawer.dart';
 import 'package:libmate/datastore/model.dart';
 import 'package:libmate/views/timeslots.dart';
 import 'package:libmate/utils/utils.dart';
-import 'dart:async';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class AppointmentPage extends StatefulWidget {
   final UserModel user;
@@ -84,7 +84,16 @@ class _AppointmentPageState extends State<AppointmentPage> {
                               onPressed: () {
                                 if(type==-1)
                                 {
-                                  showToast(context, "Please select what you want to do from options above");
+                                  Fluttertoast.showToast(
+                                      msg: " please select options among issue/return or sit in lib then select day",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.CENTER,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.red,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0
+                                  );
+
                                 }
                                 else{
                                   Navigator.push(
@@ -106,9 +115,15 @@ class _AppointmentPageState extends State<AppointmentPage> {
                               child: RaisedButton.icon(
                                 onPressed: () {
                                   if(type==-1)
-                                    {
-                                      showToast(context, "Please select what you want to do from options above");
-                                    }
+                                    Fluttertoast.showToast(
+                                        msg: " please select options among issue/return or sit in lib then select day",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.red,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0
+                                    );
                                   else{
                                     Navigator.push(
                                       context,

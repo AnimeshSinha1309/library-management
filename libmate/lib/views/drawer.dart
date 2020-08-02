@@ -70,7 +70,7 @@ class AppDrawer extends StatelessWidget {
       _DrawerViewItem(Icons.home, 'Admin', '/admin').build(context),
       _DrawerViewItem(Icons.location_on, 'Guide', '/guide').build(context),
 
-      _DrawerViewItem(Icons.search, 'Get time slot', '/appointment').build(context),
+      _DrawerViewItem(Icons.access_time, 'Get time slot', '/appointment').build(context),
       _DrawerViewItem(Icons.search, 'Search Books', '/search').build(context),
       _DrawerViewItem(Icons.calendar_view_day, 'Upcoming periodicals', '/schedule').build(context),
       _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute').build(context),

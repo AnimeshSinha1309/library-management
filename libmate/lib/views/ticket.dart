@@ -64,6 +64,7 @@ class _TicketPageState extends State<TicketPage> {
                                       fontWeight: FontWeight.bold)),
                             ])
                           ]),
+
                           Row(children: <Widget>[
                             Icon(
                               Icons.date_range,
@@ -82,6 +83,8 @@ class _TicketPageState extends State<TicketPage> {
                                 color: Colors.grey,
                                 letterSpacing: 2.0,
                               )),
+
+
                         ]
                     )
                 ),
@@ -92,10 +95,18 @@ class _TicketPageState extends State<TicketPage> {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text('\n\n Table Number: $tableNo',
+                          Text('Sit in Library',
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  letterSpacing: 2.0,
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold)),
+
+                          Text('\n Table Number: $tableNo',
                               style: TextStyle(
                                   color: Colors.pink,
                                   letterSpacing: 2.0,
+                                  fontSize: 18.0,
                                   fontWeight: FontWeight.bold
                               )),
                         ]
@@ -133,7 +144,11 @@ class _TicketPageState extends State<TicketPage> {
                                   fontSize: 28.0,
                                   fontWeight: FontWeight.bold)),
                           Spacer(),
+
+
                           Column(children: [
+
+
                             Text('Time',
                                 style: TextStyle(
                                   color: Colors.grey,
@@ -147,6 +162,7 @@ class _TicketPageState extends State<TicketPage> {
                                     fontWeight: FontWeight.bold)),
                           ])
                         ]),
+
                         Row(children: <Widget>[
                           Icon(
                             Icons.date_range,
@@ -158,6 +174,17 @@ class _TicketPageState extends State<TicketPage> {
                                   letterSpacing: 2.0,
                                   fontWeight: FontWeight.bold)),
                         ]),
+                        Row(
+                            children: <Widget>[
+                              Text('Issue/Return book',
+                                  style: TextStyle(
+                                      color: Colors.grey,
+                                      letterSpacing: 2.0,
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold)),
+                              Spacer(),
+                            ]),
+
 
 
                         Text('$date',
@@ -165,6 +192,8 @@ class _TicketPageState extends State<TicketPage> {
                               color: Colors.grey,
                               letterSpacing: 2.0,
                             )),
+
+
                       ]
                   )
               ),

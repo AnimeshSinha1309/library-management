@@ -24,15 +24,11 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
   int maxBooks = 20;
   String _docType;
 
-  Future renew(name) async {
-
-    Firestore.instance.collection('periodical-subscriptions').document(name).get().then((value){
-      print(value.data);
-    });
-
-
-
-  }
+//  Future renew(name) async {
+//    Firestore.instance.collection('periodical-subscriptions').document(name).get().then((value){
+//      print(value.data);
+//    });
+//  }
   @override
   void initState() {
     super.initState();
@@ -40,7 +36,51 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
 
   }
 
+  Future renewPeriodicals(String name,String type) async {
+    int month;
+    switch(type) {
+      case 'annually': {
+        month = 12;
+      }
+      break;
 
+      case 'semi-annually': {
+        month = 6;
+      }
+      break;
+      case 'quaterly': {
+        month = 4;
+      }
+      break;
+      case 'monthly': {
+        month = 1;
+      }
+      break;
+
+      default: {
+        month =1;
+      }
+      break;
+    }
+    final snapshot = await Firestore.instance
+        .collection(_docType)
+        .document(name)
+        .get();
+    print(snapshot.data['expiry']);
+    var currDt = DateTime.now();
+        if(currDt.isAfter(snapshot.data['expiry']))
+          {
+            showToast(context, "Already subscribed!");
+          }
+        else{
+          var purchase = DateTime.now().add(Duration(days: 30*month));
+          Firestore.instance
+              .collection(_docType)
+              .document(name)
+              .updateData({'purchased': purchase});
+          showToast(context, "Renewed");
+        }
+  }
   Future<int> saveReadingList(JournalModel model) async {
     final prefs = await SharedPreferences.getInstance();
     List<String> readList = prefs.getStringList("readingList") ?? [];
@@ -78,8 +118,8 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
       return "Unknown Error";
     }
   }
-  List<String> _subscription = ['Annually', 'Semi-annually', 'Quaterly', 'Monthly']; // Option 2
-  String _currsubscription = 'Annually';
+  List<String> _subscription = ['annually', 'semi-annually', 'quaterly', 'monthly']; // Option 2
+  String _currsubscription = 'annually';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,18 +149,7 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
                         child: Padding(
                             padding: EdgeInsets.all(10),
                             child: Column(children: [
-                              ButtonTheme(
-                                minWidth: 200,
-                                textTheme: ButtonTextTheme.primary,
-                                child: RaisedButton(
-                                  onPressed: () async {
-                                    showToast(context, "Renewing..");
-                                    print(widget.model.name);
-                                    await renew(widget.model.name);
-                                  },
-                                  child: Text("Renue subscription"),
-                                ),
-                              ),
+
                               SizedBox(height: 10),
                               RichText(
                                 text: TextSpan(
@@ -156,6 +185,28 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
                                           style: TextStyle(fontWeight: FontWeight.bold)),
                                       TextSpan(text: widget.model.charges)
                                     ]),
+                              ),
+                              SizedBox(height: 10),
+                              RichText(
+                                text: TextSpan(
+                                    style: DefaultTextStyle.of(context).style,
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                          text: "Expires: "+ "23-07-2020",
+                                          style: TextStyle(fontWeight: FontWeight.bold)),
+                                    ]),
+                              ),
+                              ButtonTheme(
+                                minWidth: 200,
+                                textTheme: ButtonTextTheme.primary,
+                                child: RaisedButton(
+                                  onPressed: () async {
+                                    showToast(context, "Please wait..");
+                                    print(widget.model.name);
+                                    await renewPeriodicals(widget.model.name,'annually');
+                                  },
+                                  child: Text("Renew subscription"),
+                                ),
                               ),
                             ])))
                   ]),

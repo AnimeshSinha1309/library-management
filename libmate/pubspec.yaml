@@ -27,6 +27,7 @@ dependencies:
 #  speech_recognition: ^0.3.0
   permission_handler: ^3.1.0
 
+  url_launcher:
 
   #payments
   razorpay_flutter: ^1.2.2

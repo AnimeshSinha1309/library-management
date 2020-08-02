@@ -123,11 +123,13 @@ class _SearchPageState extends State<SearchPage> {
     Map<String, String> query = Map<String, String>();
 
     var type = selectedUser.name;
+    bool isSp = true;
     if (type == "Springer journals") {
       query["springer"] = "1";
     } else if (type == "Springer books") {
       query["springer"] = "0";
-    }
+    } else
+      isSp = false;
 
     searchControllers.forEach((key, value) {
       if (value.text.length > 0) query[key] = value.text;
@@ -150,10 +152,10 @@ class _SearchPageState extends State<SearchPage> {
     }
     // Process the response
     var response = readBookData(result);
-    printWrapped(result.body);
     List<BookModel> searchResults = List();
     for (var res in response) {
-      searchResults.add(BookModel.fromJSON(json: res));
+      print(isSp);
+      searchResults.add(BookModel.fromJSON(json: res, isSp: isSp));
     }
     // Set the state again
     setState(() {

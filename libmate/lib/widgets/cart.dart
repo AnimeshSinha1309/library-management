@@ -72,37 +72,34 @@ class BookCartState extends State<BookCartUI> {
             child: SafeArea(
               left: true,
               right: true,
-              child: SafeArea(
-                  left: true,
-                  right: true,
-                  top: true,
-                  child: CustomScrollView(
-                    slivers: [
-                      SliverGrid(
-                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 200.0,
-                          mainAxisSpacing: 10.0,
-                          crossAxisSpacing: 10.0,
-                          childAspectRatio: 0.75,
-                        ),
-                        delegate: SliverChildBuilderDelegate(
-                          (BuildContext context, int index) =>
-                              BookCard(model: booklist[index]),
-                          childCount: books == null ? 0 : booklist.length,
-                        ),
-                      ),
-                      SliverToBoxAdapter(
-                          child: ButtonTheme(
-                              minWidth: 200,
-                              textTheme: ButtonTextTheme.primary,
-                              child: RaisedButton(
-                                  child: Text("Checkout"),
-                                  onPressed: () {
-                                    gotoPage(context,
-                                        Checkout(booklist, widget.user));
-                                  })))
-                    ],
-                  )),
+              top: true,
+              child: CustomScrollView(
+                slivers: [
+                  SliverGrid(
+                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 200.0,
+                      mainAxisSpacing: 10.0,
+                      crossAxisSpacing: 10.0,
+                      childAspectRatio: 0.75,
+                    ),
+                    delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) =>
+                          BookCard(model: booklist[index]),
+                      childCount: books == null ? 0 : booklist.length,
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                      child: ButtonTheme(
+                          minWidth: 200,
+                          textTheme: ButtonTextTheme.primary,
+                          child: RaisedButton(
+                              child: Text("Checkout"),
+                              onPressed: () {
+                                gotoPage(
+                                    context, Checkout(booklist, widget.user));
+                              })))
+                ],
+              ),
             )));
   }
 

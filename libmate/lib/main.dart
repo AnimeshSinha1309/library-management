@@ -12,6 +12,7 @@ import 'package:libmate/views/libcard.dart';
 import 'package:libmate/views/request.dart';
 import 'package:libmate/views/requested.dart';
 import 'package:libmate/views/search.dart';
+import 'package:libmate/views/admin_issue.dart';
 import 'package:libmate/views/speech.dart';
 import 'package:fuzzy/fuzzy.dart';
 import 'package:provider/provider.dart';
@@ -112,7 +113,8 @@ class _MyAppState extends State<MyApp> {
                 '/accounts': (BuildContext context) => new AccountsPage(),
                 '/guide': (BuildContext context) =>
                     new GuidePage(currentUser: usermodel),
-                '/cart': (BuildContext context) => new BookCartUI(usermodel)
+                '/cart': (BuildContext context) => new BookCartUI(usermodel),
+                '/admin_scan': (BuildContext context) => IssueBook()
               });
         }));
   }

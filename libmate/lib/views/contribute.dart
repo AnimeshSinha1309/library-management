@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:barcode_scan/barcode_scan.dart';
+import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -48,7 +48,7 @@ class _ContributePageState extends State<ContributePage> {
 
   Future _scanBarcode() async {
     try {
-      String barcode = await BarcodeScanner.scan();
+      String barcode = await scanner.scan();
       setState(() {
         _barcodeController.text = barcode;
       });

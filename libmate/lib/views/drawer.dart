@@ -42,6 +42,8 @@ class AppDrawer extends StatelessWidget {
       _DrawerViewItem(Icons.home, 'Home', '/home').build(context),
       _DrawerViewItem(Icons.home, 'Admin', '/admin').build(context),
       _DrawerViewItem(Icons.shop, 'Issue cart', '/cart').build(context),
+      _DrawerViewItem(Icons.camera, 'Admin Scan and issue', '/admin_scan')
+          .build(context),
       _DrawerViewItem(Icons.search, 'Search', '/search').build(context),
       _DrawerViewItem(Icons.location_on, 'Guide', '/guide').build(context),
       _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute')

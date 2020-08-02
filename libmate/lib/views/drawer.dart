@@ -48,6 +48,8 @@ class AppDrawer extends StatelessWidget {
       _DrawerViewItem(Icons.location_on, 'Guide', '/guide').build(context),
       _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute')
           .build(context),
+      _DrawerViewItem(Icons.file_upload, 'Auto Tagger', '/autoTagger')
+          .build(context),
       _DrawerViewItem(Icons.library_books, 'Reading List', '/goals')
           .build(context),
       _DrawerViewItem(Icons.card_membership, 'Library Card', '/libcard')
@@ -71,10 +73,18 @@ class AppDrawer extends StatelessWidget {
       _DrawerViewItem(Icons.home, 'Admin', '/admin').build(context),
       _DrawerViewItem(Icons.location_on, 'Guide', '/guide').build(context),
 
-      _DrawerViewItem(Icons.access_time, 'Get time slot', '/appointment').build(context),
+      _DrawerViewItem(Icons.access_time, 'Get time slot', '/appointment')
+          .build(context),
       _DrawerViewItem(Icons.search, 'Search Books', '/search').build(context),
-      _DrawerViewItem(Icons.calendar_view_day, 'Upcoming periodicals', '/schedule').build(context),
-      _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute').build(context),
+      _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute')
+          .build(context),
+      _DrawerViewItem(Icons.file_upload, 'Auto Tagger', '/autoTagger')
+          .build(context),
+      _DrawerViewItem(
+              Icons.calendar_view_day, 'Upcoming periodicals', '/schedule')
+          .build(context),
+      _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute')
+          .build(context),
 
       _DrawerViewItem(Icons.book, 'Journals', '/journal').build(context),
       _DrawerViewItem(Icons.people, 'Friends', '/friends').build(context),

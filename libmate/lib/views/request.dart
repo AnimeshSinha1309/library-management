@@ -29,7 +29,10 @@ class _RequestPageState extends State<RequestPage> {
         .collection("books")
         .document(_isbnController.text)
         .get();
-    if (snapShot == null || !snapShot.exists) {
+    if (snapShot == null ||
+        !snapShot.exists ||
+        snapShot.data['issues'].length == 0 ||
+        !snapShot.data['issues'].containsValue('available')) {
       return false;
     }
     return true;
@@ -177,7 +180,6 @@ class _RequestPageState extends State<RequestPage> {
                                   // Validate returns true if the form is valid, or false
                                   // otherwise.
                                   if (_formKey.currentState.validate()) {
-                                    _formKey.currentState.save();
                                     showToast(context, "Sending Request..");
                                     final String resp = await _sendRequest();
                                     showToast(context, resp);

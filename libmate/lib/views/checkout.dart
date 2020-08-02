@@ -16,14 +16,18 @@ class Checkout extends StatefulWidget {
   String qrdata;
   String uid;
   List<BookModel> books;
+  List<BorrowBookModel> returns;
   UserModel user;
 
   // uid for checking issue status of books
-  Checkout(this.books, this.user) {
+  Checkout(this.books, this.returns, this.user) {
     uid = user.email;
     List<dynamic> datalist = [];
     datalist.add(user.email);
     for (var book in books) {
+      datalist.add(book.toJSON());
+    }
+    for (var book in returns) {
       datalist.add(book.toJSON());
     }
     qrdata = jsonEncode(datalist);
@@ -51,6 +55,7 @@ class CheckoutState extends State<Checkout> {
     await Future.delayed(Duration(seconds: 2));
     final prefs = await SharedPreferences.getInstance();
     prefs.remove("issuecart");
+    prefs.remove("returncart");
 
     gotoPage(context, null, clear: true, routeName: "/home");
   }
@@ -62,7 +67,7 @@ class CheckoutState extends State<Checkout> {
 
     List<Widget> children = [];
     if (issued) {
-      children = [Text("Issued! Redirecting to home page...")];
+      children = [Text("Issued and Returned! Redirecting to home page...")];
       redirect();
     } else {
       children = [

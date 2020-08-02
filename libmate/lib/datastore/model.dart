@@ -97,13 +97,13 @@ class BookModel {
 
   BookModel(
       {@required this.name,
-        this.author = "",
-        this.isbn = "",
-        this.image =
-        "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg",
-        this.subject = "",
-        this.genre = "",
-        this.description});
+      this.author = "",
+      this.isbn = "",
+      this.image =
+          "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg",
+      this.subject = "",
+      this.genre = "",
+      this.description});
 
   Map<String, BookModelBorrowState> copies;
   bool isSp;
@@ -165,9 +165,9 @@ class BorrowBookModel {
 
   BorrowBookModel(
       {@required this.accessionNumber,
-        this.borrowDate,
-        @required this.book,
-        this.returnDate}) {
+      this.borrowDate,
+      @required this.book,
+      this.returnDate}) {
     this.borrowDate = this.borrowDate ?? DateTime.now();
     assert(this.book.isbn != null);
     assert(this.book != null);

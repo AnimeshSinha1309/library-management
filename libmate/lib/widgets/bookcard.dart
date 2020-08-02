@@ -254,6 +254,7 @@ class BookPage extends StatelessWidget {
                                 child: RaisedButton(
                                   onPressed: () {
                                     showToast(context, "NOT IMPLEMENTED");
+                                    // TODO: Implement routing this to contribute
                                   },
                                   child: Text("Edit Information"),
                                 ),

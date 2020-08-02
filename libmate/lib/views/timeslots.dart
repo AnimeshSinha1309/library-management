@@ -33,7 +33,7 @@ class _TimePageState extends State<TimePage> {
   Future getSlotList(DateTime now, DateTime end, DateFormat dateFormat) async {
     List<String> _slots = [];
     DateTime cur = now;
-    while (dateFormat.format(cur).compareTo(dateFormat.format(end)) <= 0) {
+    while (dateFormat.format(cur).compareTo(dateFormat.format(end)) < 0) {
       _slots.add(dateFormat.format(cur));
       cur = cur.add(new Duration(minutes: 30));
     }
@@ -75,8 +75,8 @@ class _TimePageState extends State<TimePage> {
     DateTime now = DateTime.now();
     DateTime cur = DateTime(
         now.year, now.month, now.day, now.hour, now.minute - now.minute % 30);
-    // DateTime end = now.add(new Duration(days: 1));
-    DateTime end = DateTime(now.year, now.month, now.day, 23, 30);
+    DateTime end = now.add(new Duration(days: 1));
+    // DateTime end = DateTime(now.year, now.month, now.day, 23, 30);
     await getSlotList(cur, end, dateFormat);
     await getAppointments(dateFormat.format(cur));
   }
@@ -154,6 +154,27 @@ class _TimePageState extends State<TimePage> {
     );
   }
 
+  List<TableRow> _timeRow() {
+    List<TableRow> rowList = List<TableRow>();
+    for (var i = 0; i < times.length; i += 2) {
+      if (i + 1 >= times.length) {
+        rowList.add(TableRow(
+          children: [
+            _timeCell(times[i]),
+          ],
+        ));
+      } else {
+        rowList.add(TableRow(
+          children: [
+            _timeCell(times[i]),
+            // _timeCell(times[i + 1]),
+          ],
+        ));
+      }
+    }
+    return rowList;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -172,13 +193,7 @@ class _TimePageState extends State<TimePage> {
                   //              FixedColumnWidth(MediaQuery.of(context).size.width / 3),
                   border: TableBorder.all(
                       color: Colors.black26, width: 1, style: BorderStyle.none),
-                  children: [
-                    TableRow(
-                      children: times.map((String slot) {
-                        return _timeCell(slot);
-                      }).toList(),
-                    )
-                  ],
+                  children: _timeRow(),
                 )));
   }
 }

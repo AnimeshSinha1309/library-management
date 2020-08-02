@@ -11,13 +11,12 @@ var fuse;
 Future loadSCache() async {
   final input = await rootBundle.loadString('assets/books-data.json');
   List<dynamic> searchRaw = json.decode(input);
-  searchData =
-      searchRaw.map<BookModel>((item) => BookModel.fromJSON(json: item))
-          .toList();
+  searchData = searchRaw
+      .map<BookModel>((item) => BookModel.fromJSON(json: item))
+      .toList();
   fuse = Fuzzy(searchData,
-      options: FuzzyOptions(keys: [
-        WeightedKey(name: "keyer", getter: getter, weight: 1)
-      ]));
+      options: FuzzyOptions(
+          keys: [WeightedKey(name: "keyer", getter: getter, weight: 1)]));
 }
 
 String getter(BookModel object) {
@@ -25,10 +24,10 @@ String getter(BookModel object) {
 }
 
 List<BookModel> searchCache(Map query) {
-  String queryString = "";
-//  query.forEach((key, value) {
-//    if (value.length > 0) queryString += value.text + ' ';
-//  });
   var result = fuse.search("light");
-  return result;
+  List<BookModel> ans = [];
+  for (var item in result) {
+    ans.add(item.item);
+  }
+  return ans;
 }

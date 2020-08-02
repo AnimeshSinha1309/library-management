@@ -1,6 +1,7 @@
 from .models import Journal, Book, Issue
 from django.shortcuts import render
 import datetime
+from libmate_admin.plotter import caller
 
 
 # Create your views here.
@@ -27,6 +28,8 @@ def dashboard(request):
         isbns.append(obj.isbn)
     # print(issue_dates)
     # print(return_dates)
+    ans = caller(issue_dates, return_dates)
+    print(ans)
     book_cnt = Book.objects.count()
     return render(request, 'dashboard.html', {'book_cnt': book_cnt, 'journal_cnt': journal_cnt, 'issue_cnt': 20})
 

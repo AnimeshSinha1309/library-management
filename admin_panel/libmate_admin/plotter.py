@@ -60,11 +60,13 @@ def plot_issue_day_of_week():
     # plt.savefig('plot_issue_day_of_week.png')
     # plt.clf()
     # plt.show()
+    # print(issue_dates)
     return days_count
 
 
 def plot_issue_day_of_month():
     days_count = []
+    # print(issue_dates)
     for issue_date in issue_dates:
         days_count.append(issue_date.day)
     # print(days_count)
@@ -215,8 +217,15 @@ def fines_to_csv():
 
 
 def caller(issued, returned):
+    print("ok")
+    global issue_dates
+    global return_dates
     issue_dates = issued
     return_dates = returned
+    # print(issue_dates)
+    # print(return_dates)
+    # for a, b in zip(issue_dates, return_dates):
+    #     print(b-a, end=' ')
     soln = []
     soln.append(plot_issue_day_of_week())
     soln.append(plot_issue_day_of_month())

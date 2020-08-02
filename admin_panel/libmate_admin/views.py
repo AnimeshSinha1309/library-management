@@ -1,4 +1,4 @@
-from .models import Journal
+from .models import Journal,Book
 from django.shortcuts import render
 
 
@@ -9,7 +9,8 @@ def hello_world(request):
 
 def dashboard(request):
     journal_cnt = Journal.objects.count()
-    return render(request, 'dashboard.html', {'book_cnt': '100', 'journal_cnt': journal_cnt, 'issue_cnt': 20})
+    book_cnt = Book.objects.count()
+    return render(request, 'dashboard.html', {'book_cnt': book_cnt, 'journal_cnt': journal_cnt, 'issue_cnt': 20})
 
 
 def journals(request):

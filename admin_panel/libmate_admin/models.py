@@ -32,3 +32,15 @@ class Book(models.Model):
 
     def __str__(self):
         return '%s, by %s -  %s' % (self.title, self.author, self.isbn)
+
+class Issue(models.Model):
+    isbn = models.CharField(max_length = 13,verbose_name='ISBN Number',primary_key = True)
+    accno = models.CharField(max_length = 64,verbose_name='Accession Number', null=True)
+    issue_date = models.CharField(max_length = 64,verbose_name='Issue Date', null=True)
+    return_date = models.CharField(max_length = 64,verbose_name='Return Date', null=True)
+
+    # class Meta:
+    #     unique_together = (('isbn', 'accno'),)
+
+    def __str__(self):
+        return '%s %s -  %s %s' % (self.isbn, self.accno, self.issue_date,self.return_date)

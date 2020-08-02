@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:libmate/datastore/state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
 class UserModel extends ChangeNotifier {
   // Basic Features of the user
   String uid, name, email, photoUrl, role;

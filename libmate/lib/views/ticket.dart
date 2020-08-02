@@ -5,23 +5,26 @@ import 'package:libmate/widgets/issueitem.dart';
 import 'package:provider/provider.dart';
 
 class TicketPage extends StatefulWidget {
-  var bookdate;
-  var time;
+  final String slot;
+  final int tableNo;
 
-  TicketPage(this.bookdate,this.time);
+  TicketPage({this.slot, this.tableNo});
+
   @override
-  _TicketPageState createState() => _TicketPageState(bookdate,time);
+  _TicketPageState createState() => _TicketPageState();
 }
 
 class _TicketPageState extends State<TicketPage> {
-
-  var bookdate;
-  var time;
-  _TicketPageState(bookdate,time);
+  String time;
+  String date;
+  int tableNo;
 
   @override
   void initState() {
     super.initState();
+    date = widget.slot.split('_')[0];
+    time = widget.slot.split('_')[1];
+    tableNo = widget.tableNo;
   }
 
   @override
@@ -35,7 +38,7 @@ class _TicketPageState extends State<TicketPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Row(children: [
-                        Text('slot booked',
+                        Text('Slot booked',
                             style: TextStyle(
                                 color: Colors.black87,
                                 letterSpacing: 2.0,
@@ -70,7 +73,7 @@ class _TicketPageState extends State<TicketPage> {
 
                       Column(
                         children: <Widget>[
-                          Text('1 August 2020',
+                          Text('$date\n\nTable Number: $tableNo',
                               style: TextStyle(
                                 color: Colors.grey,
                                 letterSpacing: 2.0,

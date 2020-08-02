@@ -33,6 +33,8 @@ Future issueBookModel(BookModel model, UserModel user) {
 Future issueBook(String isbn, UserModel currentUser,
     [String accNo = ""]) async {
   var data = await Firestore.instance.collection("books").document(isbn).get();
+  print(isbn);
+  print(data.data);
   BookModel book = BookModel.fromJSON(json: data.data, isbn: isbn);
 
   if (accNo == "") {

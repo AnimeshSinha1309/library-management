@@ -50,7 +50,7 @@ class Chatbot {
   List<String> extractStuff(List<String> prec, String userInput) {
     List<String> author = [];
     for (var token in prec) {
-      var reg = RegExp(token + r" (\w+)", caseSensitive: false);
+      var reg = RegExp(r"\b" + token + r" (\w+)", caseSensitive: false);
       print("$reg $userInput");
       var matches = reg.allMatches(userInput);
       for (var match in matches) {
@@ -70,7 +70,8 @@ class Chatbot {
 
   bool checkExists(List<String> triggers, String str) {
     for (var trigger in triggers) {
-      if (new RegExp(trigger, caseSensitive: false).hasMatch(str)) return true;
+      if (new RegExp(r"\b" + trigger + r"\b", caseSensitive: false)
+          .hasMatch(str)) return true;
     }
     return false;
   }
@@ -153,6 +154,8 @@ class Chatbot {
         output.add("Title: ${book.name} by ${book.author}");
       }
     }
+
+    context = 1;
 
     return output;
   }

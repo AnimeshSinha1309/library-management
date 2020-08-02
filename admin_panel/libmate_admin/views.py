@@ -6,3 +6,6 @@ def hello_world(request):
 
 def dashboard(request):
     return render(request, 'dashboard.html', {})
+
+def journals(request):
+    return render(request, 'journals.html', {})

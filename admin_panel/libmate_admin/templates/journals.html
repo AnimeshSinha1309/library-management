@@ -1,0 +1,293 @@
+{% extends 'base.html' %} {% block title %}Home{% endblock %} {% block content%}
+
+<script>
+    window.onload = function () {
+        CanvasJS.addColorSet("shades", [
+            //colorSet Array
+            "#39B2D7",
+            "#9414D0",
+            "#E11BBF",
+            "#E11B74",
+            "#ED2121",
+        ]);
+        var j = 1;
+        const x = 0,
+            y = 0;
+        //converting string into json arr and making tupple to array by replacing
+        const dataTwo = JSON.parse(
+            "{{ datat | safe }}"
+                .replace(/\(/g, "[")
+                .replace(/\)/g, "]")
+                .replace(/'/g, '"')
+        );
+        dps = [];
+        for (var i = 0; i < dataTwo.length; i++) {
+            dps.push({
+                label: dataTwo[i][1],
+                y: dataTwo[i][0],
+                legendText: dataTwo[i][1] + ":" + dataTwo[i][0],
+            });
+        }
+        console.log(dps);
+        var chart = new CanvasJS.Chart("chartContainer", {
+            exportEnabled: true,
+            animationEnabled: true,
+            title: {
+                text: "Test Success Rate Statistics",
+                fontFamily: "tahoma",
+            },
+            dataPointWidth: 15,
+            axisX: {
+                title: "Months",
+                gridThickness: 0,
+            },
+            axisY: {
+                title: "Number of Students",
+                gridThickness: 0,
+                // titleFontColor: "#4F81BC",
+                // lineColor: "#4F81BC",
+                // labelFontColor: "#4F81BC",
+                // tickColor: "#4F81BC"
+            },
+            // axisY2: {
+            //   title: "Clutch - Units",
+            //   titleFontColor: "#C0504E",
+            //   lineColor: "#C0504E",
+            //   labelFontColor: "#C0504E",
+            //   tickColor: "#C0504E"
+            // },
+            // toolTip: {
+            //   shared: true
+            // },
+            legend: {
+                cursor: "pointer",
+                itemclick: toggleDataSeries,
+            },
+            data: [
+                {
+                    type: "column",
+                    fillColor: "rgba(158, 224, 244 ,0.5)",
+                    name: "Male",
+                    showInLegend: true,
+                    // yValueFormatString: "#,##0.# Units",
+                    dataPoints: [
+                        { label: "Jan", y: parseInt("{{ data.1.0 | safe}}") },
+                        { label: "Feb", y: parseInt("{{ data.2.0 | safe}}") },
+                        { label: "March", y: parseInt("{{ data.3.0 | safe}}") },
+                        { label: "April", y: parseInt("{{ data.4.0 | safe}}") },
+                        { label: "May", y: parseInt("{{ data.5.0 | safe}}") },
+                        { label: "June", y: parseInt("{{ data.6.0 | safe}}") },
+                        { label: "July", y: parseInt("{{ data.7.0 | safe}}") },
+                        { label: "Aug", y: parseInt("{{ data.8.0 | safe}}") },
+                        { label: "Sep", y: parseInt("{{ data.9.0 | safe}}") },
+                        { label: "Oct", y: parseInt("{{ data.10.0 | safe}}") },
+                        { label: "Nov", y: parseInt("{{ data.11.0 | safe}}") },
+                        { label: "Dec", y: parseInt("{{ data.12.0 | safe}}") },
+                    ],
+                },
+                {
+                    type: "column",
+                    color: "#ffa6e4",
+                    name: "Female",
+                    showInLegend: true,
+                    // yValueFormatString: "#,##0.# Units",
+                    dataPoints: [
+                        { label: "Jan", y: parseInt("{{ data.1.1 | safe}}") },
+                        { label: "Feb", y: parseInt("{{ data.2.1 | safe}}") },
+                        { label: "March", y: parseInt("{{ data.3.1 | safe}}") },
+                        { label: "April", y: parseInt("{{ data.4.1 | safe}}") },
+                        { label: "May", y: parseInt("{{ data.5.1 | safe}}") },
+                        { label: "June", y: parseInt("{{ data.6.1 | safe}}") },
+                        { label: "July", y: parseInt("{{ data.7.1 | safe}}") },
+                        { label: "Aug", y: parseInt("{{ data.8.1 | safe}}") },
+                        { label: "Sep", y: parseInt("{{ data.9.1 | safe}}") },
+                        { label: "Oct", y: parseInt("{{ data.10.1 | safe}}") },
+                        { label: "Nov", y: parseInt("{{ data.11.1 | safe}}") },
+                        { label: "Dec", y: parseInt("{{ data.12.1 | safe}}") },
+                    ],
+                },
+                {
+                    type: "column",
+                    color: "#59C3E3",
+                    name: "Others",
+                    showInLegend: true,
+                    // yValueFormatString: "#,##0.# Units",
+                    dataPoints: [
+                        { label: "Jan", y: parseInt("{{ data.1.2 | safe}}") },
+                        { label: "Feb", y: parseInt("{{ data.2.2 | safe}}") },
+                        { label: "March", y: parseInt("{{ data.3.2 | safe}}") },
+                        { label: "April", y: parseInt("{{ data.4.2 | safe}}") },
+                        { label: "May", y: parseInt("{{ data.5.2 | safe}}") },
+                        { label: "June", y: parseInt("{{ data.6.2 | safe}}") },
+                        { label: "July", y: parseInt("{{ data.7.2 | safe}}") },
+                        { label: "Aug", y: parseInt("{{ data.8.2 | safe}}") },
+                        { label: "Sep", y: parseInt("{{ data.9.2 | safe}}") },
+                        { label: "Oct", y: parseInt("{{ data.10.2 | safe}}") },
+                        { label: "Nov", y: parseInt("{{ data.11.2 | safe}}") },
+                        { label: "Dec", y: parseInt("{{ data.12.2 | safe}}") },
+                    ],
+                },
+            ],
+        });
+        chart.render();
+        var i = 0;
+
+        var chart2 = new CanvasJS.Chart("chartContainer2", {
+            colorSet: "shades",
+            title: {
+                text: "Number of Students",
+                fontFamily: "tahoma",
+            },
+            legend: {
+                cursor: "pointer",
+            },
+            data: [
+                {
+                    type: "doughnut",
+                    indexLabelPlacement: "inside",
+                    indexLabel: " ",
+                    startAngle: 30,
+                    innerRadius: 88,
+                    showInLegend: true,
+                    // indexLabelFontSize: 17,
+
+                    toolTipContent: "<b>{label}:</b> {y} (#percent%)",
+                    dataPoints: dps,
+                },
+            ],
+        });
+        chart2.render();
+
+        function toggleDataSeries(e) {
+            if (
+                typeof e.dataSeries.visible === "undefined" ||
+                e.dataSeries.visible
+            ) {
+                e.dataSeries.visible = false;
+            } else {
+                e.dataSeries.visible = true;
+            }
+            e.chart.render();
+        }
+    };
+</script>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="page-header">
+            <h3 class="page-title">
+                <span class="page-title-icon bg-gradient-primary text-white mr-2">
+                    <i class="mdi mdi-home"></i>
+                </span>
+                Dashboard
+            </h3>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 stretch-card grid-margin">
+                <div class="card bg-gradient-danger card-img-holder text-white">
+                    <div class="card-body">
+                        <img src="/static/circle.svg" class="card-img-absolute" alt="circle-image" />
+                        <h4 class="font-weight-normal mb-3">
+                            Total Books
+                            <i class="mdi mdi-chart-line mdi-24px float-right"></i>
+                        </h4>
+                        <h2 class="mb-5">{{list.studentstested}}</h2>
+                        <!-- <h6 class="card-text">Increased by 60%</h6> -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 stretch-card grid-margin">
+                <div class="card bg-gradient-info card-img-holder text-white">
+                    <div class="card-body">
+                        <img src="/static/circle.svg" class="card-img-absolute" alt="circle-image" />
+                        <h4 class="font-weight-normal mb-3">
+                            Total Journals
+                            <i class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
+                        </h4>
+                        <h2 class="mb-5">{{list.yettobetested}}</h2>
+                        <!-- <h6 class="card-text">Decreased by 10%</h6> -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 stretch-card grid-margin">
+                <div class="card bg-gradient-success card-img-holder text-white">
+                    <div class="card-body">
+                        <img src="/static/circle.svg" class="card-img-absolute" alt="circle-image" />
+                        <h4 class="font-weight-normal mb-3">
+                            Members Registered
+                            <i class="mdi mdi-diamond mdi-24px float-right"></i>
+                        </h4>
+                        <h2 class="mb-5">{{list.numberofschools}}</h2>
+                        <!-- <h6 class="card-text">Increased by 5%</h6> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-7 grid-margin stretch-card">
+                <div class="card" style="height: 470px;">
+                    <div class="card-body">
+                        <div class="clearfix" id="chartContainer">
+                            <img src="/static/plot_fines.png">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5 grid-margin stretch-card">
+                <div class="card" style="height: 470px;">
+                    <div class="card-body">
+                        <div class="clearfix" id="chartContainer2">
+                            <img src="/static/plot_category_counts.png">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5 grid-margin stretch-card">
+                <div class="card" style="height: 470px;">
+                    <div class="card-body">
+                        <div class="clearfix" id="chartContainer2">
+                            <img src="/static/plot_fines_pie.png">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7 grid-margin stretch-card">
+                <div class="card" style="height: 470px;">
+                    <div class="card-body">
+                        <div class="clearfix" id="chartContainer">
+                            <img src="/static/plot_issue_day_of_month.png">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-7 grid-margin stretch-card">
+                <div class="card" style="height: 470px;">
+                    <div class="card-body">
+                        <div class="clearfix" id="chartContainer">
+                            <img src="/static/plot_issue_day_of_week.png">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5 grid-margin stretch-card">
+                <div class="card" style="height: 470px;">
+                    <div class="card-body">
+                        <div class="clearfix" id="chartContainer2">
+
+                            <img src="/static/plot_return_duration.png">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

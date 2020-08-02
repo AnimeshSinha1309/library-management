@@ -84,18 +84,18 @@ class _AutoTaggerPageState extends State<AutoTaggerPage> {
         map['1'] = 'available';
         // _acc = _isbnController.text + '1';
 
-        // Firestore.instance
-        //     .collection("books")
-        //     .document(_isbnController.text)
-        //     .setData({
-        //   'author': _authorsController.text,
-        //   'description': _descriptionController.text,
-        //   'genre': _genreController.text,
-        //   'image': _image,
-        //   'name': _nameController.text,
-        //   'subject': _subjectController.text,
-        //   'issues': map,
-        // });
+        Firestore.instance
+            .collection("books")
+            .document(_isbnController.text)
+            .setData({
+          'author': _authorsController.text,
+          'description': _descriptionController.text,
+          'genre': _genreController.text,
+          'image': _image,
+          'name': _nameController.text,
+          'subject': _subjectController.text,
+          'issues': map,
+        });
       } else {
         map.addAll(snapShot.data['issues']);
         String field = '1';
@@ -107,18 +107,18 @@ class _AutoTaggerPageState extends State<AutoTaggerPage> {
         map[field] = 'available';
         // _acc = _isbnController.text + field;
 
-        // Firestore.instance
-        //     .collection("books")
-        //     .document(_isbnController.text)
-        //     .updateData({
-        //   'author': _authorsController.text,
-        //   'description': _descriptionController.text,
-        //   'genre': _genreController.text,
-        //   'image': _image,
-        //   'name': _nameController.text,
-        //   'subject': _subjectController.text,
-        //   'issues': map,
-        // });
+        Firestore.instance
+            .collection("books")
+            .document(_isbnController.text)
+            .updateData({
+          'author': _authorsController.text,
+          'description': _descriptionController.text,
+          'genre': _genreController.text,
+          'image': _image,
+          'name': _nameController.text,
+          'subject': _subjectController.text,
+          'issues': map,
+        });
       }
       await _getBarcode();
       // // cleanFields();

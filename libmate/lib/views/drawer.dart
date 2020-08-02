@@ -58,6 +58,11 @@ class AppDrawer extends StatelessWidget {
           .build(context),
       _DrawerViewItem(Icons.library_add, 'Book Requests', '/requested')
           .build(context),
+      _DrawerViewItem(Icons.access_time, 'Get time slot', '/appointment')
+          .build(context),
+      _DrawerViewItem(
+              Icons.calendar_view_day, 'Upcoming periodicals', '/schedule')
+          .build(context),
       Divider(color: Colors.grey, thickness: 0.5),
       _DrawerViewItem(Icons.people, 'Issue Book', '/issue').build(context),
       _DrawerViewItem(Icons.account_circle, 'Accounts', '/accounts')

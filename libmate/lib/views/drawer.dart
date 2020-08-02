@@ -83,8 +83,6 @@ class AppDrawer extends StatelessWidget {
 
       _DrawerViewItem(Icons.access_time, 'Get time slot', '/appointment')
           .build(context),
-
-      _DrawerViewItem(Icons.access_time, 'Get time slot', '/appointment').build(context),
       _DrawerViewItem(Icons.search, 'Search Books', '/search').build(context),
       _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute')
           .build(context),

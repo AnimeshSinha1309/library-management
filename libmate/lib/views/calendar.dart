@@ -42,25 +42,25 @@ class _SchedulePageState extends State<SchedulePage > {
   }
 
 
-//  Future addDue() async {
-//    try {
-//      final snapShot =
-//      await Firestore.instance.collection(_docType).getDocuments();
-//      if (snapShot == null) return;
-//      var batch = Firestore.instance.batch();
-//      for (var document in snapShot.documents) {
-//        periodicals.add(document.data['name']);
-//        timestamps.add(document.data['purchased']);
-//        DateTime now = DateTime.now();
-//        timestamps.add(now);
-//        print(periodicals);
-//      }
-//    }
-//    catch (e) {
-//      print(e.toString());
-//    }
-//
-//  }
+  Future addDue() async {
+    try {
+      final snapShot =
+      await Firestore.instance.collection(_docType).getDocuments();
+      if (snapShot == null) return;
+      var batch = Firestore.instance.batch();
+      for (var document in snapShot.documents) {
+        periodicals.add(document.data['name']);
+        timestamps.add(document.data['purchased']);
+        DateTime now = DateTime.now();
+        timestamps.add(now);
+        print(periodicals);
+      }
+    }
+    catch (e) {
+      print(e.toString());
+    }
+
+  }
 
 
   List<Meeting> _getDataSource() {
@@ -72,7 +72,11 @@ class _SchedulePageState extends State<SchedulePage > {
     DateTime(today.year, today.month, today.day+5, 9, 0, 0);
     final DateTime endTime = startTime.add(const Duration(hours: 2));
     final DateTime endTime2 = startTime2.add(const Duration(hours: 2));
-
+    for (var i=0; i < periodicals.length; i++)
+      {
+        meetings.add(Meeting(
+            periodicals[i], startTime, endTime, const Color(0xFF0F8644), false));
+      }
     meetings.add(Meeting(
         "Nature vol 8", startTime, endTime, const Color(0xFF0F8644), false));
     meetings.add(Meeting(

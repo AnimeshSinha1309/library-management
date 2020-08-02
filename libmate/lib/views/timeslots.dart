@@ -121,14 +121,17 @@ class _TimePageState extends State<TimePage> {
                   showToast(context, "Sorry, This slot is not available now!");
                 });
               } else {
+                int tableNo = 1;
                 if (snapshot.exists) {
                   var newList = snapshot.data['uid'];
                   newList.add(widget.user.uid);
+                  tableNo = newList.length;
                   Firestore.instance
                       .collection(_docType)
                       .document(slot)
                       .updateData({'uid': newList});
                 } else {
+                  tableNo = 1;
                   Firestore.instance
                       .collection(_docType)
                       .document(slot)
@@ -143,7 +146,7 @@ class _TimePageState extends State<TimePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => TicketPage(slot: slot)),
+                      builder: (context) => TicketPage(slot: slot, tableNo: tableNo)),
                 );
               }
             } else {

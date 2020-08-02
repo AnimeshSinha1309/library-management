@@ -6,8 +6,9 @@ import 'package:provider/provider.dart';
 
 class TicketPage extends StatefulWidget {
   final String slot;
+  final int tableNo;
 
-  TicketPage({this.slot});
+  TicketPage({this.slot, this.tableNo});
 
   @override
   _TicketPageState createState() => _TicketPageState();
@@ -16,12 +17,14 @@ class TicketPage extends StatefulWidget {
 class _TicketPageState extends State<TicketPage> {
   String time;
   String date;
+  int tableNo;
 
   @override
   void initState() {
     super.initState();
     date = widget.slot.split('_')[0];
     time = widget.slot.split('_')[1];
+    tableNo = widget.tableNo;
   }
 
   @override
@@ -70,7 +73,7 @@ class _TicketPageState extends State<TicketPage> {
 
                       Column(
                         children: <Widget>[
-                          Text('$date',
+                          Text('$date\n\nTable Number: $tableNo',
                               style: TextStyle(
                                 color: Colors.grey,
                                 letterSpacing: 2.0,

@@ -30,8 +30,13 @@ class Checkout extends StatefulWidget {
     for (var book in returns) {
       returnList.add(book.toJSON());
     }
-    qrdata = jsonEncode(
-        {'email': user.email, 'issues': booksList, 'returns': returnList});
+    qrdata = jsonEncode({
+      'email': user.email,
+      'photo': user.photoUrl,
+      'name': user.name,
+      'issues': booksList,
+      'returns': returnList
+    });
     // printWrapped(qrdata);
   }
   @override

@@ -3,6 +3,7 @@ import 'package:libmate/views/drawer.dart';
 import 'package:libmate/datastore/model.dart';
 import 'package:libmate/widgets/bookcard.dart';
 import 'package:libmate/widgets/issueitem.dart';
+import 'package:libmate/utils/utils.dart';
 import 'dart:convert';
 import 'package:qrscan/qrscan.dart' as scanner;
 
@@ -12,7 +13,7 @@ class IssueBook extends StatefulWidget {
 }
 
 class IssueBookState extends State<IssueBook> {
-  String email = "";
+  String email, name, photoUrl;
   List<BookModel> books;
   List<BorrowBookModel> returns;
 
@@ -26,6 +27,9 @@ class IssueBookState extends State<IssueBook> {
 
           setState(() {
             email = val['email'];
+            name = val['name'];
+            photoUrl = val['photo'];
+
             books = val['issues']
                 .map<BookModel>((e) => BookModel.fromJSON(json: e))
                 .toList();
@@ -47,7 +51,7 @@ class IssueBookState extends State<IssueBook> {
   Widget build(BuildContext context) {
     var btn = RaisedButton.icon(
         onPressed: () async {
-          print("doing");
+          print("Doing");
           await _scanBarcode();
         },
         icon: Text("Scan QR code"),
@@ -73,14 +77,71 @@ class IssueBookState extends State<IssueBook> {
               left: true,
               right: true,
               top: true,
-              child: ListView(
-                  children: <Widget>[
-                        ButtonTheme(
-                            textTheme: ButtonTextTheme.primary, child: btn),
-                        Text("User detected: $email")
-                      ] +
-                      bookWidgs +
-                      returnWidgs),
+              child: CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                      child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundImage:
+                          NetworkImage(photoUrl ?? "https://i.pravatar.cc/300"),
+                    ),
+                    title: Text(name ?? "Libmate Test User"),
+                    subtitle: Text(email ?? "test@libmate.iiit.ac.in"),
+                  )),
+                  SliverToBoxAdapter(
+                      child: Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Text('Books being Issued',
+                              style: TextStyle(
+                                  color: Colors.black87,
+                                  fontSize: 25.0,
+                                  fontWeight: FontWeight.bold)))),
+                  SliverGrid(
+                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 200.0,
+                      mainAxisSpacing: 10.0,
+                      crossAxisSpacing: 10.0,
+                      childAspectRatio: 0.75,
+                    ),
+                    delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) =>
+                          BookCard(model: books[index]),
+                      childCount: books == null ? 0 : books.length,
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                      child: Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Text('Books being Returned',
+                              style: TextStyle(
+                                  color: Colors.black87,
+                                  fontSize: 25.0,
+                                  fontWeight: FontWeight.bold)))),
+                  SliverGrid(
+                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 400.0,
+                      mainAxisSpacing: 10.0,
+                      crossAxisSpacing: 10.0,
+                      childAspectRatio: 2.25,
+                    ),
+                    delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) =>
+                          IssuedBookCard(model: returns[index]),
+                      childCount: returns == null ? 0 : returns.length,
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                      child: ButtonTheme(
+                          minWidth: 200,
+                          textTheme: ButtonTextTheme.primary,
+                          child: RaisedButton(
+                              child: Text("Permit Transaction"),
+                              onPressed: () {
+                                gotoPage(context, null,
+                                    clear: true, routeName: "/home");
+                              })))
+                ],
+              ),
             )));
   }
 }

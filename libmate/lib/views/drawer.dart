@@ -40,10 +40,7 @@ class AppDrawer extends StatelessWidget {
   List<Widget> loggedInDrawerList(context) {
     return <Widget>[
       _DrawerViewItem(Icons.home, 'Home', '/home').build(context),
-      _DrawerViewItem(Icons.home, 'Admin', '/admin').build(context),
       _DrawerViewItem(Icons.shop, 'Issue cart', '/cart').build(context),
-      _DrawerViewItem(Icons.camera, 'Admin Scan and issue', '/admin_scan')
-          .build(context),
       _DrawerViewItem(Icons.search, 'Search', '/search').build(context),
       _DrawerViewItem(Icons.location_on, 'Guide', '/guide').build(context),
       _DrawerViewItem(Icons.bookmark_border, 'Auto Tagger', '/autoTagger')
@@ -54,15 +51,20 @@ class AppDrawer extends StatelessWidget {
           .build(context),
       _DrawerViewItem(Icons.library_add, 'Request Books', '/request')
           .build(context),
-      _DrawerViewItem(Icons.library_add, 'Book Requests', '/requested')
+      Divider(color: Colors.grey, thickness: 0.5),
+      _DrawerViewItem(Icons.view_carousel, 'Book Requests', '/requested')
           .build(context),
       _DrawerViewItem(Icons.access_time, 'Get time slot', '/appointment')
+          .build(context),
+      _DrawerViewItem(Icons.center_focus_weak, 'Admin', '/admin')
+          .build(context),
+      _DrawerViewItem(Icons.camera, 'Admin Scan and issue', '/admin_scan')
           .build(context),
       _DrawerViewItem(
               Icons.calendar_view_day, 'Upcoming periodicals', '/schedule')
           .build(context),
       Divider(color: Colors.grey, thickness: 0.5),
-      _DrawerViewItem(Icons.people, 'Issue Book', '/issue').build(context),
+      _DrawerViewItem(Icons.people, 'Forced Issue', '/issue').build(context),
       _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute')
           .build(context),
       _DrawerViewItem(Icons.account_circle, 'Accounts', '/accounts')
@@ -94,7 +96,7 @@ class AppDrawer extends StatelessWidget {
       _DrawerViewItem(Icons.access_time, 'Get time slot', '/appointment')
           .build(context),
       _DrawerViewItem(
-          Icons.calendar_view_day, 'Upcoming periodicals', '/schedule')
+              Icons.calendar_view_day, 'Upcoming periodicals', '/schedule')
           .build(context),
       Divider(color: Colors.grey, thickness: 0.5),
       _DrawerViewItem(Icons.people, 'Issue Book', '/issue').build(context),

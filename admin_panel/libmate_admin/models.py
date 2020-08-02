@@ -17,13 +17,18 @@ class Journal(models.Model):
         return '%s, by %s' % (self.title, self.author)
 
 class Book(models.Model):
-    title = models.CharField(max_length = 100, verbose_name='Book Title')
-    dewey = models.CharField(max_length = 100, verbose_name='Dewey Decimal id', null=True)
-    authors = models.CharField(max_length = 100, verbose_name='Authors', null=True)
-    subject = models.CharField(max_length = 100, verbose_name='Subject', null=True)
-    genre = models.CharField(max_length = 100, verbose_name='Genre', null=True)
+    id = models.CharField(max_length = 200, verbose_name='Book ID',primary_key = True)
+    title = models.CharField(max_length = 1000, verbose_name='Book Title' ,null=True)
+    category = models.CharField(max_length = 1000, verbose_name='Category', null=True)
+    author = models.CharField(max_length = 1000, verbose_name='Authors', null=True)
+    description = models.CharField(max_length = 6000, verbose_name='Description', null=True)
+    rating = models.FloatField(verbose_name='Rating', null=True)
+    tag = models.CharField(max_length = 1000, verbose_name='Tag', null=True)
+    gbooks_link = models.CharField(max_length = 1000, verbose_name='Gbooks link', null=True)
+    volume_link = models.CharField(max_length = 1000, verbose_name='Volume link', null=True)
+    info_link = models.CharField(max_length = 1000, verbose_name='Info Link', null=True)
+    image = models.CharField(max_length = 1000, verbose_name='Image Link', null=True)
     isbn = models.CharField(max_length = 13,verbose_name='ISBN Number', null=True)
-    description = models.CharField(max_length = 10000, verbose_name='Description', null=True)
 
     def __str__(self):
-        return '%s, by %s -  %s' % (self.title, self.authors, self.isbn)
+        return '%s, by %s -  %s' % (self.title, self.author, self.isbn)

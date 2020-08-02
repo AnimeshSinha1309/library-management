@@ -23,3 +23,15 @@ def journals(request):
         if cnt == 50:
             break
     return render(request, 'journals.html', {'items': items})
+
+
+def books(request):
+    items = []
+    # print(Journal.objects.all())
+    cnt = 0
+    for obj in Book.objects.all():
+        cnt += 1
+        items.append(obj)
+        if cnt == 50:
+            break
+    return render(request, 'books.html', {'items': items})

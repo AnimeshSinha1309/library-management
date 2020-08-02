@@ -244,9 +244,10 @@
                                     <TD>{{item.isbn}}</TD>
                                     <TD>{{item.category}}</TD>
                                     <TD>{{item.tag}}</TD>
-                                    <TD>{{item.gbooks_link}}</TD>
-                                    <TD>{{item.volume_link}}</TD>
-                                    <TD>{{item.info_link}}</TD>
+                                    <TD><a href="{{item.gbooks_link}}">Link</a>
+                                    </TD>
+                                    <TD><a href="{{item.volume_link}}">Link</a></TD>
+                                    <TD><a href="{{item.info_link}}">Link</a></TD>
                                 </TR>
                                 {% endfor %}
                             </table>

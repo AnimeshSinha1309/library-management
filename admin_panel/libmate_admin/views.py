@@ -1,4 +1,4 @@
-from .models import Journal,Book
+from .models import Journal, Book
 from django.shortcuts import render
 
 
@@ -20,7 +20,7 @@ def journals(request):
     for obj in Journal.objects.all():
         cnt += 1
         items.append(obj)
-        if cnt == 50:
+        if cnt == 30:
             break
     return render(request, 'journals.html', {'items': items})
 
@@ -32,6 +32,6 @@ def books(request):
     for obj in Book.objects.all():
         cnt += 1
         items.append(obj)
-        if cnt == 50:
+        if cnt == 15:
             break
     return render(request, 'books.html', {'items': items})

@@ -137,7 +137,8 @@ class AdminjournalPage extends StatelessWidget {
       return "Unknown Error";
     }
   }
-
+  List<String> _subscription = ['Annually', 'Semi-annually', 'Quaterly', 'Monthly']; // Option 2
+  String _currsubscription = 'Annually';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -187,6 +188,28 @@ class AdminjournalPage extends StatelessWidget {
                                           style: TextStyle(fontWeight: FontWeight.bold)),
                                       TextSpan(text: model.subscription)
                                     ]),
+                              ),
+//                              DropdownButton<String>(
+//                                items: <String>['Yearly', 'Quaterly', 'Semi-Quaterly','Monthy',].map((String value) {
+//                                  return new DropdownMenuItem<String>(
+//                                    value: value,
+//                                    child: new Text(value),
+//                                  );
+//                                }).toList(),
+//                                onChanged: (_) {},
+//                              ),
+                              DropdownButton(
+                                hint: Text('Subscription type'), // Not necessary for Option 1
+                                value: _currsubscription,
+                                onChanged: (newValue) {
+                                    _currsubscription= newValue;
+                                  },
+                                items: _subscription.map((subscription) {
+                                  return DropdownMenuItem(
+                                    child: new Text(subscription),
+                                    value: subscription,
+                                  );
+                                }).toList(),
                               ),
                               SizedBox(height: 10),
                               RichText(

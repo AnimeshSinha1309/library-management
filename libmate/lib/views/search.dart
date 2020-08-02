@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -162,15 +163,37 @@ class _SearchPageState extends State<SearchPage> {
       });
       searchControllers[id] = controller;
     }
-    return TextFormField(
+    return TypeAheadField(
+      textFieldConfiguration: TextFieldConfiguration(
+        autofocus: true,
+        style: DefaultTextStyle.of(context)
+            .style
+            .copyWith(fontStyle: FontStyle.italic),
         decoration: InputDecoration(
             labelText: label,
             suffixIcon: new IconButton(
                 onPressed: () async {
                   await _listen(id);
                 },
-                icon: Icon(_isListening ? Icons.mic : Icons.mic_none))),
-        controller: searchControllers[id]);
+                icon: Icon(_isListening ? Icons.mic : Icons.mic_none)),
+            border: OutlineInputBorder()),
+        controller: searchControllers[id],
+      ),
+      suggestionsCallback: (pattern) async {
+        return ["Artificial Suggestion 1", "Artificial Suggestion 2", "Artificial Suggestion 3", ];
+      },
+      itemBuilder: (context, suggestion) {
+        return ListTile(
+          leading: Icon(Icons.shopping_cart),
+          title: Text(suggestion['name']),
+          subtitle: Text('\$${suggestion['price']}'),
+        );
+      },
+      onSuggestionSelected: (suggestion) {
+        searchControllers[id] = suggestion;
+        scheduleSearch();
+      },
+    );
   }
 
   Widget buildQueryOptions() {

@@ -40,7 +40,7 @@ dependencies:
   speech_to_text: ^2.3.0
 
   fuzzy: <1.0.0
-
+  flutter_typeahead: ^1.8.7
   provider: ^4.0.2
 
   http: ^0.12.2

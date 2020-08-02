@@ -75,7 +75,7 @@ class _SearchPageState extends State<SearchPage> {
     });
 
     // Query the URL
-    Uri url = Uri.https("libmate.herokuapp.com", "/query", query);
+    Uri url = Uri.http("54.83.31.83", "/query", query);
     final result = await http.get(url); // call api;
     if (result.statusCode != 200) {
       print('ERROR: Search did not return a 200 Server response code');
@@ -104,7 +104,7 @@ class _SearchPageState extends State<SearchPage> {
           childAspectRatio: 0.75,
         ),
         delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) =>
+          (BuildContext context, int index) =>
               BookCard(model: dataCached[index]),
           childCount: dataCached == null ? 0 : dataCached.length,
         ),
@@ -145,8 +145,6 @@ class _SearchPageState extends State<SearchPage> {
           onResult: (val) => setState(() {
             searchControllers[id].text = val.recognizedWords;
             print(searchControllers[id].text);
-            if (val.hasConfidenceRating && val.confidence > 0) {
-            }
           }),
         );
       }

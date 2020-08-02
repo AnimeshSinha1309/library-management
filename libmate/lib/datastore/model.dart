@@ -93,7 +93,7 @@ class BookModel {
   String subject;
   String genre;
   String description;
-  Map<dynamic, dynamic> issues = Map<String, dynamic>();
+  Map<String, dynamic> issues = Map<String, dynamic>();
 
   BookModel(
       {@required this.name,
@@ -112,10 +112,18 @@ class BookModel {
     this.name = json["name"] ?? json["title"];
     this.author = json["author"] ?? (json["authors"] ?? "");
     this.genre = json["genre"] ?? (json["category"] ?? "");
+    // isbn parameter is highest priority, don't remove
     this.isbn = isbn ??
         (json["isbn"] is String ? json["isbn"] : json["isbn"].toString());
     this.image = json["image"] ?? defImage;
-    this.issues = json["issues"] ?? Map();
+    var jstheir = json["issues"];
+
+    if (jstheir != null) {
+      var js = new Map<String, dynamic>.from(jstheir);
+      this.issues = js;
+    } else
+      this.issues = Map<String, dynamic>();
+
     this.subject = json["subject"] ?? json["category"] ?? "";
     this.description = json["description"];
   }
@@ -127,6 +135,17 @@ class BookModel {
     this.issues = Map();
     this.subject = json["category"];
     this.description = json["description"];
+  }
+  toJSON() {
+    return {
+      "name": name,
+      "author": author,
+      "isbn": isbn,
+      "image": image,
+      "subject": subject,
+      "genre": genre,
+      "description": description
+    };
   }
 }
 
@@ -144,6 +163,7 @@ class BorrowBookModel {
       @required this.book,
       this.returnDate}) {
     this.borrowDate = this.borrowDate ?? DateTime.now();
+    assert(this.book.isbn != null);
     assert(this.book != null);
   }
 
@@ -176,6 +196,10 @@ class BorrowBookModel {
       "returnDate": returnDate,
       "book": book.isbn,
     };
+  }
+
+  bool isReturned() {
+    return returnDate != null;
   }
 }
 

@@ -15,8 +15,13 @@ import 'package:libmate/views/libcard.dart';
 import 'package:libmate/views/request.dart';
 import 'package:libmate/views/requested.dart';
 import 'package:libmate/views/search.dart';
+import 'package:libmate/views/admin_issue.dart';
 import 'package:libmate/views/speech.dart';
 import 'package:provider/provider.dart';
+import 'package:libmate/views/guide.dart';
+import 'package:libmate/views/journals.dart';
+import 'package:libmate/widgets/cart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(MyApp());
 
@@ -53,11 +58,19 @@ class _MyAppState extends State<MyApp> {
   void loadState(Function callback) {
     void loader() async {
       model = await UserModel.fromSharedPrefs();
-      loadUser(model);
+      await loadUser(model);
       callback();
     }
 
     // to avoid clogging up initState
+    void logouter() async {
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setBool("logged_in", false);
+      prefs.remove("issuecart");
+      loader();
+    }
+
+    // logouter();
     loader();
   }
 
@@ -102,6 +115,8 @@ class _MyAppState extends State<MyApp> {
                 '/accounts': (BuildContext context) => new AccountsPage(),
                 '/guide': (BuildContext context) =>
                     new GuidePage(currentUser: usermodel),
+                '/cart': (BuildContext context) => new BookCartUI(usermodel),
+                '/admin_scan': (BuildContext context) => IssueBook()
               });
         }));
   }

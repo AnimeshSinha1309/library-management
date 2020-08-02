@@ -2,15 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:libmate/utils/utils.dart';
 import 'package:libmate/views/drawer.dart';
+import 'package:libmate/datastore/state.dart';
+import 'package:libmate/datastore/model.dart';
+import 'dart:convert';
 
 class Checkout extends StatefulWidget {
-  String data;
+  String qrdata;
   String uid;
+  List<BookModel> books;
+  UserModel user;
 
   // uid for checking issue status of books
-  Checkout(data, uid) {
-    this.uid = uid;
-    this.data = data + uid;
+  Checkout(this.books, this.user) {
+    uid = user.email;
+    List<dynamic> datalist = [];
+    datalist.add(user.email);
+    for (var book in books) {
+      datalist.add(book.toJSON());
+    }
+    qrdata = jsonEncode(datalist);
   }
   @override
   createState() => CheckoutState();
@@ -20,7 +30,7 @@ class CheckoutState extends State<Checkout> {
   int checks = 0;
 
   recheck() async {
-    await Future.delayed(Duration(seconds: 5));
+    for (var book in widget.books) await issueBookModel(book, widget.user);
     setState(() {
       checks++;
       print("Rebuilding");
@@ -45,7 +55,7 @@ class CheckoutState extends State<Checkout> {
       redirect();
     } else {
       children = [
-        QrImage(data: widget.data, version: QrVersions.auto, size: 200.0),
+        QrImage(data: widget.qrdata, version: QrVersions.auto, size: 200.0),
         Text("Not received confirmation from admin yet")
       ];
     }

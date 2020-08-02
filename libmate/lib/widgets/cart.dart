@@ -8,6 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 class BookCartUI extends StatefulWidget {
+  UserModel user;
+  BookCartUI(this.user);
   @override
   createState() => BookCartState();
 }
@@ -89,8 +91,7 @@ class BookCartState extends State<BookCartUI> {
                       child: RaisedButton(
                           child: Text("Checkout"),
                           onPressed: () {
-                            String data = jsonEncode(toJSON());
-                            gotoPage(context, Checkout(data, "TODO1234"));
+                            gotoPage(context, Checkout(booklist, widget.user));
                           }))
                 ],
               ),

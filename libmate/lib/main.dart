@@ -67,8 +67,8 @@ class _MyAppState extends State<MyApp> {
 
     // to avoid clogging up initStae
 
-    // logouter();
-    loader();
+    logouter();
+    // loader();
   }
 
   @override
@@ -112,7 +112,7 @@ class _MyAppState extends State<MyApp> {
                 '/accounts': (BuildContext context) => new AccountsPage(),
                 '/guide': (BuildContext context) =>
                     new GuidePage(currentUser: usermodel),
-                '/cart': (BuildContext context) => new BookCartUI()
+                '/cart': (BuildContext context) => new BookCartUI(usermodel)
               });
         }));
   }

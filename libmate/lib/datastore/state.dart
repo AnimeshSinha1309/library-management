@@ -26,9 +26,22 @@ void loadUser(UserModel currentUser) async {
   }
 }
 
-Future issueBook(String isbn, UserModel currentUser, String accNo) async {
+Future issueBookModel(BookModel model, UserModel user) {
+  return issueBook(model.isbn, user);
+}
+
+Future issueBook(String isbn, UserModel currentUser,
+    [String accNo = ""]) async {
   var data = await Firestore.instance.collection("books").document(isbn).get();
   BookModel book = BookModel.fromJSON(json: data.data, isbn: isbn);
+
+  if (accNo == "") {
+    for (var key in book.issues.keys) {
+      accNo = key;
+      break;
+    }
+  }
+
   if (!book.issues.containsKey(accNo))
     throw Exception("Invalid Accession Number for given ISBN.");
   book.issues[accNo] = "issued";
@@ -42,6 +55,7 @@ Future issueBook(String isbn, UserModel currentUser, String accNo) async {
     'issues': book.issues,
   }, merge: true);
   currentUser.borrowedBooks.add(borrow);
+  await currentUser.toSharedPrefs();
 }
 
 Future returnBook(String isbn, UserModel currentUser, String accNo) async {
@@ -67,6 +81,7 @@ Future returnBook(String isbn, UserModel currentUser, String accNo) async {
       .map<BorrowBookModel>((json) => BorrowBookModel.fromJSON(json))
       .toList();
 
+  await currentUser.toSharedPrefs();
   Firestore.instance.collection("books").document(isbn).setData({
     'issues': book.issues,
   }, merge: true);

@@ -17,22 +17,18 @@ class BookCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String info = (model.genre ?? "");
+    if (model.subject != null && model.subject != model.genre) {
+      info += ", " + model.subject;
+    }
     List<Widget> catInfo = [
       Text(
-        "Genre: " + (model.genre ?? ""),
+        info,
         style: TextStyle(
           color: Colors.white,
         ),
       ),
     ];
-    if (model.subject != null && model.subject != model.genre) {
-      catInfo.add(Text(
-        "Subject: " + (model.subject),
-        style: TextStyle(
-          color: Colors.white,
-        ),
-      ));
-    }
     return Card(
         elevation: 5,
         child: SizedBox(
@@ -62,30 +58,25 @@ class BookCard extends StatelessWidget {
                       },
                       child: Container(
                         padding: EdgeInsets.all(8),
-                        color: Color.fromRGBO(0, 0, 0, 0.9),
+                        color: Color.fromRGBO(0, 0, 0, 0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                                Flexible(
-                                  child: Text(
-                                    model.name ?? "",
+                                Text(model.name ?? "",
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                     ),
                                     overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
+                                    maxLines: 2),
                                 Spacer(),
-                                Flexible(
-                                    child: Text(
-                                  model.author ?? "",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                )),
+                                Text(model.author ?? "",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2),
                                 Spacer()
                               ] +
                               catInfo,

@@ -42,7 +42,7 @@ class CheckoutState extends State<Checkout> {
   }
 
   redirect() async {
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 10));
     final prefs = await SharedPreferences.getInstance();
     prefs.remove("issuecart");
 
@@ -61,13 +61,25 @@ class CheckoutState extends State<Checkout> {
     } else {
       children = [
         QrImage(data: widget.qrdata, version: QrVersions.auto, size: 200.0),
+        Text("Show this QR code to the library admin"),
         Text("Not received confirmation from admin yet")
       ];
     }
 
     return Scaffold(
         drawer: AppDrawer(),
-        appBar: AppBar(title: Text("Issue book")),
-        body: Column(children: children));
+        appBar: AppBar(title: Text("Check out")),
+        body: Padding(
+            padding: EdgeInsets.fromLTRB(30.0, 40.0, 30.0, 0.0),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(height: 30.0),
+                  Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: children),
+                  SizedBox(height: 30.0),
+                ])));
   }
 }

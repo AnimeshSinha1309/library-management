@@ -75,7 +75,7 @@ class _TimePageState extends State<TimePage> {
     DateTime now = DateTime.now();
     DateTime cur = DateTime(
         now.year, now.month, now.day, now.hour, now.minute - now.minute % 30);
-    DateTime end = now.add(new Duration(days: 1));
+    DateTime end = cur.add(new Duration(days: 1));
     // DateTime end = DateTime(now.year, now.month, now.day, 23, 30);
     await getSlotList(cur, end, dateFormat);
     await getAppointments(dateFormat.format(cur));
@@ -146,7 +146,7 @@ class _TimePageState extends State<TimePage> {
             }
           },
           child: Text(
-            slot.split('_')[1],
+            slot.split('_')[0] + " " + slot.split('_')[1],
             style: TextStyle(color: Colors.white),
           ),
         ),
@@ -161,13 +161,14 @@ class _TimePageState extends State<TimePage> {
         rowList.add(TableRow(
           children: [
             _timeCell(times[i]),
+            _timeCell(times[i + 1]),
           ],
         ));
       } else {
         rowList.add(TableRow(
           children: [
             _timeCell(times[i]),
-            // _timeCell(times[i + 1]),
+            _timeCell(times[i + 1]),
           ],
         ));
       }
@@ -186,7 +187,7 @@ class _TimePageState extends State<TimePage> {
         drawer: AppDrawer(),
         body: _loaded == false
             ? Text("loading..")
-            : Padding(
+            : SingleChildScrollView(
                 padding: const EdgeInsets.all(8.0),
                 child: Table(
                   //          defaultColumnWidth:

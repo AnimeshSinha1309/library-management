@@ -84,18 +84,18 @@ class _AutoTaggerPageState extends State<AutoTaggerPage> {
         map['1'] = 'available';
         // _acc = _isbnController.text + '1';
 
-        Firestore.instance
-            .collection("books")
-            .document(_isbnController.text)
-            .setData({
-          'author': _authorsController.text,
-          'description': _descriptionController.text,
-          'genre': _genreController.text,
-          'image': _image,
-          'name': _nameController.text,
-          'subject': _subjectController.text,
-          'issues': map,
-        });
+        // Firestore.instance
+        //     .collection("books")
+        //     .document(_isbnController.text)
+        //     .setData({
+        //   'author': _authorsController.text,
+        //   'description': _descriptionController.text,
+        //   'genre': _genreController.text,
+        //   'image': _image,
+        //   'name': _nameController.text,
+        //   'subject': _subjectController.text,
+        //   'issues': map,
+        // });
       } else {
         map.addAll(snapShot.data['issues']);
         String field = '1';
@@ -107,19 +107,18 @@ class _AutoTaggerPageState extends State<AutoTaggerPage> {
         map[field] = 'available';
         // _acc = _isbnController.text + field;
 
-        Firestore.instance
-            .collection("books")
-            .document(_isbnController.text)
-            .updateData({
-          'author': _authorsController.text,
-          'description': _descriptionController.text,
-          'genre': _genreController.text,
-          'image': _image,
-          'name': _nameController.text,
-          'subject': _subjectController.text,
-          'issues': map,
-        });
-
+        // Firestore.instance
+        //     .collection("books")
+        //     .document(_isbnController.text)
+        //     .updateData({
+        //   'author': _authorsController.text,
+        //   'description': _descriptionController.text,
+        //   'genre': _genreController.text,
+        //   'image': _image,
+        //   'name': _nameController.text,
+        //   'subject': _subjectController.text,
+        //   'issues': map,
+        // });
       }
       await _getBarcode();
       // // cleanFields();
@@ -192,22 +191,26 @@ class _AutoTaggerPageState extends State<AutoTaggerPage> {
   }
 
   Future _printBarcode() async {
-    final doc = pw.Document();
-    const imageProvider = const AssetImage('assets/_barcode.png');
-    final PdfImage image = await pdfImageFromImageProvider(
-        pdf: doc.document, image: imageProvider);
+    try {
+      final doc = pw.Document();
+      const imageProvider = const AssetImage('assets/_barcode.png');
+      final PdfImage image = await pdfImageFromImageProvider(
+          pdf: doc.document, image: imageProvider);
 
-    doc.addPage(pw.Page(build: (pw.Context context) {
-      return pw.Center(
-        child: pw.Image(image),
-      );
-    }));
+      doc.addPage(pw.Page(build: (pw.Context context) {
+        return pw.Center(
+          child: pw.Image(image),
+        );
+      }));
 
-    await Printing.layoutPdf(
-        onLayout: (PdfPageFormat format) async => doc.save());
+      await Printing.layoutPdf(
+          onLayout: (PdfPageFormat format) async => doc.save());
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
-  Widget _barcodeWidget() {
+  Widget _barcodeWidget(BuildContext context) {
     if (_barcodefile == "") {
       return Container();
     }
@@ -222,7 +225,8 @@ class _AutoTaggerPageState extends State<AutoTaggerPage> {
                   height: 200,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: NetworkImage(_barcodefile),
+                      image: AssetImage('assets/_barcode.png'),
+                      // image: NetworkImage(_barcodefile),
                       fit: BoxFit.fitHeight,
                     ),
                   )),
@@ -328,6 +332,7 @@ class _AutoTaggerPageState extends State<AutoTaggerPage> {
                           padding: const EdgeInsets.symmetric(vertical: 16.0),
                           child: Row(
                             children: <Widget>[
+                              SizedBox(width: 10),
                               RaisedButton(
                                 color: Colors.pinkAccent,
                                 onPressed: () async {
@@ -381,7 +386,7 @@ class _AutoTaggerPageState extends State<AutoTaggerPage> {
                             ],
                           ),
                         ),
-                        _barcodeWidget(),
+                        _barcodeWidget(context),
                       ]),
                 ),
               )),

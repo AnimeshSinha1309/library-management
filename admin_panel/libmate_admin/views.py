@@ -8,10 +8,9 @@ def hello_world(request):
 
 
 def dashboard(request):
-    return render(request, 'dashboard.html', {})
+    journal_cnt = Journal.objects.count()
+    return render(request, 'dashboard.html', {'book_cnt': '100', 'journal_cnt': journal_cnt, 'issue_cnt': 20})
 
 
 def journals(request):
-    # return render(request, 'journals.html', {})
-    journal_cnt = Journal.objects.count()
-    return render(request, 'journals.html', {'book_cnt': '100', 'journal_cnt': journal_cnt, 'issue_cnt': 20})
+    return render(request, 'journals.html', {})

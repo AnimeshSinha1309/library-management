@@ -3,7 +3,7 @@ import 'package:libmate/views/drawer.dart';
 import 'package:libmate/utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:validators/validators.dart';
-import 'package:barcode_scan/barcode_scan.dart';
+import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -61,9 +61,10 @@ class _RequestPageState extends State<RequestPage> {
           'cnt': 1,
         });
       } else {
-        String reason = snapShot.data['reason'].length >= _reasonController.text.length
-            ? snapShot.data['reason']
-            : _reasonController.text;
+        String reason =
+            snapShot.data['reason'].length >= _reasonController.text.length
+                ? snapShot.data['reason']
+                : _reasonController.text;
         await Firestore.instance
             .collection("requested books")
             .document(_isbnController.text)
@@ -104,7 +105,7 @@ class _RequestPageState extends State<RequestPage> {
 
   Future _scanBarcode() async {
     try {
-      final isbn = await BarcodeScanner.scan();
+      final isbn = await scanner.scan();
       if (isISBN(isbn)) {
         _isbnController.text = isbn;
         await _autofill();

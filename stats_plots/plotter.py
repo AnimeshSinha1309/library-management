@@ -38,7 +38,7 @@ def plot_issue_day_of_week():
     days_count = {"Monday": 0, "Tuesday": 0, "Wednesday": 0,
                   "Thursday": 0, "Friday": 0, "Saturday": 0, "Sunday": 0}
     for issue_date in issue_dates:
-        print(issue_date.weekday())
+        # print(issue_date.weekday())
         days_count[days[issue_date.weekday()]
                    ] = days_count[days[issue_date.weekday()]] + 1
     colors = []
@@ -48,10 +48,14 @@ def plot_issue_day_of_week():
         else:
             colors.append('g')
 
-    print(days_count)
+    # print(days_count)
     brlist = plt.bar(days_count.keys(), days_count.values(), 0.5, color='g')
     for i in range(7):
         brlist[i].set_color(colors[i])
+    # plt.legend()
+    plt.title("Number of issues per day of week")
+    plt.xlabel("Day of week")
+    plt.ylabel("Number of books issued")
     plt.show()
 
 
@@ -64,6 +68,9 @@ def plot_issue_day_of_month():
     plt.hist(days_count, bins=np.arange(1, 32), width=0.7)
     # ax.set_xticks(ax.get_xticks()[::2])
     plt.xticks(np.arange(1, 32, 7))
+    plt.title("Number of issues per day of month")
+    plt.xlabel("Day of month")
+    plt.ylabel("Number of books issued")
     plt.show()
 
 
@@ -77,18 +84,10 @@ def plot_issue_month():
     plt.hist(days_count, bins=np.arange(1, 14),
              width=0.7, color='g')
     plt.xticks(np.arange(1, 14))
+    plt.title("Number of issues per month")
+    plt.xlabel("Month No.")
+    plt.ylabel("Number of books issued")
     plt.show()
-
-
-# def plot_issue_year():
-#     days_count = []
-#     for issue_date in issue_dates:
-#         # print(issue_date.weekday())
-#         days_count.append(issue_date.day)
-#     # print(days_count)
-#     arr = np.array(days_count)
-#     plt.hist(days_count, bins=np.arange(1, 32))
-#     plt.show()
 
 
 def plot_return_duration():
@@ -99,6 +98,9 @@ def plot_return_duration():
     plt.hist(return_duration, bins=np.arange(
         arr.min(), arr.max()+2), width=0.8, color='g')
     plt.xticks(np.arange(arr.min(), arr.max()+2, 1))
+    plt.title("Return duration frequency")
+    plt.xlabel("Time in days from issue")
+    plt.ylabel("Books returned")
     plt.show()
 
 
@@ -112,6 +114,9 @@ def plot_fines():
     arr = np.array(fines)
     # print(return_duration)
     plt.hist(fines, bins=np.arange(arr.min(), arr.max()+2), width=0.8)
+    plt.title("Fine frequency")
+    plt.xlabel("Fine value")
+    plt.ylabel("No of people")
     plt.show()
 
 
@@ -131,12 +136,16 @@ def plot_fines_pie():
             finer_count_two_weeks += 1
     # print(finer_count)
     plt.pie([finer_count_one_week, finer_count_two_weeks, non_finer],
-            labels=["Returned late by less than a week"+str(finer_count_one_week), "Returned after two weeks"+str(finer_count_two_weeks), "Returned on Time"+str(non_finer)])
+            labels=["Returned late by less than a week - "+str(finer_count_one_week), "Returned after two weeks - "+str(finer_count_two_weeks), "Returned on Time - "+str(non_finer)])
+    plt.title("Pie Chart for Fine Paid")
     plt.show()
 
 
 def plot_category_counts():
     plt.bar(category_counts.keys(), category_counts.values(), 0.5, color='g')
+    plt.title("No of books issued in each catgory")
+    plt.xlabel("Category")
+    plt.ylabel("No of books")
     plt.show()
 
 
@@ -144,8 +153,8 @@ if __name__ == "__main__":
     setup()
     # plot_issue_day_of_week()
     # plot_issue_day_of_month()
-    plot_issue_month()
+    # plot_issue_month()
     # plot_return_duration()
     # plot_fines()
     # plot_fines_pie()
-    # plot_category_counts()
+    plot_category_counts()

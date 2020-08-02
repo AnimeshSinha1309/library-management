@@ -16,7 +16,7 @@ class TimePage extends StatefulWidget {
   TimePage({this.user, this.type, this.timeInterval,this.day});
 
   @override
-  _TimePageState createState() => _TimePageState();
+  _TimePageState createState() => _TimePageState(day);
 }
 
 class _TimePageState extends State<TimePage> {
@@ -27,6 +27,8 @@ class _TimePageState extends State<TimePage> {
   int _timeInterval;
   int _maxRows;
   Set<String> _filledSlots = Set();
+  String day;
+  _TimePageState(this.day);
 
   List<String> times = [];
 
@@ -75,12 +77,26 @@ class _TimePageState extends State<TimePage> {
 
   Future getSlots() async {
     DateFormat dateFormat = DateFormat("yyyy-MM-dd_HH:mm");
-    DateTime now = DateTime.now();
-    DateTime cur = DateTime(
-        now.year, now.month, now.day, now.hour, now.minute - now.minute % _timeInterval);
-    DateTime end = cur.add(new Duration(days: 1));
-    await getSlotList(cur, end, dateFormat);
-    await getAppointments(dateFormat.format(cur));
+    if(day=='today')
+      {
+        DateTime now = DateTime.now();
+        DateTime cur = DateTime(
+            now.year, now.month, now.day, now.hour, now.minute - now.minute % _timeInterval);
+        DateTime end = cur.add(new Duration(days: 1));
+        await getSlotList(cur, end, dateFormat);
+        await getAppointments(dateFormat.format(cur));
+
+      }
+    else{
+      DateTime now = DateTime.now();
+      DateTime cur = DateTime(
+          now.year, now.month, now.day+1, now.hour, now.minute - now.minute % _timeInterval);
+      DateTime end = cur.add(new Duration(days: 1));
+      await getSlotList(cur, end, dateFormat);
+      await getAppointments(dateFormat.format(cur));
+    }
+
+
   }
 
   @override
@@ -202,6 +218,8 @@ class _TimePageState extends State<TimePage> {
                 padding: const EdgeInsets.all(8.0),
                 child: Table(
                   //          defaultColumnWidth:
+
+
                   //              FixedColumnWidth(MediaQuery.of(context).size.width / 3),
                   border: TableBorder.all(
                       color: Colors.black26, width: 1, style: BorderStyle.none),

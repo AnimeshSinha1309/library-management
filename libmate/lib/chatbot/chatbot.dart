@@ -43,25 +43,39 @@ class Chatbot {
     context = 0;
   }
 
+  List<String> extractTokens(dynamic dataFuse, List<String> strTokens) {
+    var distinctTokens = strTokens.toSet().toList();
+    final threshold = 0.01;
+    List<String> tokens = [];
+
+    for (var token in distinctTokens) {
+      if (new RegExp(r"^\s*$").hasMatch(token)) continue;
+
+      var res = dataFuse.search(token); // item, score relevant to us
+
+      if (res[0].score < threshold) {
+        print("((((");
+        print(res[0].item.name);
+        print(res[0].item.author);
+        print(token);
+        tokens.add(token);
+      }
+    }
+
+    return tokens;
+  }
+
   List<String> extractData(
       dynamic dataFuse, List<String> strTokens, List<String> whiteList,
       {Map<String, double> scores}) {
-    final maxReturns = 3;
-    final scoreThresh = 0.7;
-
+    double threshold = 0.01;
     var distinctTokens = strTokens.toSet().toList();
     if (scores == null) scores = Map();
 
     for (var token in distinctTokens) {
       if (new RegExp(r"^\s*$").hasMatch(token)) continue;
-      // if (!whiteList.contains(token)) continue;
       var res = dataFuse.search(token); // item, score relevant to us
 
-      // print("==+++++== $token");
-      // for (var item in res) {
-      //   print(
-      //       "${item.item.name} ${item.score.toStringAsFixed(3)} ${item.item.tag} ${item.item.author}");
-      // }
       for (var row in res) {
         var item = row.item;
         scores[item.isbn] = (scores[item.isbn] ?? 0) + row.score;
@@ -69,15 +83,25 @@ class Chatbot {
     }
 
     var keysDesc = scores.keys.toList()
-      ..sort((a, b) => scores[b].compareTo(scores[a]));
+      ..sort((b, a) => scores[b].compareTo(scores[a]));
 
-    if (keysDesc.length > maxReturns) {
-      keysDesc = keysDesc.sublist(0, maxReturns);
+    int i = 0;
+    print("==+++++== $strTokens");
+
+    threshold += scores[keysDesc[0]];
+    for (var item in keysDesc) {
+      var book = books[mapper[item]];
+      if (scores[item] > threshold) {
+        print("${scores['item']}");
+        break;
+      }
+
+      if (i < 10)
+        print("${book.name} ${scores[item]} ${book.tag} ${book.author}");
+
+      i++;
     }
-    // for (var key in keysDesc) {
-    //   print("$key ${scores[key]}");
-    // }
-
+    keysDesc = keysDesc.sublist(0, i);
     return keysDesc;
   }
 
@@ -116,14 +140,35 @@ class Chatbot {
   }
 
   Future<List<ChatBook>> search(
-      List<ChatBook> authors, List<ChatBook> subjects) async {
-    var authorNames = authors.map<String>((x) => x.author).toList();
-    var tagNames = subjects.map<String>((x) => x.tag).toList();
+      List<String> author, List<String> subject) async {
+    final mxlen = 3;
+    var res = [];
+    if (subject != null) {
+      res = extractData(subjectsFuse, subject, []);
+    } else {
+      res = extractData(authorsFuse, author, []);
+      if (res.length > mxlen) {
+        res = res.sublist(0, mxlen);
+      }
+    }
 
-    Map<String, double> scores;
-    extractData(authorsFuse, authorNames, authorWhiteList, scores: scores);
-    var finalRes =
-        extractData(subjectsFuse, tagNames, tagWhitelist, scores: scores);
+    res = res.map<ChatBook>((x) => books[mapper[x]]).toList();
+
+    if (subject == null) return res;
+
+    var fuse = Fuzzy(res,
+        options: FuzzyOptions(keys: [
+          WeightedKey(name: 'combo', getter: (x) => x.author, weight: 0)
+        ]));
+    var finalRes;
+    if (author != null)
+      finalRes = extractData(fuse, author, []);
+    else
+      finalRes = res;
+
+    if (finalRes.length > mxlen) {
+      finalRes = finalRes.sublist(0, mxlen);
+    }
 
     List<ChatBook> output = [];
     for (var res in finalRes) {
@@ -156,67 +201,37 @@ class Chatbot {
       ];
     }
 
-    List<String> newtokens = stopwordRemoval(tokens);
-    String query = newtokens.join(" ");
-    newtokens.reversed.join(" ");
-
-    var data = comboFuse.search(query);
-
-    print(query);
-
-    for (int i = 0; i < 10; i++) {
-      var item = data[i];
-      print(
-          "${item.item.name} ${item.score.toStringAsFixed(3)} ${item.item.tag} ${item.item.author}");
-    }
-
-    query = newtokens.reversed.join(" ");
-
-    data = comboFuse.search(query);
-
-    print(query);
-
-    for (int i = 0; i < 10; i++) {
-      var item = data[i];
-      print(
-          "${item.item.name} ${item.score.toStringAsFixed(3)} ${item.item.tag} ${item.item.author}");
-    }
-
     List<String> output = [];
     if (hello) output.add("Hey there!");
 
-    print("subjs");
-    var detectedSubjects = extractData(subjectsFuse, tokens, tagWhitelist);
-    print("authors");
-    var detectedAuthors = extractData(authorsFuse, tokens, authorWhiteList);
-    print("Detected stuff");
-    print(detectedAuthors);
-    print(detectedSubjects);
+    tokens = stopwordRemoval(tokens);
+
+    var detectedSubjects = extractTokens(subjectsFuse, tokens);
+    var detectedAuthors = extractTokens(authorsFuse, tokens);
 
     output.add("Recommending books based on");
-    String author = "Authors: ";
-    String subjects = "Subjects: ";
+    String author = "Author: ";
+    String subjects = "Subject: ";
 
-    int i = 0;
-    for (var a in detectedAuthors) {
-      if (i > 0) author += ", ";
-      author += books[mapper[a]].author;
-      i++;
+    List<String> aTokens, sTokens;
+
+    if (detectedAuthors.isEmpty) {
+      author += "none";
+    } else {
+      aTokens = detectedAuthors;
+      author += detectedAuthors.join(" ");
     }
-    i = 0;
-    for (var s in detectedSubjects) {
-      if (i > 0) subjects += ", ";
-      subjects += books[mapper[s]].tag;
-      i++;
+
+    if (detectedSubjects.isEmpty) {
+      subjects += "none";
+    } else {
+      sTokens = detectedSubjects;
+      subjects += detectedSubjects.join(" ");
     }
-    if (detectedAuthors.length == 0) author += "none";
-    if (detectedSubjects.length == 0) subjects += "none";
 
     output.add(author + "; " + subjects);
 
-    var detA = detectedAuthors.map<ChatBook>((x) => books[mapper[x]]).toList();
-    var detS = detectedSubjects.map<ChatBook>((x) => books[mapper[x]]).toList();
-    var result = await search(detA, detS);
+    var result = await search(aTokens, sTokens);
 
     if (result.length == 0) {
       output.add("Sorry, I could not find any books related to that criteria");
@@ -276,18 +291,7 @@ class Chatbot {
         options: FuzzyOptions(keys: [
           WeightedKey(
               name: "author",
-              getter: (ChatBook o) => o.author.replaceAll(RegExp(r";"), " "),
-              weight: 0)
-        ]));
-    comboFuse = Fuzzy(books,
-        options: FuzzyOptions(keys: [
-          WeightedKey(
-              name: "author",
-              getter: (ChatBook o) => o.author.replaceAll(RegExp(r";"), " "),
-              weight: 0),
-          WeightedKey(
-              name: "tag",
-              getter: (ChatBook o) => o.author.replaceAll(RegExp(r";"), " "),
+              getter: (ChatBook o) => o.author.replaceAll(RegExp(r";|,"), " "),
               weight: 0)
         ]));
 

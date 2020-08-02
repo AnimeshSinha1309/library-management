@@ -41,8 +41,10 @@ class AppDrawer extends StatelessWidget {
     return <Widget>[
       _DrawerViewItem(Icons.home, 'Home', '/home').build(context),
       _DrawerViewItem(Icons.home, 'Admin', '/admin').build(context),
+      _DrawerViewItem(Icons.shop, 'Issue cart', '/cart').build(context),
+      _DrawerViewItem(Icons.camera, 'Admin Scan and issue', '/admin_scan')
+          .build(context),
       _DrawerViewItem(Icons.search, 'Search', '/search').build(context),
-      _DrawerViewItem(Icons.keyboard_voice, 'Speech', '/speech').build(context),
       _DrawerViewItem(Icons.location_on, 'Guide', '/guide').build(context),
       _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute')
           .build(context),
@@ -59,7 +61,6 @@ class AppDrawer extends StatelessWidget {
       _DrawerViewItem(Icons.account_circle, 'Accounts', '/accounts')
           .build(context),
       _DrawerViewItem(Icons.info, 'About', '/about').build(context),
-      _DrawerViewItem(Icons.location_on, 'Guide', '/guide').build(context),
     ];
   }
 
@@ -89,7 +90,6 @@ class AppDrawer extends StatelessWidget {
       _DrawerViewItem(Icons.info, 'About', '/about').build(context),
       //end
       _DrawerViewItem(Icons.search, 'Search', '/search').build(context),
-      _DrawerViewItem(Icons.keyboard_voice, 'Speech', '/speech').build(context),
       _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute')
           .build(context),
       Divider(color: Colors.grey, thickness: 0.5),

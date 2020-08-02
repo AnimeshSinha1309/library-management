@@ -4,7 +4,8 @@ import 'dart:convert';
 import 'dart:io' show File;
 import 'dart:async';
 
-void gotoPage(BuildContext context, dynamic page) {
+void gotoPage(BuildContext context, dynamic page,
+    {bool clear = false, String routeName = ""}) {
   var route = PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => page,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -23,7 +24,10 @@ void gotoPage(BuildContext context, dynamic page) {
           child: child,
         );
       });
-  Navigator.of(context).push(route);
+  if (clear)
+    Navigator.pushNamedAndRemoveUntil(context, routeName, (r) => false);
+  else
+    Navigator.of(context).push(route);
 }
 
 void showToast(BuildContext context, String message) {

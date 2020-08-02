@@ -107,11 +107,17 @@ class BookModel {
 
   Map<String, BookModelBorrowState> copies;
   int issueCount, starCount;
+
   BookModel.fromJSON({Map<String, dynamic> json, String isbn}) {
     this.name = json["name"] ?? json["title"];
     this.author = json["author"] ?? json["authors"] ?? "";
     this.genre = json["genre"] ?? json["category"] ?? "";
     this.isbn = json['isbn'] is String ? json['isbn'] : json['isbn'].toString();
+    this.author = json["author"] ?? (json["authors"] ?? "");
+    this.genre = json["genre"] ?? (json["category"] ?? "");
+    // isbn parameter is highest priority, don't remove
+    this.isbn = isbn ??
+        (json["isbn"] is String ? json["isbn"] : json["isbn"].toString());
     this.image = json["image"] ?? defImage;
     var jstheir = json["issues"];
 
@@ -122,6 +128,15 @@ class BookModel {
       this.issues = Map<String, dynamic>();
 
     this.subject = json["subject"] ?? json["category"] ?? "";
+    this.description = json["description"];
+  }
+
+  BookModel.fromSaved(Map json) {
+    this.name = json["name"];
+    this.author = json["author"];
+    this.image = json["image"];
+    this.issues = Map();
+    this.subject = json["category"];
     this.description = json["description"];
   }
 
@@ -152,6 +167,7 @@ class BorrowBookModel {
         @required this.book,
         this.returnDate}) {
     this.borrowDate = this.borrowDate ?? DateTime.now();
+    assert(this.book.isbn != null);
     assert(this.book != null);
   }
 
@@ -185,6 +201,10 @@ class BorrowBookModel {
       "book": book.isbn,
     };
   }
+
+  bool isReturned() {
+    return returnDate != null;
+  }
 }
 
 class JournalModel {
@@ -202,16 +222,16 @@ class JournalModel {
 
   JournalModel(
       {@required this.name,
-        this.image =
-        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fdejapong.com%2Fmaking-cover-art-for-nature%2F&psig=AOvVaw14M72qqXN5MBdAG-D5VkK1&ust=1596199113845000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCMCB3Kn_9OoCFQAAAAAdAAAAABAD",
-        this.title = "",
-        this.impactfactor = "",
-        this.chiefeditor = "",
-        this.date = "",
-        this.volume = "",
-        this.issue = "",
-        this.description = "",
-        this.issn = ""});
+      this.image =
+          "https://www.google.com/url?sa=i&url=https%3A%2F%2Fdejapong.com%2Fmaking-cover-art-for-nature%2F&psig=AOvVaw14M72qqXN5MBdAG-D5VkK1&ust=1596199113845000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCMCB3Kn_9OoCFQAAAAAdAAAAABAD",
+      this.title = "",
+      this.impactfactor = "",
+      this.chiefeditor = "",
+      this.date = "",
+      this.volume = "",
+      this.issue = "",
+      this.description = "",
+      this.issn = ""});
 
   JournalModel.fromJSON(Map<String, dynamic> json) {
     name = json["title"];

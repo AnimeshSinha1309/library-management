@@ -92,7 +92,7 @@ class Chatbot {
 
   dynamic makeOneQuery(Map<String, String> query) async {
     query["maxResults"] = "3";
-    Uri url = Uri.https("libmate.herokuapp.com", "/query", query);
+    Uri url = Uri.http("54.83.31.83", "/query", query);
     final result = await http.get(url); // call api;
     if (result.statusCode != 200) {
       print('ERROR: Search did not return a 200 Server response code');

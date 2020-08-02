@@ -1,10 +1,10 @@
-import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:libmate/datastore/model.dart';
+import 'package:libmate/scache/data.dart';
 import 'package:libmate/utils/utils.dart';
 import 'package:libmate/views/drawer.dart';
 import 'package:libmate/widgets/bookcard.dart';
@@ -22,8 +22,6 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   stt.SpeechToText _speech;
   bool _isListening = false;
-  // String _text = "";
-  double _confidence = 1.0;
 
   @override
   void initState() {
@@ -59,6 +57,7 @@ class _SearchPageState extends State<SearchPage> {
   ///  as book cards
 
   List<BookModel> data;
+  List<BookModel> dataCached;
   bool searchLoading = false;
 
   void scheduleSearch() async {
@@ -69,12 +68,14 @@ class _SearchPageState extends State<SearchPage> {
 
     // Reject if empty, otherwise start loading
     if (query.isEmpty) return;
+
+    dataCached = searchCache(query);
     setState(() {
       searchLoading = true;
     });
 
     // Query the URL
-    Uri url = Uri.https("libmate.herokuapp.com", "/query", query);
+    Uri url = Uri.http("54.83.31.83", "/query", query);
     final result = await http.get(url); // call api;
     if (result.statusCode != 200) {
       print('ERROR: Search did not return a 200 Server response code');
@@ -94,16 +95,20 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget buildResultsPane() {
-    if (searchLoading) {
-      return SliverToBoxAdapter(
-          child: Center(
-              child: SizedBox(
-        child: CircularProgressIndicator(),
-        height: 50.0,
-        width: 50.0,
-      )));
-    } else if (data == null || data.length == 0) {
-      return SliverToBoxAdapter(child: Text("No items in data view"));
+    if (searchLoading || data == null || data.length == 0) {
+      return SliverGrid(
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 200.0,
+          mainAxisSpacing: 10.0,
+          crossAxisSpacing: 10.0,
+          childAspectRatio: 0.75,
+        ),
+        delegate: SliverChildBuilderDelegate(
+          (BuildContext context, int index) =>
+              BookCard(model: dataCached[index]),
+          childCount: dataCached == null ? 0 : dataCached.length,
+        ),
+      );
     } else {
       return SliverGrid(
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
@@ -140,9 +145,6 @@ class _SearchPageState extends State<SearchPage> {
           onResult: (val) => setState(() {
             searchControllers[id].text = val.recognizedWords;
             print(searchControllers[id].text);
-            if (val.hasConfidenceRating && val.confidence > 0) {
-              _confidence = val.confidence;
-            }
           }),
         );
       }

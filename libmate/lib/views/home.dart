@@ -6,9 +6,15 @@ import 'package:libmate/widgets/bookcard.dart';
 import 'package:libmate/widgets/issueitem.dart';
 import 'package:provider/provider.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
+  @override
+  createState() => HomeState();
+}
+
+class HomeState extends State<Home> {
   final Icon customIcon = Icon(Icons.search);
   final Widget customHeading = Text("LibMate");
+  int checks = 0;
 
   List<Widget> generateRecommendations() {
     List<BookCard> recommendations = [];
@@ -19,9 +25,16 @@ class Home extends StatelessWidget {
     return recommendations;
   }
 
+  Future<void> _onRefresh() async {
+    await Future.delayed(Duration(seconds: 1));
+    setState(() {
+      checks++;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserModel>(
+    var child = Consumer<UserModel>(
         builder: (BuildContext context, UserModel model, Widget child) {
       return Scaffold(
           appBar: AppBar(
@@ -86,12 +99,14 @@ class Home extends StatelessWidget {
               )),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) =>
-                        IssuedBookCard(model: model.borrowedBooks[index]),
+                    (BuildContext context, int index) => IssuedBookCard(
+                        model: model.borrowedBooks[index], user: model),
                     childCount: model.borrowedBooks.length),
               ),
             ],
           ));
     });
+
+    return RefreshIndicator(child: child, onRefresh: _onRefresh);
   }
 }

@@ -93,29 +93,65 @@ class BookModel {
   String subject;
   String genre;
   String description;
-  Map<dynamic, dynamic> issues = Map<String, dynamic>();
+  Map<String, dynamic> issues = Map<String, dynamic>();
 
   BookModel(
       {@required this.name,
-      this.author = "",
-      this.isbn = "",
-      this.image =
-          "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg",
-      this.subject = "",
-      this.genre = "",
-      this.description});
+        this.author = "",
+        this.isbn = "",
+        this.image =
+        "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg",
+        this.subject = "",
+        this.genre = "",
+        this.description});
 
   Map<String, BookModelBorrowState> copies;
+  bool isSp;
   int issueCount, starCount;
-  BookModel.fromJSON({Map<String, dynamic> json, String isbn}) {
+
+  BookModel.fromJSON(
+      {Map<String, dynamic> json, String isbn, this.isSp = false}) {
     this.name = json["name"] ?? json["title"];
     this.author = json["author"] ?? json["authors"] ?? "";
     this.genre = json["genre"] ?? json["category"] ?? "";
-    this.isbn = isbn;
+    this.isbn = json['isbn'] is String ? json['isbn'] : json['isbn'].toString();
+    this.author = json["author"] ?? (json["authors"] ?? "");
+    this.genre = json["genre"] ?? (json["category"] ?? "");
+    // isbn parameter is highest priority, don't remove
+    this.isbn = isbn ??
+        (json["isbn"] is String ? json["isbn"] : json["isbn"].toString());
     this.image = json["image"] ?? defImage;
-    this.issues = json["issues"] ?? Map();
+    var jstheir = json["issues"];
+
+    if (jstheir != null) {
+      var js = new Map<String, dynamic>.from(jstheir);
+      this.issues = js;
+    } else
+      this.issues = Map<String, dynamic>();
+
     this.subject = json["subject"] ?? json["category"] ?? "";
     this.description = json["description"];
+  }
+
+  BookModel.fromSaved(Map json) {
+    this.name = json["name"];
+    this.author = json["author"];
+    this.image = json["image"];
+    this.issues = Map();
+    this.subject = json["category"];
+    this.description = json["description"];
+  }
+
+  toJSON() {
+    return {
+      "name": name,
+      "author": author,
+      "isbn": isbn,
+      "image": image,
+      "subject": subject,
+      "genre": genre,
+      "description": description
+    };
   }
 }
 
@@ -129,10 +165,11 @@ class BorrowBookModel {
 
   BorrowBookModel(
       {@required this.accessionNumber,
-      this.borrowDate,
-      @required this.book,
-      this.returnDate}) {
+        this.borrowDate,
+        @required this.book,
+        this.returnDate}) {
     this.borrowDate = this.borrowDate ?? DateTime.now();
+    assert(this.book.isbn != null);
     assert(this.book != null);
   }
 
@@ -145,9 +182,14 @@ class BorrowBookModel {
     return (delay > 0 ? delay : 0) * fineRate;
   }
 
-  BorrowBookModel.fromJSON(Map<dynamic, dynamic> json) {
+  BorrowBookModel.fromJSON(
+    Map<dynamic, dynamic> json,
+  ) {
     accessionNumber = json["accNo"];
-    borrowDate = json["borrowDate"].toDate();
+    if (json["borrowDate"] != null)
+      borrowDate = (json["borrowDate"]).toDate();
+    else
+      borrowDate = DateTime.now();
     if (json["returnDate"] is DateTime)
       returnDate = json["returnDate"];
     else if (json["returnDate"] is Timestamp)
@@ -162,6 +204,10 @@ class BorrowBookModel {
       "returnDate": returnDate,
       "book": book.isbn,
     };
+  }
+
+  bool isReturned() {
+    return returnDate != null;
   }
 }
 
@@ -182,7 +228,6 @@ class JournalModel {
 
   JournalModel(
       {@required this.name,
-
         this.image =
         "https://www.google.com/url?sa=i&url=https%3A%2F%2Fdejapong.com%2Fmaking-cover-art-for-nature%2F&psig=AOvVaw14M72qqXN5MBdAG-D5VkK1&ust=1596199113845000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCMCB3Kn_9OoCFQAAAAAdAAAAABAD",
         this.title = "",
@@ -195,7 +240,6 @@ class JournalModel {
         this.issn = "",
         this.subscription = "",
         this.charges = ""
-
       });
 
   JournalModel.fromJSON(Map<String, dynamic> json) {
@@ -207,7 +251,7 @@ class JournalModel {
     chiefeditor = (json["chiefeditor"] ?? "");
     date = (json["chiefeditor"] ?? "");
     volume = (json["volume"] ?? "").toString();
-    issue = (json["issue"]??"").toString();
+    issue = (json["issue"] ?? "").toString();
     description = (json["description"] ?? "");
     issn = (json["issn"] ?? "");
     image = json["image"] ??

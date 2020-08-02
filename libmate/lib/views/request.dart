@@ -3,7 +3,7 @@ import 'package:libmate/views/drawer.dart';
 import 'package:libmate/utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:validators/validators.dart';
-import 'package:barcode_scan/barcode_scan.dart';
+import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -29,7 +29,10 @@ class _RequestPageState extends State<RequestPage> {
         .collection("books")
         .document(_isbnController.text)
         .get();
-    if (snapShot == null || !snapShot.exists) {
+    if (snapShot == null ||
+        !snapShot.exists ||
+        snapShot.data['issues'].length == 0 ||
+        !snapShot.data['issues'].containsValue('available')) {
       return false;
     }
     return true;
@@ -61,9 +64,10 @@ class _RequestPageState extends State<RequestPage> {
           'cnt': 1,
         });
       } else {
-        String reason = snapShot.data['reason'].length >= _reasonController.text.length
-            ? snapShot.data['reason']
-            : _reasonController.text;
+        String reason =
+            snapShot.data['reason'].length >= _reasonController.text.length
+                ? snapShot.data['reason']
+                : _reasonController.text;
         await Firestore.instance
             .collection("requested books")
             .document(_isbnController.text)
@@ -104,7 +108,7 @@ class _RequestPageState extends State<RequestPage> {
 
   Future _scanBarcode() async {
     try {
-      final isbn = await BarcodeScanner.scan();
+      final isbn = await scanner.scan();
       if (isISBN(isbn)) {
         _isbnController.text = isbn;
         await _autofill();
@@ -176,7 +180,6 @@ class _RequestPageState extends State<RequestPage> {
                                   // Validate returns true if the form is valid, or false
                                   // otherwise.
                                   if (_formKey.currentState.validate()) {
-                                    _formKey.currentState.save();
                                     showToast(context, "Sending Request..");
                                     final String resp = await _sendRequest();
                                     showToast(context, resp);

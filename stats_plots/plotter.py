@@ -12,12 +12,23 @@ fine_per_day = 1
 borrow_time = 50
 
 
+def random_date(start, end):
+    """Generate a random datetime between `start` and `end`"""
+    # print(int((end-start).total_seconds))
+    return start + datetime.timedelta(
+        # Get a random amount of seconds between `start` and `end`
+        random.randint(0, int((end - start).total_seconds()//(60*60*24))),
+    )
+
+
 def setup():
     for i in range(num_entries):
-        issue_dates.append(datetime.date(
-            2020, random.randint(5, 6), random.randint(1, 30)))
+        issue_dates.append(random_date(
+            datetime.date(year=2019, month=1, day=1), datetime.date.today()))
     for i in range(num_entries):
-        return_dates.append(datetime.date.today())
+        return_dates.append(
+            issue_dates[i]+datetime.timedelta(days=int(max(random.gauss(7, 4), 0))))
+    print(issue_dates)
 
 
 def plot_issue_day_of_week():
@@ -30,20 +41,52 @@ def plot_issue_day_of_week():
         print(issue_date.weekday())
         days_count[days[issue_date.weekday()]
                    ] = days_count[days[issue_date.weekday()]] + 1
+    colors = []
+    for i in range(7):
+        if days_count[days[i]] > 150:
+            colors.append('r')
+        else:
+            colors.append('g')
+
     print(days_count)
-    plt.bar(days_count.keys(), days_count.values(), 0.5, color='g')
+    brlist = plt.bar(days_count.keys(), days_count.values(), 0.5, color='g')
+    for i in range(7):
+        brlist[i].set_color(colors[i])
     plt.show()
 
 
 def plot_issue_day_of_month():
     days_count = []
     for issue_date in issue_dates:
-        # print(issue_date.weekday())
         days_count.append(issue_date.day)
     # print(days_count)
     arr = np.array(days_count)
-    plt.hist(days_count, bins=np.arange(1, 32))
+    plt.hist(days_count, bins=np.arange(1, 32), width=0.7)
+    # ax.set_xticks(ax.get_xticks()[::2])
+    plt.xticks(np.arange(1, 32, 7))
     plt.show()
+
+
+# def plot_issue_month():
+#     days_count = []
+#     for issue_date in issue_dates:
+#         # print(issue_date.weekday())
+#         days_count.append(issue_date.month)
+#     # print(days_count)
+#     arr = np.array(days_count)
+#     plt.hist(days_count, bins=np.arange(1, 32))
+#     plt.show()
+
+
+# def plot_issue_year():
+#     days_count = []
+#     for issue_date in issue_dates:
+#         # print(issue_date.weekday())
+#         days_count.append(issue_date.day)
+#     # print(days_count)
+#     arr = np.array(days_count)
+#     plt.hist(days_count, bins=np.arange(1, 32))
+#     plt.show()
 
 
 def plot_return_duration():
@@ -51,7 +94,8 @@ def plot_return_duration():
                        for i in range(num_entries)]
     arr = np.array(return_duration)
     # print(return_duration)
-    plt.hist(return_duration, bins=np.arange(arr.min()-5, arr.max()+5))
+    plt.hist(return_duration, bins=np.arange(
+        arr.min()-2, arr.max()+2), width=0.8, color='g')
     plt.show()
 
 
@@ -90,8 +134,8 @@ def plot_category_counts():
 if __name__ == "__main__":
     setup()
     # plot_issue_day_of_week()
-    # plot_issue_day_of_month()
+    plot_issue_day_of_month()
     # plot_return_duration()
     # plot_fines()
     # plot_fines_pie()
-    plot_category_counts()
+    # plot_category_counts()

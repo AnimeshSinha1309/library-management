@@ -2,9 +2,9 @@ from django.db import models
 
 # Create your models here.
 class Journal(models.Model):
-    title = models.CharField(max_length = 100, verbose_name = "Journal Title", null=True)
+    title = models.CharField(max_length = 100, verbose_name = "Journal Title", primary_key = True)
     author = models.CharField(max_length = 100,verbose_name = "Author", null=True)
-    Publisher_Title = models.CharField(max_length = 100, verbose_name = "Publisher Title", null=True)
+    Publication_Title = models.CharField(max_length = 100, verbose_name = "Publication Title", null=True)
     Book_Series_Title = models.CharField(max_length = 100, verbose_name = "Book Series Title", null=True)
     Journal_Volume = models.CharField(max_length = 100,verbose_name = "Journal  Volume", null=True)
     Journal_Issue = models.CharField(max_length = 100,verbose_name = "Journal  Issue", null=True)

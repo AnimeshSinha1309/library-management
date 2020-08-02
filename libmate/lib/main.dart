@@ -20,7 +20,7 @@ import 'package:libmate/views/guide.dart';
 import 'package:libmate/views/journals.dart';
 import 'package:libmate/views/schedule.dart';
 import 'package:libmate/views/appointment.dart';
-
+import 'package:libmate/views/ticket.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {

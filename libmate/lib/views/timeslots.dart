@@ -29,8 +29,9 @@ class _TimePageState extends State<TimePage> {
   Set<String> _filledSlots = Set();
   String day;
   int type;
-  _TimePageState(this.day,this.type);
 
+
+  _TimePageState(this.day,this.type);
   List<String> times = [];
 
   Future getSlotList(DateTime now, DateTime end, DateFormat dateFormat) async {
@@ -163,7 +164,7 @@ class _TimePageState extends State<TimePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => TicketPage(slot, tableNo,type)),
+                      builder: (context) => TicketPage(widget.user,slot,tableNo,type)),
                 );
               }
             } else {

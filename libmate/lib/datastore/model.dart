@@ -188,6 +188,10 @@ class BorrowBookModel {
       "book": book.isbn,
     };
   }
+
+  bool isReturned() {
+    return returnDate != null;
+  }
 }
 
 class JournalModel {

@@ -118,16 +118,11 @@ class BorrowBookPage extends StatelessWidget {
               label: Text('Return'));
         }),
       )),
-      Center(
-          child: ButtonTheme(
-        textTheme: ButtonTextTheme.primary,
-        child: RaisedButton.icon(
-          onPressed: () {},
-          icon: Icon(Icons.swap_horiz),
-          label: Text('Re-issue'),
-        ),
-      )),
     ];
+
+    if (model.isReturned()) {
+      children = [];
+    }
 
     var finePayBtn = Center(
       child: ButtonTheme(
@@ -142,6 +137,25 @@ class BorrowBookPage extends StatelessWidget {
 
     if (model.fine > 0) children.insert(0, finePayBtn);
 
+    String fineText = "Total fine is \u20B9 " + model.fine.toString();
+    if (model.isReturned()) {
+      fineText = "Fine paid was " + model.fine.toString();
+    }
+    String dueText = "Book is due on " +
+        model.dueDate.day.toString() +
+        "/" +
+        model.dueDate.month.toString() +
+        "/" +
+        model.dueDate.year.toString();
+    if (model.isReturned()) {
+      dueText = "Book was returned on " +
+          model.returnDate.day.toString() +
+          "/" +
+          model.returnDate.month.toString() +
+          "/" +
+          model.returnDate.year.toString();
+    }
+
     return Scaffold(
         appBar: new AppBar(
           title: new Text("Issued Book"),
@@ -152,18 +166,13 @@ class BorrowBookPage extends StatelessWidget {
           Padding(
               padding: EdgeInsets.symmetric(vertical: 20),
               child: Text(
-                "Total fine is \u20B9 " + model.fine.toString(),
+                fineText,
                 style: TextStyle(fontSize: 20.0),
               )),
           Padding(
               padding: EdgeInsets.fromLTRB(20, 0, 20, 40),
               child: Text(
-                "Book is due on " +
-                    model.dueDate.day.toString() +
-                    "/" +
-                    model.dueDate.month.toString() +
-                    "/" +
-                    model.dueDate.year.toString(),
+                dueText,
                 style: TextStyle(fontSize: 20.0),
               )),
           Row(

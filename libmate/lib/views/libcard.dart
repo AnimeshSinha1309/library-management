@@ -86,7 +86,7 @@ class _LibcardPageState extends State<LibcardPage> {
       var pastBooks = SliverList(
         delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) =>
-                IssuedBookCard(model: model.borrowedBooks[index], user: model),
+                IssuedBookCard(model: model.pastBooks[index], user: model),
             childCount: model.pastBooks.length),
       );
 

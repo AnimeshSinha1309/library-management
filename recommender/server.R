@@ -35,15 +35,14 @@ shinyServer(function(input, output, session) {
   # show the books to be rated
   output$ratings <- renderUI({
     num_rows <- 20
-    num_books <- 6 # books per row
+    num_books <- 10 # books per row
     
     lapply(1:num_rows, function(i) {
       list(fluidRow(lapply(1:num_books, function(j) {
         list(div(width = 2,
-                #  div(img(src = books$image_url[(i - 1) * num_books + j])),
                  span(books$authors[(i - 1) * num_books + j]),
-                 span(books$title[(i - 1) * num_books + j]),
-                 span(ratingInput(paste0("", books$book_id[(i - 1) * num_books + j]), label = "")))) #00c0ef
+                 span(strong(books$title[(i - 1) * num_books + j])),
+                 span(ratingInput(paste0("select_", books$book_id[(i - 1) * num_books + j]), label = "", dataStop = 5)))) #00c0ef
       })))
     })
   })
@@ -81,10 +80,8 @@ shinyServer(function(input, output, session) {
                                     Predicted_rating =  user_results)
         
     }) # still busy
-    
   }) # clicked on button
   
-
   # display the recommendations
   output$results <- renderUI({
     num_rows <- 4
@@ -92,16 +89,14 @@ shinyServer(function(input, output, session) {
     recom_result <- df()
     
     lapply(1:num_rows, function(i) {
-      list(row(style = "padding: 20px;", lapply(1:num_books, function(j) {
-        div(style = "padding: 20px;", title = paste0("Recommendation ", (i - 1) * num_books + j),            
-          # div(, 
-          #     a(href = paste0('https://www.goodreads.com/book/show/', books$best_book_id[recom_result$Book_id[(i - 1) * num_books + j]]), 
-          #       target='blank', 
-          #       img(src = books$image_url[recom_result$Book_id[(i - 1) * num_books + j]], height = 150)
-          #     )
-          #    ),
-          span(books$authors[recom_result$Book_id[(i - 1) * num_books + j]]),
-          span(strong(books$title[recom_result$Book_id[(i - 1) * num_books + j]]))
+      list(fluidRow(lapply(1:num_books, function(j) {
+        div(width = 2, status = "success", solidHeader = FALSE, title = paste0("Rank ", (i - 1) * num_books + j),
+          span(style = "text-align:center; color: #999999; font-size: 80%", 
+              books$authors[recom_result$Book_id[(i - 1) * num_books + j]]
+             ),
+          span(style="text-align:center; font-size: 100%", 
+              strong(books$title[recom_result$Book_id[(i - 1) * num_books + j]])
+             )
         )        
       }))) # columns
     }) # rows

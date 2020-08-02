@@ -187,21 +187,21 @@ class BorrowBookModel {
   ) {
     accessionNumber = json["accNo"];
     if (json["borrowDate"] != null)
-      borrowDate = (json["borrowDate"]).toDate();
+      borrowDate = DateTime.parse(json["borrowDate"]);
     else
       borrowDate = DateTime.now();
     if (json["returnDate"] is DateTime)
       returnDate = json["returnDate"];
     else if (json["returnDate"] is Timestamp)
-      returnDate = json["returnDate"].toDate();
+      returnDate = DateTime.parse(json["returnDate"]);
     book = cachedBooks[json["book"]];
   }
 
   Map<String, dynamic> toJSON() {
     return <String, dynamic>{
       "accNo": accessionNumber,
-      "borrowDate": borrowDate,
-      "returnDate": returnDate,
+      "borrowDate": borrowDate.toIso8601String(),
+      "returnDate": returnDate == null ? null : returnDate.toIso8601String(),
       "book": book.isbn,
     };
   }

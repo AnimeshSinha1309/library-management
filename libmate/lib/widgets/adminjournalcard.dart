@@ -46,7 +46,7 @@ class AdminjournalCard extends StatelessWidget {
                         if (shouldOpenPage)
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => AdminjournalPage(model:model)),
+                            MaterialPageRoute(builder: (context) => AdminjournalPage(model)),
                           );
                       },
                       child: Container(

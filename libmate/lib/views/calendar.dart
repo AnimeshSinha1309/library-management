@@ -6,7 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:async';
 class SchedulePage extends StatefulWidget {
   @override
   _SchedulePageState createState() => _SchedulePageState();
@@ -14,6 +15,11 @@ class SchedulePage extends StatefulWidget {
 
 class _SchedulePageState extends State<SchedulePage > {
   List<Meeting> meetings;
+  JournalModel model;
+  String _docType = 'Periodical-subscription';
+  List<String> periodicals = [];
+  List<DateTime> timestamps = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +31,8 @@ class _SchedulePageState extends State<SchedulePage > {
         drawer: AppDrawer(),
         body: SfCalendar(
           view: CalendarView.month,
-          dataSource: MeetingDataSource(_getDataSource("Nature vol8")),
+          dataSource: MeetingDataSource(_getDataSource()),
+
           // by default the month appointment display mode set as Indicator, we can
           // change the display mode as appointment using the appointment display mode
           // property
@@ -34,14 +41,42 @@ class _SchedulePageState extends State<SchedulePage > {
         ));
   }
 
-  List<Meeting> _getDataSource($periodical) {
-    meetings = <Meeting>[];
+
+//  Future addDue() async {
+//    try {
+//      final snapShot =
+//      await Firestore.instance.collection(_docType).getDocuments();
+//      if (snapShot == null) return;
+//      var batch = Firestore.instance.batch();
+//      for (var document in snapShot.documents) {
+//        periodicals.add(document.data['name']);
+//        timestamps.add(document.data['purchased']);
+//        DateTime now = DateTime.now();
+//        timestamps.add(now);
+//        print(periodicals);
+//      }
+//    }
+//    catch (e) {
+//      print(e.toString());
+//    }
+//
+//  }
+
+
+  List<Meeting> _getDataSource() {
+    List meetings = <Meeting>[];
     final DateTime today = DateTime.now();
     final DateTime startTime =
     DateTime(today.year, today.month, today.day, 9, 0, 0);
+    final DateTime startTime2 =
+    DateTime(today.year, today.month, today.day+5, 9, 0, 0);
     final DateTime endTime = startTime.add(const Duration(hours: 2));
+    final DateTime endTime2 = startTime2.add(const Duration(hours: 2));
+
     meetings.add(Meeting(
-        $periodical, startTime, endTime, const Color(0xFF0F8644), false));
+        "Nature vol 8", startTime, endTime, const Color(0xFF0F8644), false));
+    meetings.add(Meeting(
+        "The Atlantic", startTime2, endTime2, const Color(0xFF0F8644), false));
     return meetings;
   }
 }
@@ -85,4 +120,20 @@ class Meeting {
   DateTime to;
   Color background;
   bool isAllDay;
+}
+class Record {
+  final String name;
+  final DateTime date;
+  final DocumentReference reference;
+
+  Record.fromMap(Map<String, dynamic> map, {this.reference})
+      : assert(map['name'] != null),
+        name = map['name'],
+        date = map['date'];
+
+  Record.fromSnapshot(DocumentSnapshot snapshot)
+      : this.fromMap(snapshot.data, reference: snapshot.reference);
+
+  @override
+  String toString() => "Record<$name:$date>";
 }

@@ -6,6 +6,9 @@ import 'package:validators/validators.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:libmate/utils/utils.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:async';
 
 const String defImage =
     "https://www.peterharrington.co.uk/blog/wp-content/uploads/2014/09/shelves.jpg";

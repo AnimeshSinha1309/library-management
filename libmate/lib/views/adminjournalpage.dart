@@ -8,6 +8,11 @@ import 'package:libmate/views/drawer.dart';
 import 'package:libmate/views/journals.dart';
 import 'package:libmate/widgets/toread.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:libmate/utils/utils.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:async';
+
+
 class AdminjournalPage extends StatefulWidget {
   final JournalModel model;
   AdminjournalPage(this.model);
@@ -16,9 +21,41 @@ class AdminjournalPage extends StatefulWidget {
 }
 class _AdminjournalPageState extends State<AdminjournalPage> {
 
-  JournalModel model;
   int maxBooks = 20;
+  String _docType;
 
+//  Future renew() async {
+//    try {
+//      final snapShot =
+//      await Firestore.instance.collection(_docType).getDocuments();
+//      if (snapShot == null) return;
+//      var batch = Firestore.instance.batch();
+//      for (var document in snapShot.documents) {
+//        if (document[model.name].compareTo(model.name) < 0) {
+//          batch.delete(Firestore.instance
+//              .collection(_docType)
+//              .document(document.documentID));
+//        } else if (document.data['uid'].length >= _maxUsers ||
+//            document.data['uid'].contains(widget.user.uid)) {
+//          _slotlist.add(document.documentID);
+//        }
+//      }
+//      batch.commit();
+//      setState(() {
+//        _filledSlots = _slotlist;
+//        _loaded = true;
+//      });
+//    } catch (e) {
+//      print(e.toString());
+//    }
+//  }
+  @override
+  void initState() {
+    super.initState();
+    _docType = 'Periodical-subscription';
+
+
+  }
 
 
   Future<int> saveReadingList(JournalModel model) async {
@@ -72,7 +109,7 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
                 padding: EdgeInsets.all(25),
                 child: ListView(children: [
                   Text(
-                    model.name,
+                    widget.model.name,
                     style: TextStyle(
                         color: Colors.black87,
                         fontSize: 28.0,
@@ -81,7 +118,7 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
                   SizedBox(height: 20),
                   Row(children: [
                     Image(
-                      image: NetworkImage(model.image),
+                      image: NetworkImage(widget.model.image),
                       fit: BoxFit.fitWidth,
                       alignment: Alignment.topCenter,
                     ),
@@ -94,7 +131,8 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
                                 textTheme: ButtonTextTheme.primary,
                                 child: RaisedButton(
                                   onPressed: () {
-                                    showToast(context, "NOT IMPLEMENTED");
+//                                    showToast(context, "NOT IMPLEMENTED");
+
                                   },
                                   child: Text("Renue subscription"),
                                 ),
@@ -107,23 +145,15 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
                                       TextSpan(
                                           text: "Subscription type: ",
                                           style: TextStyle(fontWeight: FontWeight.bold)),
-                                      TextSpan(text: model.subscription)
                                     ]),
                               ),
-//                              DropdownButton<String>(
-//                                items: <String>['Yearly', 'Quaterly', 'Semi-Quaterly','Monthy',].map((String value) {
-//                                  return new DropdownMenuItem<String>(
-//                                    value: value,
-//                                    child: new Text(value),
-//                                  );
-//                                }).toList(),
-//                                onChanged: (_) {},
-//                              ),
                               DropdownButton(
                                 hint: Text('Subscription type'), // Not necessary for Option 1
                                 value: _currsubscription,
                                 onChanged: (newValue) {
-                                  _currsubscription= newValue;
+                                  setState(() {
+                                    _currsubscription = newValue;
+                                  });
                                 },
                                 items: _subscription.map((subscription) {
                                   return DropdownMenuItem(
@@ -140,7 +170,7 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
                                       TextSpan(
                                           text: "Charges: ",
                                           style: TextStyle(fontWeight: FontWeight.bold)),
-                                      TextSpan(text: model.charges)
+                                      TextSpan(text: widget.model.charges)
                                     ]),
                               ),
                             ])))
@@ -151,7 +181,7 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
                         style: DefaultTextStyle.of(context).style,
                         children: <TextSpan>[
                           TextSpan(
-                              text: model.title,
+                              text: widget.model.title,
                               style: TextStyle(fontWeight: FontWeight.bold))
                         ]),
                   ),
@@ -163,11 +193,11 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
                           TextSpan(
                               text: "volume: ",
                               style: TextStyle(fontWeight: FontWeight.bold)),
-                          TextSpan(text: model.volume),
+                          TextSpan(text: widget.model.volume),
                           TextSpan(
                               text: "issue: ",
                               style: TextStyle(fontWeight: FontWeight.bold)),
-                          TextSpan(text: model.issue)
+                          TextSpan(text: widget.model.issue)
                         ]),
                   ),
                   RichText(
@@ -177,7 +207,7 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
                           TextSpan(
                               text: "date: ",
                               style: TextStyle(fontWeight: FontWeight.bold)),
-                          TextSpan(text: model.date)
+                          TextSpan(text: widget.model.date)
                         ]),
                   ),
                   SizedBox(height: 10),
@@ -188,7 +218,7 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
                           TextSpan(
                               text: "publisher: ",
                               style: TextStyle(fontWeight: FontWeight.bold)),
-                          TextSpan(text: model.name)
+                          TextSpan(text: widget.model.name)
                         ]),
                   ),
                   SizedBox(height: 10),
@@ -199,7 +229,7 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
                           TextSpan(
                               text: "impact factor: ",
                               style: TextStyle(fontWeight: FontWeight.bold)),
-                          TextSpan(text: model.impactfactor)
+                          TextSpan(text: widget.model.impactfactor)
                         ]),
                   ),
                   SizedBox(height: 10),
@@ -210,7 +240,7 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
                           TextSpan(
                               text: "cheif editor: ",
                               style: TextStyle(fontWeight: FontWeight.bold)),
-                          TextSpan(text: model.chiefeditor)
+                          TextSpan(text: widget.model.chiefeditor)
                         ]),
                   ),
 
@@ -221,7 +251,7 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
                           TextSpan(
                               text: "ISSN: ",
                               style: TextStyle(fontWeight: FontWeight.bold)),
-                          TextSpan(text: model.issn)
+                          TextSpan(text: widget.model.issn)
                         ]),
                   ),
                   SizedBox(height: 10),
@@ -232,7 +262,7 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
                           TextSpan(
                               text: "Description: ",
                               style: TextStyle(fontWeight: FontWeight.bold)),
-                          TextSpan(text: model.description)
+                          TextSpan(text: widget.model.description)
                         ]),
                   ),
                   SizedBox(

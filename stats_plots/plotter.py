@@ -1,3 +1,4 @@
+import csv
 import matplotlib.pyplot as plt
 import datetime
 import random
@@ -173,6 +174,23 @@ def produce_all():
     plot_category_counts()
 
 
+def write_to_csv():
+    issue_dates_2 = []
+    return_dates_2 = []
+    for i_d in issue_dates:
+        issue_dates_2.append(str(i_d)+'T00:00:00')
+    for i_d in return_dates:
+        return_dates_2.append(str(i_d)+'T00:00:00')
+    # print(issue_dates_2)
+    # print(return_dates_2)
+    with open('dates.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["issue_date", "return_date"])
+        for i_d, r_d in zip(issue_dates_2, return_dates_2):
+            writer.writerow([i_d, r_d])
+
+
 if __name__ == "__main__":
     setup()
-    produce_all()
+    # produce_all()
+    write_to_csv()

@@ -31,6 +31,7 @@ class Chatbot {
   Map<String, int> mapper;
   List<String> authorWhiteList;
   List<String> tagWhitelist;
+  dynamic comboFuse;
 
   int context;
 
@@ -53,14 +54,14 @@ class Chatbot {
 
     for (var token in distinctTokens) {
       if (new RegExp(r"^\s*$").hasMatch(token)) continue;
-      if (!whiteList.contains(token)) continue;
+      // if (!whiteList.contains(token)) continue;
       var res = dataFuse.search(token); // item, score relevant to us
 
-      print("==+++++== $token");
-      for (int i = 0; i < 5; i++) {
-        print(
-            "${res[i].item.name} ${res[i].score.toStringAsFixed(3)} ${res[i].item.tag} ${res[i].item.author}");
-      }
+      // print("==+++++== $token");
+      // for (var item in res) {
+      //   print(
+      //       "${item.item.name} ${item.score.toStringAsFixed(3)} ${item.item.tag} ${item.item.author}");
+      // }
       for (var row in res) {
         var item = row.item;
         scores[item.isbn] = (scores[item.isbn] ?? 0) + row.score;
@@ -73,9 +74,9 @@ class Chatbot {
     if (keysDesc.length > maxReturns) {
       keysDesc = keysDesc.sublist(0, maxReturns);
     }
-    for (var key in keysDesc) {
-      print("$key ${scores[key]}");
-    }
+    // for (var key in keysDesc) {
+    //   print("$key ${scores[key]}");
+    // }
 
     return keysDesc;
   }
@@ -132,6 +133,15 @@ class Chatbot {
     return output;
   }
 
+  List<String> stopwordRemoval(List<String> tokens) {
+    List<String> ret = [];
+    for (var token in tokens) {
+      if (tagWhitelist.contains(token) || authorWhiteList.contains(token))
+        ret.add(token);
+    }
+    return ret;
+  }
+
   // context = 0 => greeting, ask for book recommendation
   // context = 1 => book recommendation shown
 
@@ -146,10 +156,38 @@ class Chatbot {
       ];
     }
 
+    List<String> newtokens = stopwordRemoval(tokens);
+    String query = newtokens.join(" ");
+    newtokens.reversed.join(" ");
+
+    var data = comboFuse.search(query);
+
+    print(query);
+
+    for (int i = 0; i < 10; i++) {
+      var item = data[i];
+      print(
+          "${item.item.name} ${item.score.toStringAsFixed(3)} ${item.item.tag} ${item.item.author}");
+    }
+
+    query = newtokens.reversed.join(" ");
+
+    data = comboFuse.search(query);
+
+    print(query);
+
+    for (int i = 0; i < 10; i++) {
+      var item = data[i];
+      print(
+          "${item.item.name} ${item.score.toStringAsFixed(3)} ${item.item.tag} ${item.item.author}");
+    }
+
     List<String> output = [];
     if (hello) output.add("Hey there!");
 
+    print("subjs");
     var detectedSubjects = extractData(subjectsFuse, tokens, tagWhitelist);
+    print("authors");
     var detectedAuthors = extractData(authorsFuse, tokens, authorWhiteList);
     print("Detected stuff");
     print(detectedAuthors);
@@ -232,12 +270,25 @@ class Chatbot {
 
     subjectsFuse = Fuzzy(books,
         options: FuzzyOptions(keys: [
-          WeightedKey(name: "tag", getter: (ChatBook o) => o.tag, weight: 1)
+          WeightedKey(name: "tag", getter: (ChatBook o) => o.tag, weight: 0)
         ]));
     authorsFuse = Fuzzy(books,
         options: FuzzyOptions(keys: [
           WeightedKey(
-              name: "author", getter: (ChatBook o) => o.author, weight: 1)
+              name: "author",
+              getter: (ChatBook o) => o.author.replaceAll(RegExp(r";"), " "),
+              weight: 0)
+        ]));
+    comboFuse = Fuzzy(books,
+        options: FuzzyOptions(keys: [
+          WeightedKey(
+              name: "author",
+              getter: (ChatBook o) => o.author.replaceAll(RegExp(r";"), " "),
+              weight: 0),
+          WeightedKey(
+              name: "tag",
+              getter: (ChatBook o) => o.author.replaceAll(RegExp(r";"), " "),
+              weight: 0)
         ]));
 
     tagWhitelist = tagWhitelist.toSet().toList();

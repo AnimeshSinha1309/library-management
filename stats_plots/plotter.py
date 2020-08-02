@@ -190,7 +190,22 @@ def write_to_csv():
             writer.writerow([i_d, r_d])
 
 
+def fines_to_csv():
+    return_duration = [(return_dates[i] - issue_dates[i]).days
+                       for i in range(num_entries)]
+    fines = []
+    for rd in return_duration:
+        if rd > borrow_time:
+            fines.append(fine_per_day*(rd-borrow_time))
+    arr = np.array(fines)
+    fine_payers = [0 for i in range(max(fines)+1)]
+    for fine in fines:
+        fine_payers[fine] += 1
+    print(fine_payers)
+
+
 if __name__ == "__main__":
     setup()
     # produce_all()
-    write_to_csv()
+    # write_to_csv()
+    fines_to_csv()

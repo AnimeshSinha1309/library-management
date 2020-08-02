@@ -5,6 +5,9 @@ import 'package:libmate/datastore/model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:validators/validators.dart';
 import 'package:barcode_scan/barcode_scan.dart';
+import 'package:printing/printing.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:pdf/pdf.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -51,15 +54,16 @@ class _AutoTaggerPageState extends State<AutoTaggerPage> {
   }
 
   Future<String> _getBarcode() async {
-    try {
-      var res = await http.get(barcodeURL +
-          '/barcode?acc=$_acc&dewey=$_dewey&uid=${widget.user.uid}');
-      _barcodefile = res.body;
-    } catch (e) {
-      _barcodefile = "/static/_barcode.png";
-    }
+    // try {
+    //   var res = await http.get(barcodeURL +
+    //       '/barcode?acc=$_acc&dewey=$_dewey&uid=${widget.user.uid}');
+    //   _barcodefile = res.body;
+    // } catch (e) {
+    //   _barcodefile = "/static/_barcode.png";
+    // }
     setState(() {
-      _barcodefile = _barcodefile;
+      // _barcodefile = barcodeURL + _barcodefile;
+      _barcodefile = 'assets/_barcode.png';
     });
     return "Barcode generated";
   }
@@ -80,18 +84,18 @@ class _AutoTaggerPageState extends State<AutoTaggerPage> {
         map['1'] = 'available';
         // _acc = _isbnController.text + '1';
 
-        // Firestore.instance
-        //     .collection("books")
-        //     .document(_isbnController.text)
-        //     .setData({
-        //   'author': _authorsController.text,
-        //   'description': _descriptionController.text,
-        //   'genre': _genreController.text,
-        //   'image': _image,
-        //   'name': _nameController.text,
-        //   'subject': _subjectController.text,
-        //   'issues': map,
-        // });
+        Firestore.instance
+            .collection("books")
+            .document(_isbnController.text)
+            .setData({
+          'author': _authorsController.text,
+          'description': _descriptionController.text,
+          'genre': _genreController.text,
+          'image': _image,
+          'name': _nameController.text,
+          'subject': _subjectController.text,
+          'issues': map,
+        });
       } else {
         map.addAll(snapShot.data['issues']);
         String field = '1';
@@ -103,22 +107,22 @@ class _AutoTaggerPageState extends State<AutoTaggerPage> {
         map[field] = 'available';
         // _acc = _isbnController.text + field;
 
-        // Firestore.instance
-        //     .collection("books")
-        //     .document(_isbnController.text)
-        //     .updateData({
-        //   'author': _authorsController.text,
-        //   'description': _descriptionController.text,
-        //   'genre': _genreController.text,
-        //   'image': _image,
-        //   'name': _nameController.text,
-        //   'subject': _subjectController.text,
-        //   'issues': map,
-        // });
+        Firestore.instance
+            .collection("books")
+            .document(_isbnController.text)
+            .updateData({
+          'author': _authorsController.text,
+          'description': _descriptionController.text,
+          'genre': _genreController.text,
+          'image': _image,
+          'name': _nameController.text,
+          'subject': _subjectController.text,
+          'issues': map,
+        });
 
       }
       await _getBarcode();
-      // cleanFields();
+      // // cleanFields();
     } catch (e) {
       return "Error sending request!!";
     }
@@ -187,10 +191,27 @@ class _AutoTaggerPageState extends State<AutoTaggerPage> {
     }
   }
 
+  Future _printBarcode() async {
+    final doc = pw.Document();
+    const imageProvider = const AssetImage('assets/_barcode.png');
+    final PdfImage image = await pdfImageFromImageProvider(
+        pdf: doc.document, image: imageProvider);
+
+    doc.addPage(pw.Page(build: (pw.Context context) {
+      return pw.Center(
+        child: pw.Image(image),
+      );
+    }));
+
+    await Printing.layoutPdf(
+        onLayout: (PdfPageFormat format) async => doc.save());
+  }
+
   Widget _barcodeWidget() {
     if (_barcodefile == "") {
       return Container();
     }
+
     return Column(
       children: [
         Row(
@@ -201,12 +222,24 @@ class _AutoTaggerPageState extends State<AutoTaggerPage> {
                   height: 200,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: NetworkImage(barcodeURL + _barcodefile),
+                      image: NetworkImage(_barcodefile),
                       fit: BoxFit.fitHeight,
                     ),
                   )),
             ),
           ],
+        ),
+        SizedBox(height: 10),
+        RaisedButton(
+          color: Colors.pinkAccent,
+          onPressed: () async {
+            showToast(context, "Printing barcode..");
+            await _printBarcode();
+          },
+          child: Text(
+            'Print',
+            style: TextStyle(color: Colors.white),
+          ),
         ),
       ],
     );
@@ -328,7 +361,7 @@ class _AutoTaggerPageState extends State<AutoTaggerPage> {
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),
-                               SizedBox(width: 20),
+                              SizedBox(width: 20),
                               RaisedButton(
                                 color: Colors.pinkAccent,
                                 onPressed: () async {

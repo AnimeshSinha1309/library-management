@@ -111,7 +111,9 @@ class BookModel {
     this.name = json["name"] ?? json["title"];
     this.author = json["author"] ?? json["authors"] ?? "";
     this.genre = json["genre"] ?? json["category"] ?? "";
-    this.isbn = json['isbn'] is String ? json['isbn'] : json['isbn'].toString();
+    // isbn parameter is highest priority, don't remove
+    this.isbn = isbn ??
+        (json['isbn'] is String ? json['isbn'] : json['isbn'].toString());
     this.image = json["image"] ?? defImage;
     var jstheir = json["issues"];
 
@@ -152,6 +154,7 @@ class BorrowBookModel {
       @required this.book,
       this.returnDate}) {
     this.borrowDate = this.borrowDate ?? DateTime.now();
+    assert(this.book.isbn != null);
     assert(this.book != null);
   }
 
@@ -184,6 +187,10 @@ class BorrowBookModel {
       "returnDate": returnDate,
       "book": book.isbn,
     };
+  }
+
+  bool isReturned() {
+    return returnDate != null;
   }
 }
 

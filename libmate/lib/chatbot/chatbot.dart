@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:fuzzy/fuzzy.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:libmate/datastore/model.dart';
+import 'package:libmate/utils/utils.dart';
 
 String readUser() {
   return stdin.readLineSync();
@@ -15,186 +15,103 @@ class ChatBook {
 
   ChatBook({this.name, this.author, this.tag, this.isbn, this.description});
 
-  ChatBook.fromJSON(Map<String, dynamic> data) {
-    name = data["title"];
-    author = data["author"];
+  ChatBook.fromJSON(Map<String, dynamic> json) {
+    this.name = json["name"] ?? json["title"];
+    this.author = json["author"] ?? json["authors"] ?? "";
+    this.isbn = json['isbn'] is String ? json['isbn'] : json['isbn'].toString();
+    this.author = json["author"] ?? (json["authors"] ?? "");
+    this.isbn =
+        (json["isbn"] is String ? json["isbn"] : json["isbn"].toString());
+
+    this.description = json["description"];
   }
 }
 
 class Chatbot {
-  dynamic subjectsFuse;
-  dynamic authorsFuse;
-  List<String> actions = ["recommend", "suggest", "give"];
-  dynamic helloFuse;
-  dynamic actionFuse;
+  List<String> recActions = ["recommend", "suggest", "give", "tell"];
+  List<String> tagPrec = ["on"];
+  List<String> authPrec = ["by"];
+  List<String> descrActions = ["describe", "description"];
+  List<String> issueActions = ["issue"];
+  List<String> greetings = ["hello", "hi", "hey", "yo"];
+
   List<ChatBook> books;
   Map<String, int> mapper;
-  List<String> authorWhiteList;
-  List<String> tagWhitelist;
-  dynamic comboFuse;
 
   int context;
 
   Chatbot() {
-    var greetings = ["hello", "hi", "hey", "yo"];
-    helloFuse = Fuzzy(greetings);
-    actionFuse = Fuzzy(actions);
-
     context = 0;
   }
 
-  List<String> extractTokens(dynamic dataFuse, List<String> strTokens) {
-    var distinctTokens = strTokens.toSet().toList();
-    final threshold = 0.01;
-    List<String> tokens = [];
-
-    for (var token in distinctTokens) {
-      if (new RegExp(r"^\s*$").hasMatch(token)) continue;
-
-      var res = dataFuse.search(token); // item, score relevant to us
-
-      if (res[0].score < threshold) {
-        print("((((");
-        print(res[0].item.name);
-        print(res[0].item.author);
-        print(token);
-        tokens.add(token);
+  List<String> extractStuff(List<String> prec, String userInput) {
+    List<String> author = [];
+    for (var token in prec) {
+      var reg = RegExp(token + r" (\w+)", caseSensitive: false);
+      print("$reg $userInput");
+      var matches = reg.allMatches(userInput);
+      for (var match in matches) {
+        author.add(match.group(1));
       }
     }
-
-    return tokens;
+    return author.toSet().toList();
   }
 
-  List<String> extractData(
-      dynamic dataFuse, List<String> strTokens, List<String> whiteList,
-      {Map<String, double> scores}) {
-    double threshold = 0.01;
-    var distinctTokens = strTokens.toSet().toList();
-    if (scores == null) scores = Map();
-
-    for (var token in distinctTokens) {
-      if (new RegExp(r"^\s*$").hasMatch(token)) continue;
-      var res = dataFuse.search(token); // item, score relevant to us
-
-      for (var row in res) {
-        var item = row.item;
-        scores[item.isbn] = (scores[item.isbn] ?? 0) + row.score;
-      }
-    }
-
-    var keysDesc = scores.keys.toList()
-      ..sort((b, a) => scores[b].compareTo(scores[a]));
-
-    int i = 0;
-    print("==+++++== $strTokens");
-
-    threshold += scores[keysDesc[0]];
-    for (var item in keysDesc) {
-      var book = books[mapper[item]];
-      if (scores[item] > threshold) {
-        print("${scores['item']}");
-        break;
-      }
-
-      if (i < 10)
-        print("${book.name} ${scores[item]} ${book.tag} ${book.author}");
-
-      i++;
-    }
-    keysDesc = keysDesc.sublist(0, i);
-    return keysDesc;
+  List<String> extractAuthor(String userInput) {
+    return extractStuff(authPrec, userInput);
   }
 
-  bool sanityCheck(List<String> userTokens) {
-    final threshold = 0.5;
+  List<String> extractTag(String userInput) {
+    return extractStuff(tagPrec, userInput);
+  }
 
-    for (var token in userTokens) {
-      var res = actionFuse.search(token);
-
-      if (!res.isEmpty && res[0].score < threshold) return true;
+  bool checkExists(List<String> triggers, String str) {
+    for (var trigger in triggers) {
+      if (new RegExp(trigger, caseSensitive: false).hasMatch(str)) return true;
     }
     return false;
   }
 
-  bool helloCheck(List<String> userTokens) {
-    final threshold = 0.5;
-
-    for (var token in userTokens) {
-      var res = helloFuse.search(token);
-
-      if (!res.isEmpty && res[0].score < threshold) return true;
-    }
-    return false;
+  bool sanityCheck(String userInput) {
+    return checkExists(recActions, userInput);
   }
 
-  dynamic readBookData(response) {
-    var usable_body = response.body.replaceAllMapped(RegExp(r"NaN,"), (match) {
-      return "\"\",";
-    });
-    usable_body =
-        usable_body.replaceAllMapped(RegExp(r'(, )?"\w+": NaN'), (match) {
-      return "";
-    });
-
-    return json.decode(usable_body);
+  bool helloCheck(String userInput) {
+    return checkExists(greetings, userInput);
   }
 
   Future<List<ChatBook>> search(
       List<String> author, List<String> subject) async {
-    final mxlen = 3;
-    var res = [];
-    if (subject != null) {
-      res = extractData(subjectsFuse, subject, []);
-    } else {
-      res = extractData(authorsFuse, author, []);
-      if (res.length > mxlen) {
-        res = res.sublist(0, mxlen);
-      }
+    Map<String, String> query = {"maxResults": "3"};
+    if (author != null) query["author"] = author[0];
+    if (subject != null) query["tag"] = subject[0];
+
+    print("Searching");
+    print(author);
+    print(subject);
+    print(query);
+    Uri url = Uri.http("54.83.31.83", "/query", query);
+    final result = await http.get(url); // call api;
+    if (result.statusCode != 200) {
+      print('ERROR: Search did not return a 200 Server response code');
+      return [];
     }
+    // Process the response
+    var response = readBookData(result);
 
-    res = res.map<ChatBook>((x) => books[mapper[x]]).toList();
+    List<ChatBook> res = List();
+    for (var x in response) res.add(ChatBook.fromJSON(x));
 
-    if (subject == null) return res;
-
-    var fuse = Fuzzy(res,
-        options: FuzzyOptions(keys: [
-          WeightedKey(name: 'combo', getter: (x) => x.author, weight: 0)
-        ]));
-    var finalRes;
-    if (author != null)
-      finalRes = extractData(fuse, author, []);
-    else
-      finalRes = res;
-
-    if (finalRes.length > mxlen) {
-      finalRes = finalRes.sublist(0, mxlen);
-    }
-
-    List<ChatBook> output = [];
-    for (var res in finalRes) {
-      output.add(books[mapper[res]]);
-    }
-
-    return output;
-  }
-
-  List<String> stopwordRemoval(List<String> tokens) {
-    List<String> ret = [];
-    for (var token in tokens) {
-      if (tagWhitelist.contains(token) || authorWhiteList.contains(token))
-        ret.add(token);
-    }
-    return ret;
+    return res;
   }
 
   // context = 0 => greeting, ask for book recommendation
   // context = 1 => book recommendation shown
 
   dynamic giveInput(String userInput) async {
-    var tokens = userInput.split(" ");
-    bool hello = helloCheck(tokens);
+    bool hello = helloCheck(userInput);
 
-    if (context == 0 && !sanityCheck(tokens)) {
+    if (context == 0 && !sanityCheck(userInput)) {
       return [
         hello ? "Hi there!" : "Sorry I do not understand that.",
         "Try asking me to 'recommend a maths book' or 'give a good book by michael nielsen about quantum physics'"
@@ -204,10 +121,8 @@ class Chatbot {
     List<String> output = [];
     if (hello) output.add("Hey there!");
 
-    tokens = stopwordRemoval(tokens);
-
-    var detectedSubjects = extractTokens(subjectsFuse, tokens);
-    var detectedAuthors = extractTokens(authorsFuse, tokens);
+    var detectedSubjects = extractTag(userInput);
+    var detectedAuthors = extractAuthor(userInput);
 
     output.add("Recommending books based on");
     String author = "Author: ";
@@ -257,10 +172,7 @@ class Chatbot {
 
     books = List();
     mapper = Map();
-    authorWhiteList = [];
-    tagWhitelist = [];
 
-    var splitReg = RegExp(r";|\s");
     for (int i = 0; i < db['id'].length; i++) {
       var idx = i.toString();
       var author = db['author'][idx];
@@ -270,11 +182,6 @@ class Chatbot {
       var tag = db['tag'][idx];
       if (name == null || author == null || isb == null || desc == null)
         continue;
-      authorWhiteList.addAll(author.split(splitReg));
-      tagWhitelist.addAll(tag.split(splitReg));
-      if (i < 10) {
-        print("$author $name $tag $isb");
-      }
 
       var isbn = isb.toInt().toString();
       var entry = ChatBook(
@@ -282,20 +189,5 @@ class Chatbot {
       mapper[isbn] = books.length;
       books.add(entry);
     }
-
-    subjectsFuse = Fuzzy(books,
-        options: FuzzyOptions(keys: [
-          WeightedKey(name: "tag", getter: (ChatBook o) => o.tag, weight: 0)
-        ]));
-    authorsFuse = Fuzzy(books,
-        options: FuzzyOptions(keys: [
-          WeightedKey(
-              name: "author",
-              getter: (ChatBook o) => o.author.replaceAll(RegExp(r";|,"), " "),
-              weight: 0)
-        ]));
-
-    tagWhitelist = tagWhitelist.toSet().toList();
-    authorWhiteList = authorWhiteList.toSet().toList();
   }
 }

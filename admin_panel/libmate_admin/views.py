@@ -15,6 +15,10 @@ def dashboard(request):
 def journals(request):
     items = []
     # print(Journal.objects.all())
+    cnt = 0
     for obj in Journal.objects.all():
+        cnt += 1
         items.append(obj)
+        if cnt == 50:
+            break
     return render(request, 'journals.html', {'items': items})

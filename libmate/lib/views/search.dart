@@ -69,8 +69,7 @@ class _SearchPageState extends State<SearchPage> {
     // Reject if empty, otherwise start loading
     if (query.isEmpty) return;
 
-    var book = BookModel.fromSaved(searchData[0]);
-    dataCached = <BookModel>[book];
+    dataCached = searchCache(query);
     setState(() {
       searchLoading = true;
     });

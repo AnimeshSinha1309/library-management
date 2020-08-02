@@ -29,6 +29,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.4.2"
+  barcode:
+    dependency: transitive
+    description:
+      name: barcode
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.16.1"
   barcode_scan:
     dependency: "direct main"
     description:
@@ -380,6 +387,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.0"
+  path_parsing:
+    dependency: transitive
+    description:
+      name: path_parsing
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.4"
+  path_provider:
+    dependency: "direct main"
+    description:
+      name: path_provider
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.1"
   path_provider_linux:
     dependency: transitive
     description:
@@ -394,6 +415,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
+  pdf:
+    dependency: transitive
+    description:
+      name: pdf
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.10.0"
   pedantic:
     dependency: transitive
     description:
@@ -443,6 +471,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
+  printing:
+    dependency: "direct main"
+    description:
+      name: printing
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.5.0"
   process:
     dependency: transitive
     description:
@@ -534,6 +569,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.2+7"
+  simple_permissions:
+    dependency: "direct main"
+    description:
+      name: simple_permissions
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.9"
   sky_engine:
     dependency: transitive
     description: flutter

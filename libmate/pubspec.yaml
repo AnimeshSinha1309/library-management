@@ -52,12 +52,14 @@ dependencies:
   intl: ^0.16.1
   validators: ^2.0.0+1
   expandable: ^4.1.4
-
+  printing: any
   shared_preferences: ^0.5.4+8
   shared_preferences_web: ^0.1.0
   flutter_launcher_icons: ^0.7.2
   syncfusion_flutter_calendar: ^18.2.47
 
+  simple_permissions: ^0.1.6
+  path_provider: ^0.4.1
   dash_chat:
 
   webview_flutter: ^0.3.22+1

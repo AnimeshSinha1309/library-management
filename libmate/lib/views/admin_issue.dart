@@ -27,9 +27,11 @@ class IssueBookState extends State<IssueBook> {
           setState(() {
             email = val['email'];
             books = val['issues']
-                .map<BookModel>((e) => BookModel.fromJSON(json: e));
+                .map<BookModel>((e) => BookModel.fromJSON(json: e))
+                .toList();
             returns = val['returns']
-                .map<BorrowBookModel>((e) => BorrowBookModel.fromJSON(e));
+                .map<BorrowBookModel>((e) => BorrowBookModel.fromJSON(e))
+                .toList();
           });
         } catch (err) {
           print(err);
@@ -77,7 +79,8 @@ class IssueBookState extends State<IssueBook> {
                             textTheme: ButtonTextTheme.primary, child: btn),
                         Text("User detected: $email")
                       ] +
-                      bookWidgs),
+                      bookWidgs +
+                      returnWidgs),
             )));
   }
 }

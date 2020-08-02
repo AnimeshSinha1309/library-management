@@ -75,7 +75,7 @@ class _MyAppState extends State<MyApp> {
       loader();
     }
 
-    // logouter();
+    //   logouter();
     loader();
   }
 
@@ -108,12 +108,14 @@ class _MyAppState extends State<MyApp> {
                 '/home': (BuildContext context) => new Home(),
                 '/admin': (BuildContext context) => new AdminPage(),
                 '/libcard': (BuildContext context) => new LibcardPage(),
-                '/appointment': (BuildContext context) => new AppointmentPage(user: model),
+                '/appointment': (BuildContext context) =>
+                    new AppointmentPage(user: model),
                 '/schedule': (BuildContext context) => new SchedulePage(),
                 '/search': (BuildContext context) => new SearchPage(),
                 '/speech': (BuildContext context) => new Speech(),
                 '/contribute': (BuildContext context) => new ContributePage(),
-                '/autoTagger': (BuildContext context) => new AutoTaggerPage(user: model),
+                '/autoTagger': (BuildContext context) =>
+                    new AutoTaggerPage(user: model),
                 '/issue': (BuildContext context) => new IssuePage(),
                 '/goals': (BuildContext context) => new GoalsPage(),
                 '/journal': (BuildContext context) => new JournalPage(),

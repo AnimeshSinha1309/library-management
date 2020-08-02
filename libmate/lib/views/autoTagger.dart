@@ -4,7 +4,7 @@ import 'package:libmate/utils/utils.dart';
 import 'package:libmate/datastore/model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:validators/validators.dart';
-import 'package:barcode_scan/barcode_scan.dart';
+import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:printing/printing.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/pdf.dart';
@@ -180,9 +180,11 @@ class _AutoTaggerPageState extends State<AutoTaggerPage> {
 
   Future _scanBarcode() async {
     try {
-      final isbn = await BarcodeScanner.scan();
-      if (isISBN(isbn)) {
-        _isbnController.text = isbn;
+      final isbn = await scanner.scan();
+      final i = isbn is String ? isbn : isbn.toString();
+
+      if (isISBN(i)) {
+        _isbnController.text = i;
         await _autofill();
       }
     } catch (e) {

@@ -39,7 +39,7 @@ class _RazorPayPageState extends State<RazorPayPage> {
   void openCheckout() async {
     var options = {
       'key': RAZOR_KEY,
-      'amount': widget.amount,
+      'amount': widget.amount * 100, // must be in paisa
       'name': "Andaman College Library",
       'description': 'Fine payment',
       'prefill': {'contact': '', 'email': ''},

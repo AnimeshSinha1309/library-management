@@ -126,13 +126,14 @@ class BorrowBookPage extends StatelessWidget {
 
     var finePayBtn = Center(
       child: ButtonTheme(
+          textTheme: ButtonTextTheme.primary,
           child: RaisedButton.icon(
-        icon: Icon(Icons.launch),
-        label: Text('Pay fine'),
-        onPressed: () {
-          gotoPage(context, RazorPayPage(model.fine));
-        },
-      )),
+            icon: Icon(Icons.launch),
+            label: Text('Pay fine'),
+            onPressed: () {
+              gotoPage(context, RazorPayPage(model.fine));
+            },
+          )),
     );
 
     if (model.fine > 0) children.insert(0, finePayBtn);

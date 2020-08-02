@@ -16,7 +16,7 @@ class SchedulePage extends StatefulWidget {
 class _SchedulePageState extends State<SchedulePage > {
   List<Meeting> meetings;
   JournalModel model;
-  String _docType = 'Periodical-subscription';
+  String _docType = 'periodical_subscriptions';
   List<String> periodicals = [];
   List<DateTime> timestamps = [];
 
@@ -45,7 +45,7 @@ class _SchedulePageState extends State<SchedulePage > {
   Future addDue() async {
     try {
       final snapShot =
-      await Firestore.instance.collection(_docType).getDocuments();
+      await Firestore.instance.collection('periodical_subscriptions').getDocuments();
       if (snapShot == null) return;
       var batch = Firestore.instance.batch();
       for (var document in snapShot.documents) {
@@ -65,18 +65,30 @@ class _SchedulePageState extends State<SchedulePage > {
 
   List<Meeting> _getDataSource() {
     List meetings = <Meeting>[];
+    Firestore.instance.collection('periodical_subscriptions').getDocuments().then((querySnapshot) {
+
+      querySnapshot.documents.forEach((result) {
+        final DateTime today = DateTime.now();
+        var arr = result.data['purchased'].split('-');
+        final DateTime startTime =
+        DateTime(int.parse(arr[0]),int.parse(arr[1]), int.parse(arr[2]), 9, 0, 0);
+        final DateTime endTime = startTime.add(const Duration(hours: 2));
+        print(endTime);
+        meetings.add(Meeting(
+            result.data['name'], startTime, endTime, const Color(0xFF0F8644), false));
+      });
+
+
+    });
     final DateTime today = DateTime.now();
+    print(today);
     final DateTime startTime =
     DateTime(today.year, today.month, today.day, 9, 0, 0);
     final DateTime startTime2 =
     DateTime(today.year, today.month, today.day+5, 9, 0, 0);
     final DateTime endTime = startTime.add(const Duration(hours: 2));
     final DateTime endTime2 = startTime2.add(const Duration(hours: 2));
-    for (var i=0; i < periodicals.length; i++)
-      {
-        meetings.add(Meeting(
-            periodicals[i], startTime, endTime, const Color(0xFF0F8644), false));
-      }
+    print(meetings.length);
     meetings.add(Meeting(
         "Nature vol 8", startTime, endTime, const Color(0xFF0F8644), false));
     meetings.add(Meeting(

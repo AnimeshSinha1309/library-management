@@ -54,7 +54,6 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
     super.initState();
     _docType = 'Periodical-subscription';
 
-
   }
 
 

@@ -93,7 +93,7 @@ class BookModel {
   String subject;
   String genre;
   String description;
-  Map<dynamic, dynamic> issues = Map<String, dynamic>();
+  Map<String, dynamic> issues = Map<String, dynamic>();
 
   BookModel(
       {@required this.name,
@@ -111,11 +111,30 @@ class BookModel {
     this.name = json["name"] ?? json["title"];
     this.author = json["author"] ?? json["authors"] ?? "";
     this.genre = json["genre"] ?? json["category"] ?? "";
-    this.isbn = isbn;
+    this.isbn = json['isbn'] is String ? json['isbn'] : json['isbn'].toString();
     this.image = json["image"] ?? defImage;
-    this.issues = json["issues"] ?? Map();
+    var jstheir = json["issues"];
+
+    if (jstheir != null) {
+      var js = new Map<String, dynamic>.from(jstheir);
+      this.issues = js;
+    } else
+      this.issues = Map<String, dynamic>();
+
     this.subject = json["subject"] ?? json["category"] ?? "";
     this.description = json["description"];
+  }
+
+  toJSON() {
+    return {
+      "name": name,
+      "author": author,
+      "isbn": isbn,
+      "image": image,
+      "subject": subject,
+      "genre": genre,
+      "description": description
+    };
   }
 }
 

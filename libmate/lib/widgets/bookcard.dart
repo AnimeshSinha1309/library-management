@@ -17,22 +17,18 @@ class BookCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String info = (model.genre ?? "");
+    if (model.subject != null && model.subject != model.genre) {
+      info += ", " + model.subject;
+    }
     List<Widget> catInfo = [
       Text(
-        "Genre: " + (model.genre ?? ""),
+        info,
         style: TextStyle(
           color: Colors.white,
         ),
       ),
     ];
-    if (model.subject != null && model.subject != model.genre) {
-      catInfo.add(Text(
-        "Subject: " + (model.subject),
-        style: TextStyle(
-          color: Colors.white,
-        ),
-      ));
-    }
     return Card(
         elevation: 5,
         child: SizedBox(
@@ -62,30 +58,25 @@ class BookCard extends StatelessWidget {
                       },
                       child: Container(
                         padding: EdgeInsets.all(8),
-                        color: Color.fromRGBO(0, 0, 0, 0.9),
+                        color: Color.fromRGBO(0, 0, 0, 1),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                                Flexible(
-                                  child: Text(
-                                    model.name ?? "",
+                                Text(model.name ?? "",
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                     ),
                                     overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
+                                    maxLines: 2),
                                 Spacer(),
-                                Flexible(
-                                    child: Text(
-                                  model.author ?? "",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                )),
+                                Text(model.author ?? "",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2),
                                 Spacer()
                               ] +
                               catInfo,
@@ -106,8 +97,9 @@ class BookPage extends StatelessWidget {
   BookPage({@required this.model});
 
   Future<int> saveReadingList(BookModel model) async {
+    final key = "readingList";
     final prefs = await SharedPreferences.getInstance();
-    List<String> readList = prefs.getStringList("readingList") ?? [];
+    List<String> readList = prefs.getStringList(key) ?? [];
     if (readList.length > maxBooks) return 1;
 
     ToRead rBook = new ToRead();
@@ -126,7 +118,26 @@ class BookPage extends StatelessWidget {
 
     if (!found) readList.add(sBook);
 
-    return (await prefs.setStringList("readingList", readList)) ? 0 : 2;
+    return (await prefs.setStringList(key, readList)) ? 0 : 2;
+  }
+
+  Future<int> saveCart(BookModel model) async {
+    final key = "issuecart";
+    final prefs = await SharedPreferences.getInstance();
+    List<String> issueCart = prefs.getStringList(key) ?? [];
+    if (issueCart.length > maxBooks) return 1;
+
+    String nBookName = model.name;
+    for (var issued in issueCart) {
+      var js = json.decode(issued);
+      if (BookModel.fromJSON(json: js).name == nBookName) {
+        return 3;
+      }
+    }
+
+    issueCart.add(jsonEncode(model.toJSON()));
+
+    return (await prefs.setStringList(key, issueCart)) ? 0 : 2;
   }
 
   List<DataRow> _getAccessionTable() {
@@ -135,6 +146,21 @@ class BookPage extends StatelessWidget {
       rows.add(DataRow(cells: [DataCell(Text(key)), DataCell(Text(value))]));
     });
     return rows;
+  }
+
+  Future<String> addBookCart(BookModel model) async {
+    int res = await saveCart(model);
+    if (res == 0) {
+      return "Added to cart";
+    } else if (res == 1) {
+      return "Exceeded max size of cart";
+    } else if (res == 2) {
+      return "Error saving cart";
+    } else if (res == 3) {
+      return "Book already present";
+    } else {
+      return "Unknown Error";
+    }
   }
 
   Future<String> addBook(BookModel model) async {
@@ -197,8 +223,9 @@ class BookPage extends StatelessWidget {
                                 minWidth: 200,
                                 textTheme: ButtonTextTheme.primary,
                                 child: RaisedButton(
-                                  onPressed: () {
-                                    showToast(context, "NOT IMPLEMENTED");
+                                  onPressed: () async {
+                                    showToast(
+                                        context, await addBookCart(model));
                                   },
                                   child: Text("Issue Book"),
                                 ),

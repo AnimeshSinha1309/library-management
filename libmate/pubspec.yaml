@@ -31,7 +31,6 @@ dependencies:
   #payments
   razorpay_flutter: ^1.2.2
   # Other utilities essential to the app
-  barcode_scan: 1.0.0
 
   # Google and Firebase for DataBase and Auth
   firebase_auth: ^0.16.0
@@ -56,6 +55,8 @@ dependencies:
   flutter_launcher_icons: ^0.7.2
 
   dash_chat:
+  qr_flutter:
+  qrscan:
 
   webview_flutter: ^0.3.22+1
 

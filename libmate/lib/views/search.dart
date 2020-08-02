@@ -23,7 +23,6 @@ class _SearchPageState extends State<SearchPage> {
   stt.SpeechToText _speech;
   bool _isListening = false;
   // String _text = "";
-  double _confidence = 1.0;
 
   @override
   void initState() {
@@ -140,9 +139,6 @@ class _SearchPageState extends State<SearchPage> {
           onResult: (val) => setState(() {
             searchControllers[id].text = val.recognizedWords;
             print(searchControllers[id].text);
-            if (val.hasConfidenceRating && val.confidence > 0) {
-              _confidence = val.confidence;
-            }
           }),
         );
       }

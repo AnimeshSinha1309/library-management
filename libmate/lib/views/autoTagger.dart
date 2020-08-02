@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:libmate/views/drawer.dart';
 import 'package:libmate/utils/utils.dart';
+import 'package:libmate/datastore/model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:validators/validators.dart';
 import 'package:barcode_scan/barcode_scan.dart';
@@ -10,7 +11,13 @@ import 'dart:convert';
 const String defImage =
     "https://www.peterharrington.co.uk/blog/wp-content/uploads/2014/09/shelves.jpg";
 
+const String barcodeURL = "http://127.0.0.1:5000";
+
 class AutoTaggerPage extends StatefulWidget {
+  final UserModel user;
+
+  AutoTaggerPage({this.user});
+
   @override
   _AutoTaggerPageState createState() => _AutoTaggerPageState();
 }
@@ -25,6 +32,9 @@ class _AutoTaggerPageState extends State<AutoTaggerPage> {
   final _subjectController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _genreController = TextEditingController();
+  String _barcodefile = "";
+  String _acc = "323";
+  String _dewey = "232";
   String _image = defImage;
 
   void cleanFields() {
@@ -35,32 +45,53 @@ class _AutoTaggerPageState extends State<AutoTaggerPage> {
     _subjectController.text = "";
     _descriptionController.text = "";
     _genreController.text = "";
+    _barcodefile = "";
+    _acc = "";
+    _dewey = "";
+  }
+
+  Future<String> _getBarcode() async {
+    try {
+      var res = await http.get(barcodeURL +
+          '/barcode?acc=$_acc&dewey=$_dewey&uid=${widget.user.uid}');
+      _barcodefile = res.body;
+    } catch (e) {
+      _barcodefile = "/static/_barcode.png";
+    }
+    setState(() {
+      _barcodefile = _barcodefile;
+    });
+    return "Barcode generated";
   }
 
   Future<String> _sendRequest() async {
     try {
-      if(_nameController.text == "") {
+      if (_nameController.text == "") {
         await _autofill();
       }
+
       final snapShot = await Firestore.instance
           .collection("books")
           .document(_isbnController.text)
           .get();
+
       Map<dynamic, dynamic> map = Map<dynamic, dynamic>();
       if (!snapShot.exists) {
         map['1'] = 'available';
-        Firestore.instance
-            .collection("books")
-            .document(_isbnController.text)
-            .setData({
-          'author': _authorsController.text,
-          'description': _descriptionController.text,
-          'genre': _genreController.text,
-          'image': _image,
-          'name': _nameController.text,
-          'subject': _subjectController.text,
-          'issues': map,
-        });
+        // _acc = _isbnController.text + '1';
+
+        // Firestore.instance
+        //     .collection("books")
+        //     .document(_isbnController.text)
+        //     .setData({
+        //   'author': _authorsController.text,
+        //   'description': _descriptionController.text,
+        //   'genre': _genreController.text,
+        //   'image': _image,
+        //   'name': _nameController.text,
+        //   'subject': _subjectController.text,
+        //   'issues': map,
+        // });
       } else {
         map.addAll(snapShot.data['issues']);
         String field = '1';
@@ -70,26 +101,28 @@ class _AutoTaggerPageState extends State<AutoTaggerPage> {
           }
         });
         map[field] = 'available';
+        // _acc = _isbnController.text + field;
 
-        Firestore.instance
-            .collection("books")
-            .document(_isbnController.text)
-            .updateData({
-          'author': _authorsController.text,
-          'description': _descriptionController.text,
-          'genre': _genreController.text,
-          'image': _image,
-          'name': _nameController.text,
-          'subject': _subjectController.text,
-          'issues': map,
-        });
+        // Firestore.instance
+        //     .collection("books")
+        //     .document(_isbnController.text)
+        //     .updateData({
+        //   'author': _authorsController.text,
+        //   'description': _descriptionController.text,
+        //   'genre': _genreController.text,
+        //   'image': _image,
+        //   'name': _nameController.text,
+        //   'subject': _subjectController.text,
+        //   'issues': map,
+        // });
 
-        cleanFields();
       }
+      await _getBarcode();
+      // cleanFields();
     } catch (e) {
       return "Error sending request!!";
     }
-    return "hello";
+    return "Book added to database!";
   }
 
   Future<String> _autofill() async {
@@ -152,6 +185,31 @@ class _AutoTaggerPageState extends State<AutoTaggerPage> {
     } catch (e) {
       print('Error: $e');
     }
+  }
+
+  Widget _barcodeWidget() {
+    if (_barcodefile == "") {
+      return Container();
+    }
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              flex: 3,
+              child: Container(
+                  height: 200,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage(barcodeURL + _barcodefile),
+                      fit: BoxFit.fitHeight,
+                    ),
+                  )),
+            ),
+          ],
+        ),
+      ],
+    );
   }
 
   @override
@@ -253,7 +311,7 @@ class _AutoTaggerPageState extends State<AutoTaggerPage> {
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),
-                              SizedBox(width: 64),
+                              SizedBox(width: 20),
                               RaisedButton(
                                 color: Colors.pinkAccent,
                                 onPressed: () async {
@@ -270,9 +328,27 @@ class _AutoTaggerPageState extends State<AutoTaggerPage> {
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),
+                               SizedBox(width: 20),
+                              RaisedButton(
+                                color: Colors.pinkAccent,
+                                onPressed: () async {
+                                  // Validate returns true if the form is valid, or false
+                                  // otherwise.
+                                  if (_barcodefile != "") {
+                                    showToast(context, "Generating barcode..");
+                                    final String resp = await _getBarcode();
+                                    showToast(context, resp);
+                                  }
+                                },
+                                child: Text(
+                                  'Barcode',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
                             ],
                           ),
                         ),
+                        _barcodeWidget(),
                       ]),
                 ),
               )),

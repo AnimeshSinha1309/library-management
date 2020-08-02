@@ -93,7 +93,7 @@ class _MyAppState extends State<MyApp> {
                 '/search': (BuildContext context) => new SearchPage(),
                 '/speech': (BuildContext context) => new Speech(),
                 '/contribute': (BuildContext context) => new ContributePage(),
-                '/autoTagger': (BuildContext context) => new AutoTaggerPage(),
+                '/autoTagger': (BuildContext context) => new AutoTaggerPage(user: model),
                 '/issue': (BuildContext context) => new IssuePage(),
                 '/goals': (BuildContext context) => new GoalsPage(),
                 '/journal': (BuildContext context) => new JournalPage(),

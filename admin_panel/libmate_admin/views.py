@@ -13,4 +13,12 @@ def dashboard(request):
 
 
 def journals(request):
+    items = []
+    # print(Journal.objects.all())
+    for obj in Journal.objects:
+        # an_item = dict(date="2012-02-" + i, id=i,
+        #                position="here", status="waiting")
+        # items.append(an_item)
+        print(obj)
+        # pass
     return render(request, 'journals.html', {})

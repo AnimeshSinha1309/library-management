@@ -36,7 +36,7 @@
 				<div
 					class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center"
 				>
-					<a href="#">
+					<a href="/dashboard">
 						<img
 							src="/static/logo.png"
 							style="
@@ -49,17 +49,6 @@
 					</a>
 				</div>
 				<div class="navbar-menu-wrapper d-flex align-items-stretch">
-					<!-- <div class="search-field d-none d-md-block">
-					<form class="d-flex align-items-center h-100" action="#">
-						<div class="input-group">
-							<div class="input-group-prepend bg-transparent">
-								<i class="input-group-text border-0 mdi mdi-magnify"></i>
-							</div>
-							<input type="text" class="form-control bg-transparent border-0"
-								placeholder="Search Schools" />
-						</div>
-					</form>
-				</div> -->
 					<ul class="navbar-nav navbar-nav-right">
 						<li class="nav-item nav-profile dropdown">
 							<a
@@ -134,7 +123,35 @@
 						background-size: contain;
 					"
 				>
-					<ul class="nav">
+					<div
+						class="container shadow mb-5"
+						style="
+							z-index: 100;
+							border-radius: 5px;
+							width: 80%;
+							background-color: rgba(255, 255, 255, 0.8);
+						"
+					>
+						<li class="nav-item sidebar-actions px-4">
+							<span class="nav-link">
+								<div class="mt-2">
+									<ul class="gradient-bullet-list mt-2">
+										<a class="nav-link" href="/dashboard">
+											<li>Dashboard</li>
+										</a>
+										<a class="nav-link" href="/books">
+											<li>Books</li>
+										</a>
+										<a class="nav-link" href="/journals">
+											<li>Journals</li>
+										</a>
+									</ul>
+								</div>
+							</span>
+						</li>
+					</div>
+
+					<!-- <ul class="nav">
 						<li class="nav-item nav-profile">
 							<a href="/dashboard" class="nav-link">
 								<div class="nav-profile-image">
@@ -146,6 +163,22 @@
 								>
 									<span class="font-weight-bold mb-2"
 										>Dashboard
+									</span>
+									<span
+										class="text-secondary text-small"
+									></span>
+								</div>
+							</a>
+							<a href="/books" class="nav-link">
+								<div class="nav-profile-image">
+									<img src="/static/male.png" alt="Profile" />
+									<span class="login-status online"></span>
+								</div>
+								<div
+									class="nav-profile-text d-flex flex-column"
+								>
+									<span class="font-weight-bold mb-2"
+										>Books
 									</span>
 									<span
 										class="text-secondary text-small"
@@ -169,7 +202,7 @@
 								</div>
 							</a>
 						</li>
-					</ul>
+					</ul> -->
 				</nav>
 				<div id="main-container">
 					{% block content %} {% endblock %}

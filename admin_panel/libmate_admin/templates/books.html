@@ -1,261 +1,98 @@
 {% extends 'base.html' %} {% block title %}Home{% endblock %} {% block content%}
-
-<script>
-    window.onload = function () {
-        CanvasJS.addColorSet("shades", [
-            //colorSet Array
-            "#39B2D7",
-            "#9414D0",
-            "#E11BBF",
-            "#E11B74",
-            "#ED2121",
-        ]);
-        var j = 1;
-        const x = 0,
-            y = 0;
-        //converting string into json arr and making tupple to array by replacing
-        const dataTwo = JSON.parse(
-            "{{ datat | safe }}"
-                .replace(/\(/g, "[")
-                .replace(/\)/g, "]")
-                .replace(/'/g, '"')
-        );
-        dps = [];
-        for (var i = 0; i < dataTwo.length; i++) {
-            dps.push({
-                label: dataTwo[i][1],
-                y: dataTwo[i][0],
-                legendText: dataTwo[i][1] + ":" + dataTwo[i][0],
-            });
-        }
-        console.log(dps);
-        var chart = new CanvasJS.Chart("chartContainer", {
-            exportEnabled: true,
-            animationEnabled: true,
-            title: {
-                text: "Test Success Rate Statistics",
-                fontFamily: "tahoma",
-            },
-            dataPointWidth: 15,
-            axisX: {
-                title: "Months",
-                gridThickness: 0,
-            },
-            axisY: {
-                title: "Number of Students",
-                gridThickness: 0,
-                // titleFontColor: "#4F81BC",
-                // lineColor: "#4F81BC",
-                // labelFontColor: "#4F81BC",
-                // tickColor: "#4F81BC"
-            },
-            // axisY2: {
-            //   title: "Clutch - Units",
-            //   titleFontColor: "#C0504E",
-            //   lineColor: "#C0504E",
-            //   labelFontColor: "#C0504E",
-            //   tickColor: "#C0504E"
-            // },
-            // toolTip: {
-            //   shared: true
-            // },
-            legend: {
-                cursor: "pointer",
-                itemclick: toggleDataSeries,
-            },
-            data: [
-                {
-                    type: "column",
-                    fillColor: "rgba(158, 224, 244 ,0.5)",
-                    name: "Male",
-                    showInLegend: true,
-                    // yValueFormatString: "#,##0.# Units",
-                    dataPoints: [
-                        { label: "Jan", y: parseInt("{{ data.1.0 | safe}}") },
-                        { label: "Feb", y: parseInt("{{ data.2.0 | safe}}") },
-                        { label: "March", y: parseInt("{{ data.3.0 | safe}}") },
-                        { label: "April", y: parseInt("{{ data.4.0 | safe}}") },
-                        { label: "May", y: parseInt("{{ data.5.0 | safe}}") },
-                        { label: "June", y: parseInt("{{ data.6.0 | safe}}") },
-                        { label: "July", y: parseInt("{{ data.7.0 | safe}}") },
-                        { label: "Aug", y: parseInt("{{ data.8.0 | safe}}") },
-                        { label: "Sep", y: parseInt("{{ data.9.0 | safe}}") },
-                        { label: "Oct", y: parseInt("{{ data.10.0 | safe}}") },
-                        { label: "Nov", y: parseInt("{{ data.11.0 | safe}}") },
-                        { label: "Dec", y: parseInt("{{ data.12.0 | safe}}") },
-                    ],
-                },
-                {
-                    type: "column",
-                    color: "#ffa6e4",
-                    name: "Female",
-                    showInLegend: true,
-                    // yValueFormatString: "#,##0.# Units",
-                    dataPoints: [
-                        { label: "Jan", y: parseInt("{{ data.1.1 | safe}}") },
-                        { label: "Feb", y: parseInt("{{ data.2.1 | safe}}") },
-                        { label: "March", y: parseInt("{{ data.3.1 | safe}}") },
-                        { label: "April", y: parseInt("{{ data.4.1 | safe}}") },
-                        { label: "May", y: parseInt("{{ data.5.1 | safe}}") },
-                        { label: "June", y: parseInt("{{ data.6.1 | safe}}") },
-                        { label: "July", y: parseInt("{{ data.7.1 | safe}}") },
-                        { label: "Aug", y: parseInt("{{ data.8.1 | safe}}") },
-                        { label: "Sep", y: parseInt("{{ data.9.1 | safe}}") },
-                        { label: "Oct", y: parseInt("{{ data.10.1 | safe}}") },
-                        { label: "Nov", y: parseInt("{{ data.11.1 | safe}}") },
-                        { label: "Dec", y: parseInt("{{ data.12.1 | safe}}") },
-                    ],
-                },
-                {
-                    type: "column",
-                    color: "#59C3E3",
-                    name: "Others",
-                    showInLegend: true,
-                    // yValueFormatString: "#,##0.# Units",
-                    dataPoints: [
-                        { label: "Jan", y: parseInt("{{ data.1.2 | safe}}") },
-                        { label: "Feb", y: parseInt("{{ data.2.2 | safe}}") },
-                        { label: "March", y: parseInt("{{ data.3.2 | safe}}") },
-                        { label: "April", y: parseInt("{{ data.4.2 | safe}}") },
-                        { label: "May", y: parseInt("{{ data.5.2 | safe}}") },
-                        { label: "June", y: parseInt("{{ data.6.2 | safe}}") },
-                        { label: "July", y: parseInt("{{ data.7.2 | safe}}") },
-                        { label: "Aug", y: parseInt("{{ data.8.2 | safe}}") },
-                        { label: "Sep", y: parseInt("{{ data.9.2 | safe}}") },
-                        { label: "Oct", y: parseInt("{{ data.10.2 | safe}}") },
-                        { label: "Nov", y: parseInt("{{ data.11.2 | safe}}") },
-                        { label: "Dec", y: parseInt("{{ data.12.2 | safe}}") },
-                    ],
-                },
-            ],
-        });
-        chart.render();
-        var i = 0;
-
-        var chart2 = new CanvasJS.Chart("chartContainer2", {
-            colorSet: "shades",
-            title: {
-                text: "Number of Students",
-                fontFamily: "tahoma",
-            },
-            legend: {
-                cursor: "pointer",
-            },
-            data: [
-                {
-                    type: "doughnut",
-                    indexLabelPlacement: "inside",
-                    indexLabel: " ",
-                    startAngle: 30,
-                    innerRadius: 88,
-                    showInLegend: true,
-                    // indexLabelFontSize: 17,
-
-                    toolTipContent: "<b>{label}:</b> {y} (#percent%)",
-                    dataPoints: dps,
-                },
-            ],
-        });
-        chart2.render();
-
-        function toggleDataSeries(e) {
-            if (
-                typeof e.dataSeries.visible === "undefined" ||
-                e.dataSeries.visible
-            ) {
-                e.dataSeries.visible = false;
-            } else {
-                e.dataSeries.visible = true;
-            }
-            e.chart.render();
-        }
-    };
-</script>
 <style>
-    table {
-        width: 100%;
-    }
+	table {
+		width: 100%;
+	}
 
-    table,
-    th,
-    td {
-        border: 1px solid black;
-        border-collapse: collapse;
-    }
+	table,
+	th,
+	td {
+		border: 1px solid black;
+		border-collapse: collapse;
+	}
 
-    th,
-    td {
-        padding: 15px;
-        text-align: left;
-    }
+	th,
+	td {
+		padding: 15px;
+		text-align: left;
+	}
 
-    #t01 tr:nth-child(even) {
-        background-color: #eee;
-    }
+	#t01 tr:nth-child(even) {
+		background-color: #eee;
+	}
 
-    #t01 tr:nth-child(odd) {
-        background-color: #fff;
-    }
+	#t01 tr:nth-child(odd) {
+		background-color: #fff;
+	}
 
-    #t01 th {
-        background-color: black;
-        color: white;
-    }
+	#t01 th {
+		background-color: black;
+		color: white;
+	}
 </style>
-<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
 <div class="main-panel">
-    <div class="content-wrapper">
-        <div class="page-header">
-            <h3 class="page-title">
-                <span class="page-title-icon bg-gradient-primary text-white mr-2">
-                    <i class="mdi mdi-home"></i>
-                </span>
-                Books
-            </h3>
-        </div>
+	<div class="content-wrapper">
+		<div class="page-header">
+			<h3 class="page-title">
+				<span
+					class="page-title-icon bg-gradient-primary text-white mr-2"
+				>
+					<i class="mdi mdi-home"></i>
+				</span>
+				Books
+			</h3>
+		</div>
 
-        <div class="row">
-            <div class="col-md-12 grid-margin stretch-card">
-                <div class="card" style="height: 1000px;overflow-x:auto;overflow-y:auto;">
-                    <div class="card-body">
-                        <div class="clearfix" id="chartContainer">
-                            <table id="t01">
-                                <tr>
-                                    <th>Image</th>
-                                    <th>Title</th>
-                                    <th>Author</th>
-                                    <!-- <th>Description</th> -->
-                                    <th>Rating</th>
-                                    <th>ISBN</th>
-                                    <th>Category</th>
-                                    <th>Tag</th>
-                                    <th>Gbooks Link</th>
-                                    <th>Volume Link</th>
-                                    <th>Info Link</th>
-                                </tr>
-                                {% for item in items %}
-                                <TR>
-                                    <TD><img src="{{item.image}}" alt=""></TD>
-                                    <TD>{{item.title}}</TD>
-                                    <TD>{{item.author}}</TD>
-                                    <!-- <TD>{{item.description}}</TD> -->
-                                    <TD>{{item.rating}}</TD>
-                                    <TD>{{item.isbn}}</TD>
-                                    <TD>{{item.category}}</TD>
-                                    <TD>{{item.tag}}</TD>
-                                    <TD><a href="{{item.gbooks_link}}">Link</a>
-                                    </TD>
-                                    <TD><a href="{{item.volume_link}}">Link</a></TD>
-                                    <TD><a href="{{item.info_link}}">Link</a></TD>
-                                </TR>
-                                {% endfor %}
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+		<div class="row">
+			<div class="col-md-12 grid-margin stretch-card">
+				<div
+					class="card"
+					style="height: 1000px; overflow-x: auto; overflow-y: auto;"
+				>
+					<div class="card-body">
+						<div class="clearfix" id="chartContainer">
+							<table id="t01">
+								<tr>
+									<th>Image</th>
+									<th>Title</th>
+									<th>Author</th>
+									<!-- <th>Description</th> -->
+									<th>Rating</th>
+									<th>ISBN</th>
+									<th>Category</th>
+									<th>Tag</th>
+									<th>Gbooks Link</th>
+									<th>Volume Link</th>
+									<th>Info Link</th>
+								</tr>
+								{% for item in items %}
+								<tr>
+									<td><img src="{{item.image}}" alt="" /></td>
+									<td>{{item.title}}</td>
+									<td>{{item.author}}</td>
+									<!-- <TD>{{item.description}}</TD> -->
+									<td>{{item.rating}}</td>
+									<td>{{item.isbn}}</td>
+									<td>{{item.category}}</td>
+									<td>{{item.tag}}</td>
+									<td>
+										<a href="{{item.gbooks_link}}">Link</a>
+									</td>
+									<td>
+										<a href="{{item.volume_link}}">Link</a>
+									</td>
+									<td>
+										<a href="{{item.info_link}}">Link</a>
+									</td>
+								</tr>
+								{% endfor %}
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 {% endblock %}

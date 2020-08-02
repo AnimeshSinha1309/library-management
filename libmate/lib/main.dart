@@ -4,6 +4,7 @@ import 'package:libmate/datastore/state.dart';
 import 'package:libmate/scache/data.dart';
 import 'package:libmate/views/about.dart';
 import 'package:libmate/views/accounts.dart';
+import 'package:libmate/views/appointment.dart';
 import 'package:libmate/views/admin.dart';
 import 'package:libmate/views/contribute.dart';
 import 'package:libmate/views/goals.dart';
@@ -20,6 +21,9 @@ import 'package:libmate/views/speech.dart';
 import 'package:provider/provider.dart';
 import 'package:libmate/views/guide.dart';
 import 'package:libmate/views/journals.dart';
+import 'package:libmate/views/schedule.dart';
+import 'package:libmate/views/appointment.dart';
+import 'package:libmate/views/ticket.dart';
 import 'package:libmate/widgets/cart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -103,6 +107,8 @@ class _MyAppState extends State<MyApp> {
                 '/home': (BuildContext context) => new Home(),
                 '/admin': (BuildContext context) => new AdminPage(),
                 '/libcard': (BuildContext context) => new LibcardPage(),
+                '/appointment': (BuildContext context) => new AppointmentPage(user: model),
+                '/schedule': (BuildContext context) => new SchedulePage(),
                 '/search': (BuildContext context) => new SearchPage(),
                 '/speech': (BuildContext context) => new Speech(),
                 '/contribute': (BuildContext context) => new ContributePage(),

@@ -97,13 +97,13 @@ class BookModel {
 
   BookModel(
       {@required this.name,
-      this.author = "",
-      this.isbn = "",
-      this.image =
-          "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg",
-      this.subject = "",
-      this.genre = "",
-      this.description});
+        this.author = "",
+        this.isbn = "",
+        this.image =
+        "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg",
+        this.subject = "",
+        this.genre = "",
+        this.description});
 
   Map<String, BookModelBorrowState> copies;
   bool isSp;
@@ -112,6 +112,9 @@ class BookModel {
   BookModel.fromJSON(
       {Map<String, dynamic> json, String isbn, this.isSp = false}) {
     this.name = json["name"] ?? json["title"];
+    this.author = json["author"] ?? json["authors"] ?? "";
+    this.genre = json["genre"] ?? json["category"] ?? "";
+    this.isbn = json['isbn'] is String ? json['isbn'] : json['isbn'].toString();
     this.author = json["author"] ?? (json["authors"] ?? "");
     this.genre = json["genre"] ?? (json["category"] ?? "");
     // isbn parameter is highest priority, don't remove
@@ -138,6 +141,7 @@ class BookModel {
     this.subject = json["category"];
     this.description = json["description"];
   }
+
   toJSON() {
     return {
       "name": name,
@@ -161,9 +165,9 @@ class BorrowBookModel {
 
   BorrowBookModel(
       {@required this.accessionNumber,
-      this.borrowDate,
-      @required this.book,
-      this.returnDate}) {
+        this.borrowDate,
+        @required this.book,
+        this.returnDate}) {
     this.borrowDate = this.borrowDate ?? DateTime.now();
     assert(this.book.isbn != null);
     assert(this.book != null);

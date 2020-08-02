@@ -107,14 +107,25 @@ class BookModel {
 
   Map<String, BookModelBorrowState> copies;
   int issueCount, starCount;
+
   BookModel.fromJSON({Map<String, dynamic> json, String isbn}) {
     this.name = json["name"] ?? json["title"];
-    this.author = json["author"] ?? json["authors"] ?? "";
-    this.genre = json["genre"] ?? json["category"] ?? "";
-    this.isbn = isbn;
+    this.author = json["author"] ?? (json["authors"] ?? "");
+    this.genre = json["genre"] ?? (json["category"] ?? "");
+    this.isbn = isbn ??
+        (json["isbn"] is String ? json["isbn"] : json["isbn"].toString());
     this.image = json["image"] ?? defImage;
     this.issues = json["issues"] ?? Map();
     this.subject = json["subject"] ?? json["category"] ?? "";
+    this.description = json["description"];
+  }
+
+  BookModel.fromSaved(Map json) {
+    this.name = json["name"];
+    this.author = json["author"];
+    this.image = json["image"];
+    this.issues = Map();
+    this.subject = json["category"];
     this.description = json["description"];
   }
 }

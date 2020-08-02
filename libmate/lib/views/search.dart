@@ -1,10 +1,10 @@
-import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:libmate/datastore/model.dart';
+import 'package:libmate/scache/data.dart';
 import 'package:libmate/utils/utils.dart';
 import 'package:libmate/views/drawer.dart';
 import 'package:libmate/widgets/bookcard.dart';
@@ -22,6 +22,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   stt.SpeechToText _speech;
   bool _isListening = false;
+
   // String _text = "";
   double _confidence = 1.0;
 
@@ -59,6 +60,7 @@ class _SearchPageState extends State<SearchPage> {
   ///  as book cards
 
   List<BookModel> data;
+  List<BookModel> dataCached;
   bool searchLoading = false;
 
   void scheduleSearch() async {
@@ -69,6 +71,9 @@ class _SearchPageState extends State<SearchPage> {
 
     // Reject if empty, otherwise start loading
     if (query.isEmpty) return;
+
+    var book = BookModel.fromSaved(searchData[0]);
+    dataCached = <BookModel>[book];
     setState(() {
       searchLoading = true;
     });
@@ -95,13 +100,19 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget buildResultsPane() {
     if (searchLoading) {
-      return SliverToBoxAdapter(
-          child: Center(
-              child: SizedBox(
-        child: CircularProgressIndicator(),
-        height: 50.0,
-        width: 50.0,
-      )));
+      return SliverGrid(
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 200.0,
+          mainAxisSpacing: 10.0,
+          crossAxisSpacing: 10.0,
+          childAspectRatio: 0.75,
+        ),
+        delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) =>
+              BookCard(model: dataCached[index]),
+          childCount: dataCached == null ? 0 : dataCached.length,
+        ),
+      );
     } else if (data == null || data.length == 0) {
       return SliverToBoxAdapter(child: Text("No items in data view"));
     } else {

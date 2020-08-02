@@ -111,7 +111,7 @@ class BookModel {
     this.name = json["name"] ?? json["title"];
     this.author = json["author"] ?? json["authors"] ?? "";
     this.genre = json["genre"] ?? json["category"] ?? "";
-    this.isbn = isbn ?? json['isbn'];
+    this.isbn = json['isbn'] is String ? json['isbn'] : json['isbn'].toString();
     this.image = json["image"] ?? defImage;
     var jstheir = json["issues"];
 

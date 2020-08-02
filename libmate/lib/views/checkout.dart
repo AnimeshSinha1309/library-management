@@ -7,6 +7,11 @@ import 'package:libmate/datastore/state.dart';
 import 'package:libmate/datastore/model.dart';
 import 'dart:convert';
 
+void printWrapped(String text) {
+  final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
+  pattern.allMatches(text).forEach((match) => print(match.group(0)));
+}
+
 class Checkout extends StatefulWidget {
   String qrdata;
   String uid;
@@ -22,6 +27,7 @@ class Checkout extends StatefulWidget {
       datalist.add(book.toJSON());
     }
     qrdata = jsonEncode(datalist);
+    // printWrapped(qrdata);
   }
   @override
   createState() => CheckoutState();

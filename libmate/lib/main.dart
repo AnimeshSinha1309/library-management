@@ -1,23 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:libmate/datastore/model.dart';
 import 'package:libmate/datastore/state.dart';
+import 'package:libmate/scache/data.dart';
 import 'package:libmate/views/about.dart';
 import 'package:libmate/views/accounts.dart';
+import 'package:libmate/views/appointment.dart';
+import 'package:libmate/views/admin.dart';
 import 'package:libmate/views/contribute.dart';
 import 'package:libmate/views/autoTagger.dart';
 import 'package:libmate/views/goals.dart';
+import 'package:libmate/views/guide.dart';
 import 'package:libmate/views/home.dart';
-import 'package:libmate/views/admin.dart';
 import 'package:libmate/views/issue.dart';
+import 'package:libmate/views/journals.dart';
 import 'package:libmate/views/libcard.dart';
 import 'package:libmate/views/request.dart';
 import 'package:libmate/views/requested.dart';
 import 'package:libmate/views/search.dart';
+import 'package:libmate/views/admin_issue.dart';
 import 'package:libmate/views/speech.dart';
-import 'package:fuzzy/fuzzy.dart';
 import 'package:provider/provider.dart';
 import 'package:libmate/views/guide.dart';
 import 'package:libmate/views/journals.dart';
+import 'package:libmate/views/schedule.dart';
+import 'package:libmate/views/appointment.dart';
+import 'package:libmate/views/ticket.dart';
+import 'package:libmate/widgets/cart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(MyApp());
 
@@ -48,16 +57,25 @@ class _MyAppState extends State<MyApp> {
     loadingComps = 0;
     loadState(callback);
     loadBooks(callback);
+    loadSCache();
   }
 
   void loadState(Function callback) {
     void loader() async {
       model = await UserModel.fromSharedPrefs();
-      loadUser(model);
+      await loadUser(model);
       callback();
     }
 
-    // to avoid clogging up initStae
+    // to avoid clogging up initState
+    void logouter() async {
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setBool("logged_in", false);
+      prefs.remove("issuecart");
+      loader();
+    }
+
+    // logouter();
     loader();
   }
 
@@ -90,6 +108,8 @@ class _MyAppState extends State<MyApp> {
                 '/home': (BuildContext context) => new Home(),
                 '/admin': (BuildContext context) => new AdminPage(),
                 '/libcard': (BuildContext context) => new LibcardPage(),
+                '/appointment': (BuildContext context) => new AppointmentPage(user: model),
+                '/schedule': (BuildContext context) => new SchedulePage(),
                 '/search': (BuildContext context) => new SearchPage(),
                 '/speech': (BuildContext context) => new Speech(),
                 '/contribute': (BuildContext context) => new ContributePage(),
@@ -103,6 +123,8 @@ class _MyAppState extends State<MyApp> {
                 '/accounts': (BuildContext context) => new AccountsPage(),
                 '/guide': (BuildContext context) =>
                     new GuidePage(currentUser: usermodel),
+                '/cart': (BuildContext context) => new BookCartUI(usermodel),
+                '/admin_scan': (BuildContext context) => IssueBook()
               });
         }));
   }

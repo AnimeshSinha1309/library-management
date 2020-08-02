@@ -163,7 +163,7 @@ class _TimePageState extends State<TimePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => TicketPage(slot: slot, tableNo: tableNo,type: type)),
+                      builder: (context) => TicketPage(slot, tableNo,type)),
                 );
               }
             } else {

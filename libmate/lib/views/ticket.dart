@@ -3,14 +3,34 @@ import 'package:libmate/datastore/model.dart';
 import 'package:libmate/views/drawer.dart';
 import 'package:libmate/widgets/issueitem.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:libmate/datastore/state.dart';
+import 'dart:convert';
 
-
+void printWrapped(String text) {
+  final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
+  pattern.allMatches(text).forEach((match) => print(match.group(0)));
+}
 class TicketPage extends StatefulWidget {
   final String slot;
   final int tableNo;
   final int type;
+  String qrdata;
+  String uid;
+  UserModel user;
 
-  TicketPage({this.slot, this.tableNo,this.type});
+  TicketPage(this.slot, this.tableNo,this.type){
+
+      uid = user.email;
+      List<dynamic> datalist = [];
+      datalist.add(user.email);
+
+      datalist.add({'slot': slot});
+      qrdata = jsonEncode(datalist);
+      qrdata = jsonEncode(datalist);
+
+      // printWrapped(qrdata);
+  }
 
   @override
   _TicketPageState createState() => _TicketPageState();
@@ -84,6 +104,10 @@ class _TicketPageState extends State<TicketPage> {
                                 color: Colors.grey,
                                 letterSpacing: 2.0,
                               )),
+
+                        QrImage(data: widget.qrdata, version: QrVersions.auto, size: 200.0),
+                        Text("Show this QR code to the library admin"),
+                        Text("Not received confirmation from admin yet")
 
 
                         ]

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:fuzzy/fuzzy.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -10,6 +11,9 @@ String readUser() {
 
 class ChatBook {
   String name, author;
+  String tag, isbn, description;
+
+  ChatBook({this.name, this.author, this.tag, this.isbn, this.description});
 
   ChatBook.fromJSON(Map<String, dynamic> data) {
     name = data["title"];
@@ -23,27 +27,43 @@ class Chatbot {
   List<String> actions = ["recommend", "suggest", "give"];
   dynamic helloFuse;
   dynamic actionFuse;
+  List<ChatBook> books;
+  Map<String, int> mapper;
+  List<String> authorWhiteList;
+  List<String> tagWhitelist;
 
-  Chatbot({subjects, authors}) {
-    subjectsFuse = Fuzzy(subjects);
-    authorsFuse = Fuzzy(authors);
+  int context;
 
+  Chatbot() {
     var greetings = ["hello", "hi", "hey", "yo"];
     helloFuse = Fuzzy(greetings);
     actionFuse = Fuzzy(actions);
+
+    context = 0;
   }
 
-  List<String> extractData(dynamic dataFuse, List<String> strTokens) {
+  List<String> extractData(
+      dynamic dataFuse, List<String> strTokens, List<String> whiteList,
+      {Map<String, double> scores}) {
     final maxReturns = 3;
+    final scoreThresh = 0.7;
 
     var distinctTokens = strTokens.toSet().toList();
-    Map<String, double> scores = Map();
+    if (scores == null) scores = Map();
 
     for (var token in distinctTokens) {
+      if (new RegExp(r"^\s*$").hasMatch(token)) continue;
+      if (!whiteList.contains(token)) continue;
       var res = dataFuse.search(token); // item, score relevant to us
+
+      print("==+++++== $token");
+      for (int i = 0; i < 5; i++) {
+        print(
+            "${res[i].item.name} ${res[i].score.toStringAsFixed(3)} ${res[i].item.tag} ${res[i].item.author}");
+      }
       for (var row in res) {
         var item = row.item;
-        scores[item] = (scores[item] ?? 0) + row.score;
+        scores[item.isbn] = (scores[item.isbn] ?? 0) + row.score;
       }
     }
 
@@ -53,6 +73,10 @@ class Chatbot {
     if (keysDesc.length > maxReturns) {
       keysDesc = keysDesc.sublist(0, maxReturns);
     }
+    for (var key in keysDesc) {
+      print("$key ${scores[key]}");
+    }
+
     return keysDesc;
   }
 
@@ -90,56 +114,32 @@ class Chatbot {
     return json.decode(usable_body);
   }
 
-  dynamic makeOneQuery(Map<String, String> query) async {
-    query["maxResults"] = "3";
-    Uri url = Uri.http("54.83.31.83", "/query", query);
-    final result = await http.get(url); // call api;
-    if (result.statusCode != 200) {
-      print('ERROR: Search did not return a 200 Server response code');
-      return;
-    }
-    return readBookData(result);
-  }
-
-  dynamic getData(String key, List<String> queries) async {
-    List<dynamic> res = List();
-    print("Queries");
-    print(queries);
-
-    for (var query in queries) {
-      Map<String, String> obj = Map();
-      obj[key] = query;
-
-      var val = await makeOneQuery(obj);
-      res.addAll(val);
-    }
-    return res;
-  }
-
   Future<List<ChatBook>> search(
-      List<String> authors, List<String> subjects) async {
-    List<dynamic> finalRes = List();
+      List<ChatBook> authors, List<ChatBook> subjects) async {
+    var authorNames = authors.map<String>((x) => x.author).toList();
+    var tagNames = subjects.map<String>((x) => x.tag).toList();
 
-    var res1 = await getData("author", authors);
-    var res2 = await getData("tag", subjects);
-    finalRes.addAll(res1);
-    finalRes.addAll(res2);
-
-    finalRes = finalRes.toSet().toList();
+    Map<String, double> scores;
+    extractData(authorsFuse, authorNames, authorWhiteList, scores: scores);
+    var finalRes =
+        extractData(subjectsFuse, tagNames, tagWhitelist, scores: scores);
 
     List<ChatBook> output = [];
     for (var res in finalRes) {
-      output.add(ChatBook.fromJSON(res));
+      output.add(books[mapper[res]]);
     }
 
     return output;
   }
 
+  // context = 0 => greeting, ask for book recommendation
+  // context = 1 => book recommendation shown
+
   dynamic giveInput(String userInput) async {
     var tokens = userInput.split(" ");
     bool hello = helloCheck(tokens);
 
-    if (!sanityCheck(tokens)) {
+    if (context == 0 && !sanityCheck(tokens)) {
       return [
         hello ? "Hi there!" : "Sorry I do not understand that.",
         "Try asking me to 'recommend a maths book' or 'give a good book by michael nielsen about quantum physics'"
@@ -149,8 +149,8 @@ class Chatbot {
     List<String> output = [];
     if (hello) output.add("Hey there!");
 
-    var detectedSubjects = extractData(subjectsFuse, tokens);
-    var detectedAuthors = extractData(authorsFuse, tokens);
+    var detectedSubjects = extractData(subjectsFuse, tokens, tagWhitelist);
+    var detectedAuthors = extractData(authorsFuse, tokens, authorWhiteList);
     print("Detected stuff");
     print(detectedAuthors);
     print(detectedSubjects);
@@ -159,14 +159,26 @@ class Chatbot {
     String author = "Authors: ";
     String subjects = "Subjects: ";
 
-    for (var a in detectedAuthors) author += a;
-    for (var s in detectedSubjects) subjects += s;
+    int i = 0;
+    for (var a in detectedAuthors) {
+      if (i > 0) author += ", ";
+      author += books[mapper[a]].author;
+      i++;
+    }
+    i = 0;
+    for (var s in detectedSubjects) {
+      if (i > 0) subjects += ", ";
+      subjects += books[mapper[s]].tag;
+      i++;
+    }
     if (detectedAuthors.length == 0) author += "none";
     if (detectedSubjects.length == 0) subjects += "none";
 
     output.add(author + "; " + subjects);
 
-    var result = await search(detectedAuthors, detectedSubjects);
+    var detA = detectedAuthors.map<ChatBook>((x) => books[mapper[x]]).toList();
+    var detS = detectedSubjects.map<ChatBook>((x) => books[mapper[x]]).toList();
+    var result = await search(detA, detS);
 
     if (result.length == 0) {
       output.add("Sorry, I could not find any books related to that criteria");
@@ -184,5 +196,51 @@ class Chatbot {
       "Welcome to the chatbot",
       "You can ask me to recommend/suggest/give you a book"
     ];
+  }
+
+  Future<void> loadDb() async {
+    final input = await rootBundle.loadString('assets/db.json');
+    dynamic db = jsonDecode(input);
+
+    books = List();
+    mapper = Map();
+    authorWhiteList = [];
+    tagWhitelist = [];
+
+    var splitReg = RegExp(r";|\s");
+    for (int i = 0; i < db['id'].length; i++) {
+      var idx = i.toString();
+      var author = db['author'][idx];
+      var name = db['title'][idx];
+      var isb = db['isbn'][idx];
+      var desc = db['description'][idx];
+      var tag = db['tag'][idx];
+      if (name == null || author == null || isb == null || desc == null)
+        continue;
+      authorWhiteList.addAll(author.split(splitReg));
+      tagWhitelist.addAll(tag.split(splitReg));
+      if (i < 10) {
+        print("$author $name $tag $isb");
+      }
+
+      var isbn = isb.toInt().toString();
+      var entry = ChatBook(
+          name: name, author: author, description: desc, tag: tag, isbn: isbn);
+      mapper[isbn] = books.length;
+      books.add(entry);
+    }
+
+    subjectsFuse = Fuzzy(books,
+        options: FuzzyOptions(keys: [
+          WeightedKey(name: "tag", getter: (ChatBook o) => o.tag, weight: 1)
+        ]));
+    authorsFuse = Fuzzy(books,
+        options: FuzzyOptions(keys: [
+          WeightedKey(
+              name: "author", getter: (ChatBook o) => o.author, weight: 1)
+        ]));
+
+    tagWhitelist = tagWhitelist.toSet().toList();
+    authorWhiteList = authorWhiteList.toSet().toList();
   }
 }

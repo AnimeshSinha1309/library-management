@@ -4,6 +4,7 @@ import 'package:libmate/views/drawer.dart';
 import 'package:libmate/widgets/issueitem.dart';
 import 'package:provider/provider.dart';
 
+
 class TicketPage extends StatefulWidget {
   final String slot;
   final int tableNo;
@@ -174,16 +175,6 @@ class _TicketPageState extends State<TicketPage> {
                                   letterSpacing: 2.0,
                                   fontWeight: FontWeight.bold)),
                         ]),
-                        Row(
-                            children: <Widget>[
-                              Text('Issue/Return book',
-                                  style: TextStyle(
-                                      color: Colors.grey,
-                                      letterSpacing: 2.0,
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.bold)),
-                              Spacer(),
-                            ]),
 
 
 
@@ -192,6 +183,17 @@ class _TicketPageState extends State<TicketPage> {
                               color: Colors.grey,
                               letterSpacing: 2.0,
                             )),
+                        Row(
+                            children: <Widget>[
+                              Text('\n\n Issue/Return book',
+                                  style: TextStyle(
+                                      color: Colors.grey,
+                                      letterSpacing: 2.0,
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold)),
+                              Spacer(),
+                            ]),
+
 
 
                       ]

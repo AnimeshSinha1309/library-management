@@ -41,6 +41,7 @@ dependencies:
   google_sign_in: ^4.4.4
   speech_to_text: ^2.3.0
 
+
   fuzzy: <1.0.0
 
   provider: ^4.0.2

@@ -23,7 +23,6 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<UserModel>(
         builder: (BuildContext context, UserModel model, Widget child) {
-      print(model.borrowedBooks);
       return Scaffold(
           appBar: AppBar(
             title: customHeading,

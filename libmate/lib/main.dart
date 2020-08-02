@@ -54,7 +54,7 @@ class _MyAppState extends State<MyApp> {
   void loadState(Function callback) {
     void loader() async {
       model = await UserModel.fromSharedPrefs();
-      loadUser(model);
+      await loadUser(model);
       callback();
     }
 
@@ -67,8 +67,8 @@ class _MyAppState extends State<MyApp> {
 
     // to avoid clogging up initStae
 
-    logouter();
-    // loader();
+    // logouter();
+    loader();
   }
 
   @override

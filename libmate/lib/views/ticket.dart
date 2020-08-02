@@ -7,8 +7,9 @@ import 'package:provider/provider.dart';
 class TicketPage extends StatefulWidget {
   final String slot;
   final int tableNo;
+  final int type;
 
-  TicketPage({this.slot, this.tableNo});
+  TicketPage({this.slot, this.tableNo,this.type});
 
   @override
   _TicketPageState createState() => _TicketPageState();
@@ -18,6 +19,7 @@ class _TicketPageState extends State<TicketPage> {
   String time;
   String date;
   int tableNo;
+  int type;
 
   @override
   void initState() {
@@ -25,6 +27,7 @@ class _TicketPageState extends State<TicketPage> {
     date = widget.slot.split('_')[0];
     time = widget.slot.split('_')[1];
     tableNo = widget.tableNo;
+    type = widget.type;
   }
 
   @override
@@ -71,17 +74,28 @@ class _TicketPageState extends State<TicketPage> {
                                 fontWeight: FontWeight.bold)),
                       ]),
 
-                      Column(
-                        children: <Widget>[
-                          Text('$date\n\nTable Number: $tableNo',
+
+                          Text('$date',
                               style: TextStyle(
                                 color: Colors.grey,
                                 letterSpacing: 2.0,
                               )),
-
-                        ],
-
-                      ),
+                    ]
+                )
+            ),
+          );
+          var tableGroup = SliverToBoxAdapter(
+            child: Padding(
+                padding: EdgeInsets.fromLTRB(30.0, 40.0, 30.0, 30.0),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                          Text('\n\n Table Number: $tableNo',
+                              style: TextStyle(
+                                color: Colors.pink,
+                                letterSpacing: 2.0,
+                                  fontWeight: FontWeight.bold
+                              )),
                     ]
                 )
             ),
@@ -96,7 +110,7 @@ class _TicketPageState extends State<TicketPage> {
               ),
               drawer: AppDrawer(),
               body: CustomScrollView(
-                slivers: [statsGroup],
+                slivers: [statsGroup, tableGroup],
               ));
         });
   }

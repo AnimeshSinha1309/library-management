@@ -16,7 +16,7 @@ class TimePage extends StatefulWidget {
   TimePage({this.user, this.type, this.timeInterval,this.day});
 
   @override
-  _TimePageState createState() => _TimePageState(day);
+  _TimePageState createState() => _TimePageState(day,type);
 }
 
 class _TimePageState extends State<TimePage> {
@@ -28,7 +28,8 @@ class _TimePageState extends State<TimePage> {
   int _maxRows;
   Set<String> _filledSlots = Set();
   String day;
-  _TimePageState(this.day);
+  int type;
+  _TimePageState(this.day,this.type);
 
   List<String> times = [];
 
@@ -96,7 +97,6 @@ class _TimePageState extends State<TimePage> {
       await getAppointments(dateFormat.format(cur));
     }
 
-
   }
 
   @override
@@ -163,7 +163,7 @@ class _TimePageState extends State<TimePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => TicketPage(slot: slot, tableNo: tableNo)),
+                      builder: (context) => TicketPage(slot: slot, tableNo: tableNo,type: type)),
                 );
               }
             } else {

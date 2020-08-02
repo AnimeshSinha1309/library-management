@@ -62,9 +62,18 @@ class _SchedulePageState extends State<SchedulePage > {
 
   }
 
+void fetchdata() async{                   //not used: testing
+  var result = await  Firestore.instance
+      .collection("'periodical_subscriptions'")
+      .getDocuments();
+  result.documents.forEach((res) {
+    print(res.data);
+  });
+}
 
   List<Meeting> _getDataSource() {
     List meetings = <Meeting>[];
+    fetchdata();
     Firestore.instance.collection('periodical_subscriptions').getDocuments().then((querySnapshot) {
 
       querySnapshot.documents.forEach((result) {
@@ -73,15 +82,12 @@ class _SchedulePageState extends State<SchedulePage > {
         final DateTime startTime =
         DateTime(int.parse(arr[0]),int.parse(arr[1]), int.parse(arr[2]), 9, 0, 0);
         final DateTime endTime = startTime.add(const Duration(hours: 2));
-        print(endTime);
         meetings.add(Meeting(
             result.data['name'], startTime, endTime, const Color(0xFF0F8644), false));
       });
 
-
     });
     final DateTime today = DateTime.now();
-    print(today);
     final DateTime startTime =
     DateTime(today.year, today.month, today.day, 9, 0, 0);
     final DateTime startTime2 =

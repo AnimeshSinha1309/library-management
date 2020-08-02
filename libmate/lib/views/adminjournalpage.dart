@@ -24,35 +24,19 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
   int maxBooks = 20;
   String _docType;
 
-//  Future renew() async {
-//    try {
-//      final snapShot =
-//      await Firestore.instance.collection(_docType).getDocuments();
-//      if (snapShot == null) return;
-//      var batch = Firestore.instance.batch();
-//      for (var document in snapShot.documents) {
-//        if (document[model.name].compareTo(model.name) < 0) {
-//          batch.delete(Firestore.instance
-//              .collection(_docType)
-//              .document(document.documentID));
-//        } else if (document.data['uid'].length >= _maxUsers ||
-//            document.data['uid'].contains(widget.user.uid)) {
-//          _slotlist.add(document.documentID);
-//        }
-//      }
-//      batch.commit();
-//      setState(() {
-//        _filledSlots = _slotlist;
-//        _loaded = true;
-//      });
-//    } catch (e) {
-//      print(e.toString());
-//    }
-//  }
+  Future renew(name) async {
+
+    Firestore.instance.collection('periodical-subscriptions').document(name).get().then((value){
+      print(value.data);
+    });
+
+
+
+  }
   @override
   void initState() {
     super.initState();
-    _docType = 'Periodical-subscription';
+    _docType = 'periodical-subscriptions';
 
   }
 
@@ -129,9 +113,10 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
                                 minWidth: 200,
                                 textTheme: ButtonTextTheme.primary,
                                 child: RaisedButton(
-                                  onPressed: () {
-//                                    showToast(context, "NOT IMPLEMENTED");
-
+                                  onPressed: () async {
+                                    showToast(context, "Renewing..");
+                                    print(widget.model.name);
+                                    await renew(widget.model.name);
                                   },
                                   child: Text("Renue subscription"),
                                 ),

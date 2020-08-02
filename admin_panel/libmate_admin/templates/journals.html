@@ -171,6 +171,37 @@
         }
     };
 </script>
+<style>
+    table {
+        width: 100%;
+    }
+
+    table,
+    th,
+    td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+
+    th,
+    td {
+        padding: 15px;
+        text-align: left;
+    }
+
+    #t01 tr:nth-child(even) {
+        background-color: #eee;
+    }
+
+    #t01 tr:nth-child(odd) {
+        background-color: #fff;
+    }
+
+    #t01 th {
+        background-color: black;
+        color: white;
+    }
+</style>
 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
 <div class="main-panel">
@@ -186,16 +217,34 @@
 
         <div class="row">
             <div class="col-md-12 grid-margin stretch-card">
-                <div class="card" style="height: 1000px;">
+                <div class="card" style="height: 1000px;overflow-x:auto;overflow-y:auto;">
                     <div class="card-body">
                         <div class="clearfix" id="chartContainer">
-                            <table>
-                                <th>
-                                <td>Name</td>
-                                <td>Name</td>
-                                <td>Name</td>
-                                <td>Name</td>
-                                </th>
+                            <table id="t01">
+                                <tr>
+                                    <th>Publication Title</th>
+                                    <th>Author</th>
+                                    <th>Book Series Title</th>
+                                    <th>Journal Volume</th>
+                                    <th>Journal Issue</th>
+                                    <th>Item DOI</th>
+                                    <th>Publication Year</th>
+                                    <th>URL</th>
+                                    <th>Content Type</th>
+                                </tr>
+                                {% for item in items %}
+                                <TR>
+                                    <TD>{{item.Publication_Title}}</TD>
+                                    <TD>{{item.author}}</TD>
+                                    <TD>{{item.Book_Series_Title}}</TD>
+                                    <TD>{{item.Journal_Volume}}</TD>
+                                    <TD>{{item.Journal_Issue}}</TD>
+                                    <TD>{{item.Item_DOI}}</TD>
+                                    <TD>{{item.Publication_Year}}</TD>
+                                    <TD>{{item.URL}}</TD>
+                                    <TD>{{item.Content_Type}}</TD>
+                                </TR>
+                                {% endfor %}
                             </table>
                         </div>
                     </div>

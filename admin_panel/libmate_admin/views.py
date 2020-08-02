@@ -2,6 +2,7 @@ from .models import Journal, Book, Issue
 from django.shortcuts import render
 import datetime
 from libmate_admin.plotter import caller
+from libmate_admin.tags_dict import tags
 
 
 # Create your views here.
@@ -14,6 +15,7 @@ def dashboard(request):
     issue_dates = []
     return_dates = []
     isbns = []
+
     for obj in Issue.objects.all():
         # print(obj.issue_date)
         isd = datetime.date(
@@ -22,9 +24,10 @@ def dashboard(request):
             rtd = datetime.date(
                 year=int(obj.return_date[0:4]), month=int(obj.return_date[5:7]), day=int(obj.return_date[8:10]))
         else:
-            rtd = null
+            rtd = 'null'
         issue_dates.append(isd)
         return_dates.append(rtd)
+        # print(Book.objects.filter(isbn=obj.isbn))
         isbns.append(obj.isbn)
     # print(issue_dates)
     # print(return_dates)

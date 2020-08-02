@@ -105,8 +105,8 @@ def plot_issue_month():
 
 
 def plot_return_duration():
-    return_duration = [(return_dates[i] - issue_dates[i]).days
-                       for i in range(num_entries)]
+    return_duration = [((return_dates[i] - issue_dates[i]).days if return_dates[i] != 'null' else 0)
+                       for i in range(len(issue_dates))]
     arr = np.array(return_duration)
     # print(return_duration)
     fine_payers = [0 for i in range(max(arr)+1)]
@@ -125,8 +125,8 @@ def plot_return_duration():
 
 
 def plot_fines():
-    return_duration = [(return_dates[i] - issue_dates[i]).days
-                       for i in range(num_entries)]
+    return_duration = [((return_dates[i] - issue_dates[i]).days if return_dates[i] != 'null' else 0)
+                       for i in range(len(issue_dates))]
     fines = []
     for rd in return_duration:
         if rd > borrow_time:
@@ -143,8 +143,8 @@ def plot_fines():
 
 
 def plot_fines_pie():
-    return_duration = [(return_dates[i] - issue_dates[i]).days
-                       for i in range(num_entries)]
+    return_duration = [((return_dates[i] - issue_dates[i]).days if return_dates[i] != 'null' else 0)
+                       for i in range(len(issue_dates))]
     fines = []
     non_finer = 0
     finer_count_one_week = 0
@@ -157,12 +157,13 @@ def plot_fines_pie():
         else:
             finer_count_two_weeks += 1
     # print(finer_count)
-    plt.pie([finer_count_one_week, finer_count_two_weeks, non_finer],
-            labels=["Returned in 8-14 days - "+str(finer_count_one_week), "Returned after 14 days - "+str(finer_count_two_weeks), "Returned on Time - "+str(non_finer)])
-    plt.title("Pie Chart for Fine Paid (Total Books = "+str(num_entries)+")")
-    plt.savefig('plot_fines_pie.png')
-    plt.clf()
+    # plt.pie([finer_count_one_week, finer_count_two_weeks, non_finer],
+    #         labels=["Returned in 8-14 days - "+str(finer_count_one_week), "Returned after 14 days - "+str(finer_count_two_weeks), "Returned on Time - "+str(non_finer)])
+    # plt.title("Pie Chart for Fine Paid (Total Books = "+str(len(issue_dates))+")")
+    # plt.savefig('plot_fines_pie.png')
+    # plt.clf()
     # plt.show()
+    return [non_finer, finer_count_one_week, finer_count_two_weeks]
 
 
 def plot_category_counts():
@@ -202,8 +203,8 @@ def write_to_csv():
 
 
 def fines_to_csv():
-    return_duration = [(return_dates[i] - issue_dates[i]).days
-                       for i in range(num_entries)]
+    return_duration = [((return_dates[i] - issue_dates[i]).days if return_dates[i] != 'null' else 0)
+                       for i in range(len(issue_dates))]
     fines = []
     for rd in return_duration:
         if rd > borrow_time:
@@ -231,6 +232,7 @@ def caller(issued, returned):
     soln.append(plot_issue_day_of_month())
     soln.append(plot_return_duration())
     soln.append(fines_to_csv())
+    soln.append(plot_fines_pie())
     return soln
 
 

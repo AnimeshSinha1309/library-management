@@ -9,7 +9,7 @@ issue_dates = []
 return_dates = []
 num_entries = 1000
 fine_per_day = 1
-borrow_time = 50
+borrow_time = 7
 
 
 def random_date(start, end):
@@ -67,15 +67,17 @@ def plot_issue_day_of_month():
     plt.show()
 
 
-# def plot_issue_month():
-#     days_count = []
-#     for issue_date in issue_dates:
-#         # print(issue_date.weekday())
-#         days_count.append(issue_date.month)
-#     # print(days_count)
-#     arr = np.array(days_count)
-#     plt.hist(days_count, bins=np.arange(1, 32))
-#     plt.show()
+def plot_issue_month():
+    days_count = []
+    for issue_date in issue_dates:
+        # print(issue_date.weekday())
+        days_count.append(issue_date.month)
+    print(days_count)
+    arr = np.array(days_count)
+    plt.hist(days_count, bins=np.arange(1, 14),
+             width=0.7, color='g')
+    plt.xticks(np.arange(1, 14))
+    plt.show()
 
 
 # def plot_issue_year():
@@ -95,7 +97,8 @@ def plot_return_duration():
     arr = np.array(return_duration)
     # print(return_duration)
     plt.hist(return_duration, bins=np.arange(
-        arr.min()-2, arr.max()+2), width=0.8, color='g')
+        arr.min(), arr.max()+2), width=0.8, color='g')
+    plt.xticks(np.arange(arr.min(), arr.max()+2, 1))
     plt.show()
 
 
@@ -108,7 +111,7 @@ def plot_fines():
             fines.append(fine_per_day*(rd-borrow_time))
     arr = np.array(fines)
     # print(return_duration)
-    plt.hist(fines, bins=np.arange(arr.min()-5, arr.max()+5))
+    plt.hist(fines, bins=np.arange(arr.min(), arr.max()+2), width=0.8)
     plt.show()
 
 
@@ -116,13 +119,19 @@ def plot_fines_pie():
     return_duration = [(return_dates[i] - issue_dates[i]).days
                        for i in range(num_entries)]
     fines = []
-    finer_count = 0
+    non_finer = 0
+    finer_count_one_week = 0
+    finer_count_two_weeks = 0
     for rd in return_duration:
-        if rd > borrow_time:
-            finer_count += 1
-    print(finer_count)
-    plt.pie([finer_count, num_entries-finer_count],
-            labels=["Not returned on time", "Returned on Time"])
+        if rd <= borrow_time:
+            non_finer += 1
+        elif rd <= 14:
+            finer_count_one_week += 1
+        else:
+            finer_count_two_weeks += 1
+    # print(finer_count)
+    plt.pie([finer_count_one_week, finer_count_two_weeks, non_finer],
+            labels=["Returned late by less than a week"+str(finer_count_one_week), "Returned after two weeks"+str(finer_count_two_weeks), "Returned on Time"+str(non_finer)])
     plt.show()
 
 
@@ -134,7 +143,8 @@ def plot_category_counts():
 if __name__ == "__main__":
     setup()
     # plot_issue_day_of_week()
-    plot_issue_day_of_month()
+    # plot_issue_day_of_month()
+    plot_issue_month()
     # plot_return_duration()
     # plot_fines()
     # plot_fines_pie()

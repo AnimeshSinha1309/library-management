@@ -4,7 +4,8 @@ import 'dart:convert';
 import 'dart:io' show File;
 import 'dart:async';
 
-void gotoPage(BuildContext context, dynamic page) {
+void gotoPage(BuildContext context, dynamic page,
+    {bool clear = false, String routeName = ""}) {
   var route = PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => page,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -23,7 +24,10 @@ void gotoPage(BuildContext context, dynamic page) {
           child: child,
         );
       });
-  Navigator.of(context).push(route);
+  if (clear)
+    Navigator.pushNamedAndRemoveUntil(context, routeName, (r) => false);
+  else
+    Navigator.of(context).push(route);
 }
 
 void showToast(BuildContext context, String message) {
@@ -46,6 +50,18 @@ class Debouncer {
 
     _timer = Timer(Duration(milliseconds: milliseconds), action);
   }
+}
+
+dynamic readBookData(response) {
+  var usable_body = response.body.replaceAllMapped(RegExp(r"NaN,"), (match) {
+    return "\"\",";
+  });
+  usable_body =
+      usable_body.replaceAllMapped(RegExp(r'(, )?"\w+": NaN'), (match) {
+    return "";
+  });
+
+  return json.decode(usable_body);
 }
 
 const config = {"razorkey": "rzp_test_U4H7R8ZUFz2iHt"};

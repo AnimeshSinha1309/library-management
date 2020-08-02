@@ -14,7 +14,7 @@ description: Your favorite library assistant.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.5.2 <3.0.0"
 
 dependencies:
   flutter:
@@ -26,15 +26,18 @@ dependencies:
   flutter_tags: ^0.4.8+2
 #  speech_recognition: ^0.3.0
   permission_handler: ^3.1.0
+  fluttertoast: ^7.0.2
 
+  url_launcher:
 
   #payments
   razorpay_flutter: ^1.2.2
   # Other utilities essential to the app
-  barcode_scan: 1.0.0
 
   # Google and Firebase for DataBase and Auth
-  cloud_firestore: ^0.13.7
+  firebase_auth: ^0.16.0
+  firebase_storage:
+  cloud_firestore: ^0.11.0+2
   google_sign_in: ^4.4.4
   speech_to_text: ^2.3.0
 
@@ -46,14 +49,22 @@ dependencies:
   image_picker: ^0.6.7+4
   image_cropper: ^1.2.3
   intl: ^0.16.1
+  validators: ^2.0.0+1
   expandable: ^4.1.4
 
   shared_preferences: ^0.5.4+8
   shared_preferences_web: ^0.1.0
+  flutter_launcher_icons: ^0.7.2
+  syncfusion_flutter_calendar: ^18.2.47
 
-  firebase_auth:
-  firebase_auth_web:
+  dash_chat:
+  qr_flutter:
+  qrscan:
 
+  webview_flutter: ^0.3.22+1
+
+  printing: ^3.5.0
+  pdf: ^1.10.0
 
 dev_dependencies:
   flutter_test:
@@ -100,3 +111,8 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_icons:
+  image_path: 'assets/favicon.png'
+  android: true
+  ios: true

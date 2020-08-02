@@ -9,8 +9,10 @@ import 'dart:async';
 
 class TimePage extends StatefulWidget {
   final UserModel user;
+  final type;
+  final timeInterval;
 
-  TimePage({this.user});
+  TimePage({this.user, this.type, this.timeInterval});
 
   @override
   _TimePageState createState() => _TimePageState();
@@ -20,22 +22,22 @@ class _TimePageState extends State<TimePage> {
   bool _loaded = false;
   Timer _timer;
   int _maxUsers = 10;
+  String _docType;
+  int _timeInterval;
+  int _maxRows;
   Set<String> _filledSlots = Set();
 
-  List<String> times = [
-    '2020-08-01_09:30',
-    '2020-08-01_10:00',
-    '2020-08-01_10:30',
-    '2020-08-01_11:00',
-    '2020-08-01_11:30'
-  ];
+  List<String> times = [];
 
   Future getSlotList(DateTime now, DateTime end, DateFormat dateFormat) async {
     List<String> _slots = [];
     DateTime cur = now;
     while (dateFormat.format(cur).compareTo(dateFormat.format(end)) < 0) {
       _slots.add(dateFormat.format(cur));
-      cur = cur.add(new Duration(minutes: 30));
+      if(_slots.length >= _maxRows) {
+        break;
+      }
+      cur = cur.add(new Duration(minutes: _timeInterval));
     }
     setState(() {
       _loaded = true;
@@ -46,14 +48,14 @@ class _TimePageState extends State<TimePage> {
   Future getAppointments(String now) async {
     try {
       final snapShot =
-          await Firestore.instance.collection('appointments').getDocuments();
+          await Firestore.instance.collection(_docType).getDocuments();
       if (snapShot == null) return;
       var batch = Firestore.instance.batch();
       Set<String> _slotlist = Set();
       for (var document in snapShot.documents) {
         if (document.documentID.compareTo(now) < 0) {
           batch.delete(Firestore.instance
-              .collection('appointments')
+              .collection(_docType)
               .document(document.documentID));
         } else if (document.data['uid'].length >= _maxUsers ||
             document.data['uid'].contains(widget.user.uid)) {
@@ -74,9 +76,8 @@ class _TimePageState extends State<TimePage> {
     DateFormat dateFormat = DateFormat("yyyy-MM-dd_HH:mm");
     DateTime now = DateTime.now();
     DateTime cur = DateTime(
-        now.year, now.month, now.day, now.hour, now.minute - now.minute % 30);
+        now.year, now.month, now.day, now.hour, now.minute - now.minute % _timeInterval);
     DateTime end = cur.add(new Duration(days: 1));
-    // DateTime end = DateTime(now.year, now.month, now.day, 23, 30);
     await getSlotList(cur, end, dateFormat);
     await getAppointments(dateFormat.format(cur));
   }
@@ -84,6 +85,10 @@ class _TimePageState extends State<TimePage> {
   @override
   void initState() {
     super.initState();
+    _docType = 'appointments' + '_' + widget.type.toString();
+    _timeInterval = widget.timeInterval;
+    _maxRows = 12 * 60 ~/ _timeInterval >= 10 ? 10: 12 * 60 ~/ _timeInterval >= 10;
+    _maxRows *= 2;
     getSlots();
     _timer = Timer.periodic(Duration(seconds: 60), (Timer t) {
       getSlots();
@@ -107,7 +112,7 @@ class _TimePageState extends State<TimePage> {
             bool _isAvail = !_filledSlots.contains(slot);
             if (_isAvail) {
               final snapshot = await Firestore.instance
-                  .collection('appointments')
+                  .collection(_docType)
                   .document(slot)
                   .get();
               if (snapshot.exists && snapshot.data['uid'].length >= _maxUsers) {
@@ -120,12 +125,12 @@ class _TimePageState extends State<TimePage> {
                   var newList = snapshot.data['uid'];
                   newList.add(widget.user.uid);
                   Firestore.instance
-                      .collection('appointments')
+                      .collection(_docType)
                       .document(slot)
                       .updateData({'uid': newList});
                 } else {
                   Firestore.instance
-                      .collection('appointments')
+                      .collection(_docType)
                       .document(slot)
                       .setData({
                     'uid': [widget.user.uid]

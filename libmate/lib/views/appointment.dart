@@ -43,7 +43,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => TimePage()),
+                                      builder: (context) => TimePage(user: widget.user, type: 0, timeInterval: 10)),
                                 );
                               },
                               icon: Icon(Icons.assignment_return),
@@ -59,7 +59,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => TimePage(user: widget.user)),
+                                    builder: (context) => TimePage(user: widget.user, type: 1, timeInterval: 30)),
                               );
                             },
                             icon: Icon(Icons.person_pin),

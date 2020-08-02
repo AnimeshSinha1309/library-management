@@ -1,0 +1,205 @@
+{% load static%}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1, shrink-to-fit=no"
+		/>
+		<title>{% block title %}LibMate Admin{% endblock %}</title>
+		<link
+			href="https://fonts.googleapis.com/css?family=Montserrat:500"
+			rel="stylesheet"
+		/>
+		<link
+			href="{% static 'materialdesignicons.min.css' %}"
+			rel="stylesheet"
+		/>
+		<link href="{% static 'vendor.bundle.base.css' %}" rel="stylesheet" />
+		<link href="{% static 'style.css' %}" rel="stylesheet" />
+
+		<!-- Compiled and minified JavaScript -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+		<script
+			src="https://code.jquery.com/jquery-3.4.1.min.js"
+			integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+			crossorigin="anonymous"
+		></script>
+	</head>
+
+	<body>
+		<div class="container-scroller">
+			<nav
+				class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row"
+			>
+				<div
+					class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center"
+				>
+					<a href="#">
+						<img
+							src="/static/logo.png"
+							style="
+								height: 180px;
+								width: 180px;
+								margin-left: -50px;
+								margin-top: 10px;
+							"
+						/>
+					</a>
+				</div>
+				<div class="navbar-menu-wrapper d-flex align-items-stretch">
+					<div class="search-field d-none d-md-block">
+						<form
+							class="d-flex align-items-center h-100"
+							action="#"
+						>
+							<div class="input-group">
+								<div class="input-group-prepend bg-transparent">
+									<i
+										class="input-group-text border-0 mdi mdi-magnify"
+									></i>
+								</div>
+								<input
+									type="text"
+									class="form-control bg-transparent border-0"
+									placeholder="Search Schools"
+								/>
+							</div>
+						</form>
+					</div>
+					<ul class="navbar-nav navbar-nav-right">
+						<li class="nav-item nav-profile dropdown">
+							<a
+								class="nav-link dropdown-toggle"
+								id="profileDropdown"
+								href="#"
+								data-toggle="dropdown"
+								aria-expanded="false"
+							>
+								<div class="nav-profile-img">
+									<img
+										src="/static/female2.jpeg"
+										alt="Profile"
+									/>
+									<span
+										class="availability-status online"
+									></span>
+								</div>
+								<div class="nav-profile-text">
+									<span class="mb-1 text-black"
+										>Hello ! {{username}}
+									</span>
+								</div>
+							</a>
+							<div
+								class="dropdown-menu navbar-dropdown"
+								aria-labelledby="profileDropdown"
+							>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="#">
+									<i
+										class="mdi mdi-logout mr-2 text-primary"
+									></i>
+									Signout
+								</a>
+							</div>
+						</li>
+						<li class="nav-item d-none d-lg-block full-screen-link">
+							<a class="nav-link">
+								<i
+									class="mdi mdi-fullscreen"
+									id="fullscreen-button"
+								></i>
+							</a>
+						</li>
+
+						<li class="nav-item nav-logout d-none d-lg-block">
+							<a class="nav-link" href="#">
+								<i class="mdi mdi-power"></i>
+							</a>
+						</li>
+					</ul>
+					<button
+						class="navbar-toggler navbar-toggler-right d-lg-none align-self-center"
+						type="button"
+						data-toggle="offcanvas"
+					>
+						<span class="mdi mdi-menu"></span>
+					</button>
+				</div>
+			</nav>
+
+			<!-- partial -->
+			<div class="container-fluid page-body-wrapper">
+				<!-- partial:partials/_sidebar.html -->
+				<nav
+					class="sidebar sidebar-offcanvas"
+					id="sidebar"
+					style="
+						position: fixed;
+						width: 250px;
+						background-image: url('{% static 'bg.jpg' %}');
+						background-attachment: fixed;
+						background-size: contain;
+					"
+				>
+					<ul class="nav">
+						<li class="nav-item nav-profile">
+							<a href="#" class="nav-link">
+								<div class="nav-profile-image">
+									<img
+										src="/static/female2.jpeg"
+										alt="Profile"
+									/>
+									<span class="login-status online"></span>
+									<!--change to offline or busy as needed-->
+								</div>
+								<div
+									class="nav-profile-text d-flex flex-column"
+								>
+									<span class="font-weight-bold mb-2"
+										>Hello !<br />{{username}}
+									</span>
+									<span
+										class="text-secondary text-small"
+									></span>
+								</div>
+								<i
+									class="mdi mdi-bookmark-check text-success nav-profile-badge"
+								></i>
+							</a>
+						</li>
+
+						<br />
+						<div
+							class="container shadow mb-5"
+							style="
+								z-index: 100;
+								border-radius: 5px;
+								width: 80%;
+								background-color: rgba(255, 255, 255, 0.8);
+							"
+						></div>
+					</ul>
+				</nav>
+				<!-- partial -->
+				<div id="main-container">
+					{% block content %} {% endblock %}
+				</div>
+			</div>
+		</div>
+		<script src="/static/vendor.bundle.base.js"></script>
+		<script src="/static/vendor.bundle.addons.js"></script>
+		<!-- endinject -->
+		<!-- Plugin js for this page-->
+		<!-- End plugin js for this page-->
+		<!-- inject:js -->
+		<script src="/static/off-canvas.js"></script>
+		<script src="/static/misc.js"></script>
+		<!-- endinject -->
+		<!-- Custom js for this page-->
+		<script src="/static/dashboard.js"></script>
+	</body>
+	<!-- <script src="{% static "tinymce/js/prism.js" %}"></script> -->
+</html>

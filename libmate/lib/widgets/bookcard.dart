@@ -58,7 +58,7 @@ class BookCard extends StatelessWidget {
                       },
                       child: Container(
                         padding: EdgeInsets.all(8),
-                        color: Color.fromRGBO(0, 0, 0, 0),
+                        color: Color.fromRGBO(0, 0, 0, 1),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[

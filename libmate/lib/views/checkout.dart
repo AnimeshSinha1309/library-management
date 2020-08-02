@@ -31,7 +31,7 @@ class CheckoutState extends State<Checkout> {
   int checks = 0;
 
   recheck() async {
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 10));
     for (var book in widget.books) await issueBookModel(book, widget.user);
     setState(() {
       checks++;
@@ -42,7 +42,7 @@ class CheckoutState extends State<Checkout> {
   }
 
   redirect() async {
-    await Future.delayed(Duration(seconds: 10));
+    await Future.delayed(Duration(seconds: 2));
     final prefs = await SharedPreferences.getInstance();
     prefs.remove("issuecart");
 

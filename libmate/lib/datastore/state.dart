@@ -37,6 +37,7 @@ Future issueBook(String isbn, UserModel currentUser,
 
   if (accNo == "") {
     for (var key in book.issues.keys) {
+      if (book.issues[key] == "issued") continue;
       accNo = key;
       break;
     }

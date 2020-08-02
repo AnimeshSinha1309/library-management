@@ -22,15 +22,16 @@ class Checkout extends StatefulWidget {
   // uid for checking issue status of books
   Checkout(this.books, this.returns, this.user) {
     uid = user.email;
-    List<dynamic> datalist = [];
-    datalist.add(user.email);
+    List<dynamic> booksList = [];
     for (var book in books) {
-      datalist.add(book.toJSON());
+      booksList.add(book.toJSON());
     }
+    List<dynamic> returnList = [];
     for (var book in returns) {
-      datalist.add(book.toJSON());
+      returnList.add(book.toJSON());
     }
-    qrdata = jsonEncode(datalist);
+    qrdata = jsonEncode(
+        {'email': user.email, 'issues': booksList, 'returns': returnList});
     // printWrapped(qrdata);
   }
   @override

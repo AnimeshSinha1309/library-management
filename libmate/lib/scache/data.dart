@@ -5,16 +5,23 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:fuzzy/fuzzy.dart';
 import 'package:libmate/datastore/model.dart';
 
-List<dynamic> searchData;
+List<BookModel> searchData;
 var fuse;
 
 Future loadSCache() async {
   final input = await rootBundle.loadString('assets/books-data.json');
-  searchData = json.decode(input);
+  List<dynamic> searchRaw = json.decode(input);
+  searchData =
+      searchRaw.map<BookModel>((item) => BookModel.fromJSON(json: item))
+          .toList();
   fuse = Fuzzy(searchData,
       options: FuzzyOptions(keys: [
-        WeightedKey(name: "keyer", getter: (obj) => obj["name"], weight: 1)
+        WeightedKey(name: "keyer", getter: getter, weight: 1)
       ]));
+}
+
+String getter(BookModel object) {
+  return object.name;
 }
 
 List<BookModel> searchCache(Map query) {

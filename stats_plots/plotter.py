@@ -56,7 +56,9 @@ def plot_issue_day_of_week():
     plt.title("Number of issues per day of week")
     plt.xlabel("Day of week")
     plt.ylabel("Number of books issued")
-    plt.show()
+    plt.savefig('plot_issue_day_of_week.png')
+    plt.clf()
+    # plt.show()
 
 
 def plot_issue_day_of_month():
@@ -71,7 +73,9 @@ def plot_issue_day_of_month():
     plt.title("Number of issues per day of month")
     plt.xlabel("Day of month")
     plt.ylabel("Number of books issued")
-    plt.show()
+    plt.savefig('plot_issue_day_of_month.png')
+    plt.clf()
+    # plt.show()
 
 
 def plot_issue_month():
@@ -87,7 +91,9 @@ def plot_issue_month():
     plt.title("Number of issues per month")
     plt.xlabel("Month No.")
     plt.ylabel("Number of books issued")
-    plt.show()
+    plt.savefig('plot_issue_month.png')
+    plt.clf()
+    # plt.show()
 
 
 def plot_return_duration():
@@ -101,7 +107,9 @@ def plot_return_duration():
     plt.title("Return duration frequency")
     plt.xlabel("Time in days from issue")
     plt.ylabel("Books returned")
-    plt.show()
+    plt.savefig('plot_return_duration.png')
+    plt.clf()
+    # plt.show()
 
 
 def plot_fines():
@@ -117,7 +125,9 @@ def plot_fines():
     plt.title("Fine frequency")
     plt.xlabel("Fine value")
     plt.ylabel("No of people")
-    plt.show()
+    plt.savefig('plot_fines.png')
+    plt.clf()
+    # plt.show()
 
 
 def plot_fines_pie():
@@ -136,9 +146,11 @@ def plot_fines_pie():
             finer_count_two_weeks += 1
     # print(finer_count)
     plt.pie([finer_count_one_week, finer_count_two_weeks, non_finer],
-            labels=["Returned late by less than a week - "+str(finer_count_one_week), "Returned after two weeks - "+str(finer_count_two_weeks), "Returned on Time - "+str(non_finer)])
-    plt.title("Pie Chart for Fine Paid")
-    plt.show()
+            labels=["Returned in 8-14 days - "+str(finer_count_one_week), "Returned after 14 days - "+str(finer_count_two_weeks), "Returned on Time - "+str(non_finer)])
+    plt.title("Pie Chart for Fine Paid (Total Books = "+str(num_entries)+")")
+    plt.savefig('plot_fines_pie.png')
+    plt.clf()
+    # plt.show()
 
 
 def plot_category_counts():
@@ -146,15 +158,21 @@ def plot_category_counts():
     plt.title("No of books issued in each catgory")
     plt.xlabel("Category")
     plt.ylabel("No of books")
-    plt.show()
+    plt.savefig('plot_category_counts.png')
+    plt.clf()
+    # plt.show()
+
+
+def produce_all():
+    plot_issue_day_of_week()
+    plot_issue_day_of_month()
+    plot_issue_month()
+    plot_return_duration()
+    plot_fines()
+    plot_fines_pie()
+    plot_category_counts()
 
 
 if __name__ == "__main__":
     setup()
-    # plot_issue_day_of_week()
-    # plot_issue_day_of_month()
-    # plot_issue_month()
-    # plot_return_duration()
-    # plot_fines()
-    # plot_fines_pie()
-    plot_category_counts()
+    produce_all()

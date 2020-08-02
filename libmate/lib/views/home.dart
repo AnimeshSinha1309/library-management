@@ -86,8 +86,8 @@ class Home extends StatelessWidget {
               )),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) =>
-                        IssuedBookCard(model: model.borrowedBooks[index]),
+                    (BuildContext context, int index) => IssuedBookCard(
+                        model: model.borrowedBooks[index], user: model),
                     childCount: model.borrowedBooks.length),
               ),
             ],

@@ -221,7 +221,7 @@ class _TicketPageState extends State<TicketPage> {
                             ]),
                         QrImage(data: widget.qrdata, version: QrVersions.auto, size: 200.0),
                         Text("Show this QR code to the library admin"),
-                        Text("Not received confirmation from admin yet")
+
 
 
 

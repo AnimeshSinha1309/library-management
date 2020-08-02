@@ -214,6 +214,17 @@ def fines_to_csv():
     # print(fine_payers)
 
 
+def caller(issued, returned):
+    issue_dates = issued
+    return_dates = returned
+    soln = []
+    soln.append(plot_issue_day_of_week())
+    soln.append(plot_issue_day_of_month())
+    soln.append(plot_return_duration())
+    soln.append(fines_to_csv())
+    return soln
+
+
 if __name__ == "__main__":
     setup()
     # produce_all()

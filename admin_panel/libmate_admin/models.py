@@ -3,13 +3,18 @@ from django.db import models
 # Create your models here.
 class Journal(models.Model):
     title = models.CharField(max_length = 100, verbose_name = "Journal Title", null=True)
-    publisher = models.CharField(max_length = 100, verbose_name = "Publisher", null=True)
-    editors = models.CharField(max_length = 100, verbose_name = "Editor in Chief", null=True)
-    issn = models.CharField(max_length = 13,verbose_name = "ISSN", null=True)
-    payment_date = models.DateTimeField('Payment Date', null=True)
+    author = models.CharField(max_length = 100,verbose_name = "Author", null=True)
+    Publisher_Title = models.CharField(max_length = 100, verbose_name = "Publisher Title", null=True)
+    Book_Series_Title = models.CharField(max_length = 100, verbose_name = "Book Series Title", null=True)
+    Journal_Volume = models.CharField(max_length = 100,verbose_name = "Journal  Volume", null=True)
+    Journal_Issue = models.CharField(max_length = 100,verbose_name = "Journal  Issue", null=True)
+    Item_DOI = models.CharField(max_length = 100,verbose_name = "Item Date of Issue", null=True)
+    Publication_Year = models.CharField(max_length = 100,verbose_name = "Publication Year", null=True)
+    URL = models.CharField(max_length = 100,verbose_name = "URL", null=True)
+    Content_Type = models.CharField(max_length = 100,verbose_name = "Content Type", null=True)
 
     def __str__(self):
-        return '%s, by %s - %s' % (self.title, self.publisher,self.issn)
+        return '%s, by %s' % (self.title, self.author)
 
 class Book(models.Model):
     title = models.CharField(max_length = 100, verbose_name='Book Title')

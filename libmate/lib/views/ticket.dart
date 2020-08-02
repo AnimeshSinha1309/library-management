@@ -6,16 +6,12 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/rendering.dart';
-import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:simple_permissions/simple_permissions.dart';
 import 'dart:io';
 import 'dart:async';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 const directoryName = 'Signature';
 
@@ -53,8 +49,6 @@ class _TicketPageState extends State<TicketPage> {
   String date;
   int tableNo;
   int type;
-  String _platformVersion = 'Unknown';
-  Permission _permission = Permission.WriteExternalStorage;
   GlobalKey globalKey = GlobalKey();
 
 
@@ -72,34 +66,13 @@ class _TicketPageState extends State<TicketPage> {
     return byteData.buffer.asUint8List();
   }
 
-// Platform messages are asynchronous, so we initialize in an async method.
-  initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      platformVersion = await SimplePermissions.platformVersion;
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
 
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
-    print(_platformVersion);
-  }
 
   void _printPngBytes() async {
     var pngBytes = await _capturePng();
     var bs64 = base64Encode(pngBytes);
     print(pngBytes);
     print(bs64);
-// requesting external storage permission
-    if(!(await checkPermission())) await requestPermission();
 
 // Use plugin [path_provider] to export image to storage
     Directory directory = await getExternalStorageDirectory();
@@ -110,7 +83,7 @@ class _TicketPageState extends State<TicketPage> {
     await Directory('$path/$directoryName').create(recursive: true);
 
 // write to storage as a filename.png
-    File('$path/$directoryName/filename.png')
+    File('$path/$directoryName/ticket.png')
         .writeAsBytesSync(pngBytes.buffer.asInt8List());
   }
 
@@ -123,26 +96,7 @@ class _TicketPageState extends State<TicketPage> {
     time = widget.slot.split('_')[1];
     tableNo = widget.tableNo;
     type = widget.type;
-    initPlatformState();
   }
-
-
-
-  checkPermission() async {
-    bool result = await SimplePermissions.checkPermission(_permission);
-    return result;
-  }
-
-  getPermissionStatus() async {
-    final result = await SimplePermissions.getPermissionStatus(_permission);
-    print("permission status is " + result.toString());
-  }
-  requestPermission() async {
-    final result = await SimplePermissions.requestPermission(_permission);
-    return result;
-  }
-
-
 
 
   @override

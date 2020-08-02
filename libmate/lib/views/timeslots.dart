@@ -11,8 +11,9 @@ class TimePage extends StatefulWidget {
   final UserModel user;
   final type;
   final timeInterval;
+  final day;
 
-  TimePage({this.user, this.type, this.timeInterval});
+  TimePage({this.user, this.type, this.timeInterval,this.day});
 
   @override
   _TimePageState createState() => _TimePageState();
@@ -154,7 +155,7 @@ class _TimePageState extends State<TimePage> {
             }
           },
           child: Text(
-            slot.split('_')[0] + " " + slot.split('_')[1],
+            slot.split('_')[1],
             style: TextStyle(color: Colors.white),
           ),
         ),
@@ -170,6 +171,7 @@ class _TimePageState extends State<TimePage> {
           children: [
             _timeCell(times[i]),
             _timeCell(times[i + 1]),
+
           ],
         ));
       } else {
@@ -189,7 +191,8 @@ class _TimePageState extends State<TimePage> {
     return Scaffold(
         backgroundColor: Colors.grey[100],
         appBar: new AppBar(
-          title: new Text('Select time'),
+          title: new Text(times[0].split('_')[0] + '  Select time ' ),
+
           centerTitle: true,
         ),
         drawer: AppDrawer(),

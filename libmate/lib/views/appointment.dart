@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:libmate/views/drawer.dart';
 import 'package:libmate/datastore/model.dart';
 import 'package:libmate/views/timeslots.dart';
+import 'package:libmate/utils/utils.dart';
+import 'dart:async';
 
 class AppointmentPage extends StatefulWidget {
   final UserModel user;
+
 
   AppointmentPage({this.user});
 
@@ -13,6 +16,10 @@ class AppointmentPage extends StatefulWidget {
 }
 
 class _AppointmentPageState extends State<AppointmentPage> {
+  int timeinterval = -1;
+  int type = -1;
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,11 +47,8 @@ class _AppointmentPageState extends State<AppointmentPage> {
                             textTheme: ButtonTextTheme.primary,
                             child: RaisedButton.icon(
                               onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => TimePage(user: widget.user, type: 0, timeInterval: 10)),
-                                );
+                                  timeinterval = 10;
+                                  type=0;
                               },
                               icon: Icon(Icons.assignment_return),
                               label: Text('Issue / Return\n       book'),
@@ -56,11 +60,8 @@ class _AppointmentPageState extends State<AppointmentPage> {
                           textTheme: ButtonTextTheme.primary,
                           child: RaisedButton.icon(
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => TimePage(user: widget.user, type: 1, timeInterval: 30)),
-                              );
+                              timeinterval = 30;
+                              type = 1;
                             },
                             icon: Icon(Icons.person_pin),
                             label: Text('Sit in Library'),
@@ -81,11 +82,18 @@ class _AppointmentPageState extends State<AppointmentPage> {
                             textTheme: ButtonTextTheme.primary,
                             child: RaisedButton.icon(
                               onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => TimePage(user: widget.user, type: 0, timeInterval: 10)),
-                                );
+                                if(type==-1)
+                                {
+                                  showToast(context, "Please select what you want to do from options above");
+                                }
+                                else{
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => TimePage(user: widget.user, type: type, timeInterval: timeinterval, day: 'today')),
+                                  );
+                                }
+
                               },
                               icon: Icon(Icons.today),
                               label: Text('Today'),
@@ -97,11 +105,18 @@ class _AppointmentPageState extends State<AppointmentPage> {
                               textTheme: ButtonTextTheme.primary,
                               child: RaisedButton.icon(
                                 onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => TimePage(user: widget.user, type: 1, timeInterval: 30)),
-                                  );
+                                  if(type==-1)
+                                    {
+                                      showToast(context, "Please select what you want to do from options above");
+                                    }
+                                  else{
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => TimePage(user: widget.user, type: type, timeInterval: timeinterval, day: 'tommorow')),
+                                    );
+                                  }
+
                                 },
                                 icon: Icon(Icons.arrow_forward),
                                 label: Text('Tommorow'),

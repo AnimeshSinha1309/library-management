@@ -26,6 +26,7 @@ dependencies:
   flutter_tags: ^0.4.8+2
 #  speech_recognition: ^0.3.0
   permission_handler: ^3.1.0
+  fluttertoast: ^7.0.2
 
 
   #payments

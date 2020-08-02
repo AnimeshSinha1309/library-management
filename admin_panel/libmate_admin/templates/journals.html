@@ -222,6 +222,7 @@
                         <div class="clearfix" id="chartContainer">
                             <table id="t01">
                                 <tr>
+                                    <th>Title</th>
                                     <th>Publication Title</th>
                                     <th>Author</th>
                                     <th>Book Series Title</th>
@@ -234,6 +235,7 @@
                                 </tr>
                                 {% for item in items %}
                                 <TR>
+                                    <TD>{{item.title}}</TD>
                                     <TD>{{item.Publication_Title}}</TD>
                                     <TD>{{item.author}}</TD>
                                     <TD>{{item.Book_Series_Title}}</TD>

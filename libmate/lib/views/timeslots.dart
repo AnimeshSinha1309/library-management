@@ -87,7 +87,7 @@ class _TimePageState extends State<TimePage> {
     super.initState();
     _docType = 'appointments' + '_' + widget.type.toString();
     _timeInterval = widget.timeInterval;
-    _maxRows = 12 * 60 ~/ _timeInterval >= 10 ? 10: 12 * 60 ~/ _timeInterval >= 10;
+    _maxRows = 12 * 60 ~/ _timeInterval >= 10 ? 20: 20 * 60 ~/ _timeInterval >= 10;
     _maxRows *= 2;
     getSlots();
     _timer = Timer.periodic(Duration(seconds: 60), (Timer t) {

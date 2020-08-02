@@ -15,23 +15,26 @@ def dashboard(request):
     # issue_dates = []
     # return_dates = []
     # isbns = []
-    # for obj in Issue.objects.all():
-    #     # print(obj.issue_date)
+    # store = Issue.objects.all()
+    # print("start")
+
+    # for obj in store:
     #     isd = datetime.date(
     #         year=int(obj.issue_date[0:4]), month=int(obj.issue_date[5:7]), day=int(obj.issue_date[8:10]))
     #     if obj.return_date:
     #         rtd = datetime.date(
     #             year=int(obj.return_date[0:4]), month=int(obj.return_date[5:7]), day=int(obj.return_date[8:10]))
     #     else:
-    #         rtd = null
+    #         rtd = 'null'
     #     issue_dates.append(isd)
     #     return_dates.append(rtd)
     #     isbns.append(obj.isbn)
-    # # print(issue_dates)
-    # # print(return_dates)
+    
     # ans = caller(issue_dates, return_dates)
+    # print("HEL")
     # print(ans)
-    return render(request, 'dashboard.html', {'book_cnt': book_cnt, 'journal_cnt': journal_cnt, 'issue_cnt': issue_cnt})
+    ans = [{'Monday': 82, 'Tuesday': 73, 'Wednesday': 79, 'Thursday': 76, 'Friday': 84, 'Saturday': 75, 'Sunday': 82}, [0, 17, 21, 19, 10, 20, 21, 18, 17, 20, 25, 20, 20, 23, 23, 17, 16, 17, 19, 18, 12, 17, 17, 16, 16, 16, 15, 23, 14, 14, 19, 11], [225, 14, 20, 19, 33, 35, 31, 28, 27, 25, 30, 22, 15, 16, 4, 1, 3, 1, 1, 1], [0, 27, 25, 30, 22, 15, 16, 4, 1, 3, 1, 1, 1], [405, 139, 7]]
+    return render(request, 'dashboard.html', {'book_cnt': book_cnt, 'journal_cnt': journal_cnt, 'issue_cnt': issue_cnt,'data1':ans[0],'data2':ans[1]})
 
 def journals(request):
     items = Journal.objects.all()[:10]

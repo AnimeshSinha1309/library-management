@@ -29,7 +29,7 @@ def setup():
     for i in range(num_entries):
         return_dates.append(
             issue_dates[i]+datetime.timedelta(days=int(max(random.gauss(7, 4), 0))))
-    print(issue_dates)
+    # print(issue_dates)
 
 
 def plot_issue_day_of_week():
@@ -91,7 +91,7 @@ def plot_issue_month():
     for issue_date in issue_dates:
         # print(issue_date.weekday())
         days_count.append(issue_date.month)
-    print(days_count)
+    # print(days_count)
     arr = np.array(days_count)
     plt.hist(days_count, bins=np.arange(1, 14),
              width=0.7, color='g')
@@ -217,7 +217,7 @@ def fines_to_csv():
 
 
 def caller(issued, returned):
-    print("ok")
+    # print("ok")
     global issue_dates
     global return_dates
     issue_dates = issued

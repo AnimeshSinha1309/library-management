@@ -37,28 +37,28 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
   }
 
   Future renewPeriodicals(String name,String type) async {
-    int month;
+    int months;
     switch(type) {
       case 'annually': {
-        month = 12;
+        months = 12;
       }
       break;
 
       case 'semi-annually': {
-        month = 6;
+        months = 6;
       }
       break;
       case 'quaterly': {
-        month = 4;
+        months = 4;
       }
       break;
       case 'monthly': {
-        month = 1;
+        months = 1;
       }
       break;
 
       default: {
-        month =1;
+        months =1;
       }
       break;
     }
@@ -73,7 +73,7 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
             showToast(context, "Already subscribed!");
           }
         else{
-          var purchase = DateTime.now().add(Duration(days: 30*month));
+          var purchase = DateTime.now().add(Duration(days: 30*months));
           Firestore.instance
               .collection(_docType)
               .document(name)

@@ -15,6 +15,8 @@ Future<void> loadUser(UserModel currentUser) async {
         .document(currentUser.uid)
         .setData({"issueList": [], "role": "student"});
   } else {
+    currentUser.borrowedBooks = [];
+    currentUser.pastBooks = [];
     for (var borrow in user.data["issueList"]) {
       var el = BorrowBookModel.fromJSON(borrow);
       if (el.returnDate == null)

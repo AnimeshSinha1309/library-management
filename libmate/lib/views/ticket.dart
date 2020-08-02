@@ -20,16 +20,17 @@ class TicketPage extends StatefulWidget {
   UserModel user;
 
   TicketPage(this.slot, this.tableNo,this.type){
-
-      uid = user.email;
-      List<dynamic> datalist = [];
-      datalist.add(user.email);
-
+    List<dynamic> datalist = [];
+//    if(user.email!=null)
+//      {
+//              uid = user.email;
+//              datalist.add(user.email);
+//      }
       datalist.add({'slot': slot});
       qrdata = jsonEncode(datalist);
       qrdata = jsonEncode(datalist);
 
-      // printWrapped(qrdata);
+       printWrapped(qrdata);
   }
 
   @override

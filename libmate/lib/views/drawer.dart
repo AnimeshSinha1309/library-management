@@ -64,7 +64,6 @@ class AppDrawer extends StatelessWidget {
               Icons.calendar_view_day, 'Upcoming periodicals', '/schedule')
           .build(context),
       Divider(color: Colors.grey, thickness: 0.5),
-      _DrawerViewItem(Icons.people, 'Forced Issue', '/issue').build(context),
       _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute')
           .build(context),
       _DrawerViewItem(Icons.account_circle, 'Accounts', '/accounts')

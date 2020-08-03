@@ -38,10 +38,30 @@ Future issueBook(String isbn, UserModel currentUser,
   BookModel book = BookModel.fromJSON(json: data.data, isbn: isbn);
 
   if (accNo == "") {
+    print(book.issues);
+    if (book.issues.length == 0) {
+      book.issues = {
+        "1": "available",
+        "2": "available",
+        "3": "available",
+        "4": "available",
+        "5": "available"
+      };
+    }
     for (var key in book.issues.keys) {
       if (book.issues[key] == "issued") continue;
       accNo = key;
       break;
+    }
+
+    if (accNo == "") {
+      for (int i = 10; i < 100; i++) {
+        if (!book.issues.containsKey(i.toString())) {
+          book.issues[i.toString()] = "available";
+          accNo = i.toString();
+          break;
+        }
+      }
     }
   }
 

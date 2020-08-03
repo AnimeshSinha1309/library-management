@@ -200,7 +200,7 @@ class Chatbot {
 
     output.add(author + "; " + subjects);
 
-    if (detectedSubjects.isEmpty && detectedSubjects.isEmpty) {
+    if (detectedAuthors.isEmpty && detectedSubjects.isEmpty) {
       output.add("Please give me the subject or author name");
     } else {
       var result = await search(aTokens, sTokens);

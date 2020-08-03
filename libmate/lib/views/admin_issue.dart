@@ -132,7 +132,7 @@ class IssueBookState extends State<IssueBook> {
                       onPressed: () async {
                         await Future.delayed(Duration(seconds: 2));
                         gotoPage(context, null,
-                            clear: true, routeName: "/home");
+                            clear: true, routeName: "/admin_scan");
                       })))
         ],
       );

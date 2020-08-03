@@ -17,17 +17,19 @@ Future loadSCache() async {
   fuse = Fuzzy(searchData,
       options: FuzzyOptions(keys: [
         WeightedKey(
-            name: "name_key", getter: (BookModel o) => o.name, weight: 1.0),
+            name: "name_key", getter: (BookModel o) => o.name, weight: 1 - 1.0),
         WeightedKey(
-            name: "author_key", getter: (BookModel o) => o.author, weight: 0.4),
+            name: "author_key",
+            getter: (BookModel o) => o.author,
+            weight: 1 - 0.4),
         WeightedKey(
             name: "desc_key",
             getter: (BookModel o) => o.description,
-            weight: 0.2),
+            weight: 1 - 0.2),
         WeightedKey(
             name: "genre_key",
             getter: (BookModel o) => o.genre + ' ' + o.subject,
-            weight: 0.8),
+            weight: 1 - 0.8),
       ]));
 }
 

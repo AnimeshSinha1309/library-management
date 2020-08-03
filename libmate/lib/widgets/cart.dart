@@ -66,6 +66,15 @@ class BookCartState extends State<BookCartUI> {
     saveCart();
   }
 
+  void clearCart() {
+    setState(() {
+      books = Set();
+      returns = Set();
+      numBooks = numReturns = 0;
+      saveCart();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var booklist = books.toList();
@@ -79,9 +88,14 @@ class BookCartState extends State<BookCartUI> {
             onPressed: () {
               gotoPage(context, Checkout(booklist, returnList, widget.user));
             }));
+    dynamic clearBtn = ButtonTheme(
+        minWidth: 200,
+        textTheme: ButtonTextTheme.primary,
+        child: RaisedButton(child: Text("Clear cart"), onPressed: clearCart));
 
     if (booklist.isEmpty && returnList.isEmpty) {
       btnChild = Text("Please add something into your cart first");
+      clearBtn = Text(" ");
     }
     dynamic issueBks = SliverGrid(
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
@@ -145,7 +159,8 @@ class BookCartState extends State<BookCartUI> {
                                   fontSize: 25.0,
                                   fontWeight: FontWeight.bold)))),
                   returnBks,
-                  SliverToBoxAdapter(child: btnChild)
+                  SliverToBoxAdapter(child: btnChild),
+                  SliverToBoxAdapter(child: clearBtn)
                 ],
               ),
             )));

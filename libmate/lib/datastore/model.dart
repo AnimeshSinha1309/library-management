@@ -126,8 +126,15 @@ class BookModel {
     if (jstheir != null) {
       var js = new Map<String, dynamic>.from(jstheir);
       this.issues = js;
-    } else
-      this.issues = Map<String, dynamic>();
+    } else {
+      this.issues = {
+        "1": "available",
+        "2": "available",
+        "3": "available",
+        "4": "available",
+        "5": "available"
+      };
+    }
 
     this.subject = json["subject"] ?? json["category"] ?? "";
     this.description = json["description"];

@@ -15,6 +15,8 @@ class IssuedBookCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const String defImage =
+        "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg";
     return Card(
       elevation: 5,
       child: InkWell(
@@ -30,7 +32,7 @@ class IssuedBookCard extends StatelessWidget {
                   height: 125,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: NetworkImage(model.book.image),
+                      image: NetworkImage(model.book.image ?? defImage),
                       fit: BoxFit.fitHeight,
                     ),
                   )),

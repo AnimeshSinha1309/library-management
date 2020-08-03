@@ -32,10 +32,6 @@
 		var chart = new CanvasJS.Chart("chartContainer", {
 			exportEnabled: true,
 			animationEnabled: true,
-			title: {
-				text: "Fine Frequency",
-				fontFamily: "tahoma",
-			},
 			axisX: {
 				title: "Fine Value (in rupees)",
 				gridThickness: 0,
@@ -80,10 +76,6 @@
 		var chart2 = new CanvasJS.Chart("chartContainer2", {
 			exportEnabled: true,
 			animationEnabled: true,
-			title: {
-				text: "No. of issues per day of month",
-				fontFamily: "tahoma",
-			},
 			axisX: {
 				title: "Days of Months",
 				gridThickness: 0,
@@ -124,10 +116,6 @@
 		var chart3 = new CanvasJS.Chart("chartContainer3", {
 			exportEnabled: true,
 			animationEnabled: true,
-			title: {
-				text: "No. of issues per day of week",
-				fontFamily: "tahoma",
-			},
 			// dataPointWidth: 2,
 			axisX: {
 				title: "Day of Week",
@@ -168,10 +156,6 @@
 		var chart4 = new CanvasJS.Chart("chartContainer4", {
 			exportEnabled: true,
 			animationEnabled: true,
-			title: {
-				text: "Return duration Frequency",
-				fontFamily: "tahoma",
-			},
 			axisX: {
 				title: "Time in days from issue",
 				gridThickness: 0,
@@ -220,10 +204,6 @@
 		}
 		var chart5 = new CanvasJS.Chart("chartContainer5", {
 			colorSet: "shades",
-			title: {
-				text: "Fine Paid",
-				fontFamily: "tahoma",
-			},
 			legend: {
 				cursor: "pointer",
 			},
@@ -310,65 +290,83 @@
 			</div>
 		</div>
 
-		<div class="row">
-			<div class="col-md-7 grid-margin stretch-card">
-				<div class="card" style="height: 470px;">
-					<div class="card-body">
-						<div class="clearfix" id="chartContainer">
-							<!-- <img src="/static/plot_issue_day_of_month.png" /> -->
-						</div>
-					</div>
+		<div class="row justify-content-around">
+			<div class="card text-center stretch-card col-lg-5 col-sm-12" style="height: 650px; margin-top: 20px;">
+				<div class="card-header">
+				  <ul class="nav nav-tabs card-header-tabs">
+					<li class="nav-item">
+					  <a class="nav-link active" href="#">Histogram</a>
+					</li>
+				  </ul>
+				</div>
+				<div class="card-body">
+				  <h5 class="card-title">Fine Frequency</h5>
+				  <p class="card-text">See bar chart of fine amount coming from different delay durations.</p>
+				  <div class="clearfix" id="chartContainer"></div>
+
 				</div>
 			</div>
-			<div class="col-md-5 grid-margin stretch-card">
-				<div class="card" style="height: 470px;">
-					<div class="card-body">
-						<div class="clearfix" id="chartContainer2">
-							<!-- <img src="/static/plot_category_counts.png" /> -->
-						</div>
-					</div>
+			<div class="card text-center col-lg-6 col-sm-12" style="height: 650px; margin-top: 20px;">
+				<div class="card-header">
+				  <ul class="nav nav-tabs card-header-tabs">
+					<li class="nav-item">
+					  <a class="nav-link active" href="#">Histogram</a>
+					</li>
+				  </ul>
+				</div>
+				<div class="card-body">
+				  <h5 class="card-title">Number of Issues across the Month</h5>
+				  <p class="card-text">See bar chart of daily issue counts.</p>
+				  <div class="clearfix" id="chartContainer2"></div>
+
 				</div>
 			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-5 grid-margin stretch-card">
-				<div class="card" style="height: 470px;">
-					<div class="card-body">
-						<div class="clearfix" id="chartContainer5">
-							<!-- <img src="/static/plot_fines_pie.png" /> -->
-						</div>
-					</div>
+			<div class="card text-center col-lg-5 col-sm-12" style="height: 650px; margin-top: 20px;">
+				<div class="card-header">
+				  <ul class="nav nav-tabs card-header-tabs">
+					<li class="nav-item">
+					  <a class="nav-link active" href="#">Histogram</a>
+					</li>
+				  </ul>
+				</div>
+				<div class="card-body">
+				  <h5 class="card-title">Issues across the Week</h5>
+				  <p class="card-text">See bar chart of traffic in the library (Issues) across days of the week.</p>
+				  <div class="clearfix" id="chartContainer3"></div>
+
 				</div>
 			</div>
-			<!-- <div class="col-md-7 grid-margin stretch-card">
-				<div class="card" style="height: 470px;">
-					<div class="card-body">
-						<div class="clearfix" id="chartContainer">
-							<img src="/static/plot_category_counts.png" />
-						</div>
-					</div>
+			<div class="card text-center col-lg-6 col-sm-12" style="height: 650px; margin-top: 20px;">
+				<div class="card-header">
+				  <ul class="nav nav-tabs card-header-tabs">
+					<li class="nav-item">
+					  <a class="nav-link active" href="#">Histogram</a>
+					</li>
+				  </ul>
 				</div>
-			</div> -->
-		</div>
-		<div class="row">
-			<div class="col-md-7 grid-margin stretch-card">
-				<div class="card" style="height: 470px;">
-					<div class="card-body">
-						<div class="clearfix" id="chartContainer3">
-							<!-- <img src="/static/plot_issue_day_of_week.png" /> -->
-						</div>
-					</div>
+				<div class="card-body">
+				  <h5 class="card-title">Return duration Frequency</h5>
+				  <p class="card-text">How long do people keep the books for.</p>
+				  <div class="clearfix" id="chartContainer4"></div>
+
 				</div>
 			</div>
-			<div class="col-md-5 grid-margin stretch-card">
-				<div class="card" style="height: 470px;">
-					<div class="card-body">
-						<div class="clearfix" id="chartContainer4">
-							<!-- <img src="/static/plot_return_duration.png" /> -->
-						</div>
-					</div>
+			<div class="card text-center col-lg-4 col-sm-12" style="height: 650px; margin-top: 20px;">
+				<div class="card-header">
+				  <ul class="nav nav-tabs card-header-tabs">
+					<li class="nav-item">
+					  <a class="nav-link active" href="#">Pie</a>
+					</li>
+				  </ul>
+				</div>
+				<div class="card-body">
+				  <h5 class="card-title">Fine Duration Share</h5>
+				  <p class="card-text">Pie chart of normal delays vs. extreme delays.</p>
+				  <div class="clearfix" id="chartContainer5"></div>
+
 				</div>
 			</div>
+			  
 		</div>
 	</div>
 </div>

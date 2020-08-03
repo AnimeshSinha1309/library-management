@@ -26,169 +26,60 @@
 			integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
 			crossorigin="anonymous"
 		></script>
+
+		<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+		<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+
+		<!-- CSS only -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+		<!-- JS, Popper.js, and jQuery -->
+		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 	</head>
 
 	<body>
 		<div class="container-scroller">
-			<nav
-				class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row"
-			>
-				<div
-					class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center"
-				>
-					<a href="/dashboard">
-						<img
-							src="/static/logo.png"
-							style="
-								height: 180px;
-								width: 180px;
-								margin-left: -50px;
-								margin-top: 10px;
-							"
-						/>
-					</a>
-				</div>
-				<div class="navbar-menu-wrapper d-flex align-items-stretch">
-					<ul class="navbar-nav navbar-nav-right">
-						<li class="nav-item nav-profile dropdown">
-							<a
-								class="nav-link dropdown-toggle"
-								id="profileDropdown"
-								href="#"
-								data-toggle="dropdown"
-								aria-expanded="false"
-							>
-								<div class="nav-profile-img">
-									<img
-										src="/static/female2.jpeg"
-										alt="Profile"
-									/>
-									<span
-										class="availability-status online"
-									></span>
-								</div>
-								<div class="nav-profile-text">
-									<span class="mb-1 text-black"
-										>Hello ! {{username}}
-									</span>
-								</div>
-							</a>
-							<div
-								class="dropdown-menu navbar-dropdown"
-								aria-labelledby="profileDropdown"
-							>
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="#">
-									<i
-										class="mdi mdi-logout mr-2 text-primary"
-									></i>
-									Signout
-								</a>
-							</div>
+
+			<nav class="navbar navbar-expand-lg navbar-fixed">
+				<a class="navbar-brand" href="#">
+					<img src="/static/logo.png" width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy">
+					<span>LibMate</span>
+				  </a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+				  <span class="navbar-toggler-icon"></span>
+				</button>
+			  
+				<div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+				    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+						<li class="nav-item active">
+							<a class="nav-link" href="/dashboard">Dashboard <span class="sr-only">(current)</span></a>
 						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="/books">Books</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="/journals">Journals</a>
+						</li>
+				    </ul>
+				    <ul class="form-inline my-2 my-lg-0">
 						<li class="nav-item d-none d-lg-block full-screen-link">
 							<a class="nav-link">
-								<i
-									class="mdi mdi-fullscreen"
-									id="fullscreen-button"
-								></i>
+								<i class="mdi mdi-fullscreen" id="fullscreen-button"></i>
 							</a>
 						</li>
-
 						<li class="nav-item nav-logout d-none d-lg-block">
 							<a class="nav-link" href="#">
 								<i class="mdi mdi-power"></i>
 							</a>
 						</li>
-					</ul>
-					<button
-						class="navbar-toggler navbar-toggler-right d-lg-none align-self-center"
-						type="button"
-						data-toggle="offcanvas"
-					>
-						<span class="mdi mdi-menu"></span>
-					</button>
+				  	</ul>
 				</div>
 			</nav>
 
-			<!-- partial -->
-			<div class="container-fluid page-body-wrapper">
-				<!-- partial:partials/_sidebar.html -->
-				<nav
-					class="sidebar sidebar-offcanvas"
-					id="sidebar"
-					style="
-						position: fixed;
-						width: 250px;
-						background-image: url('{% static 'bg.jpg' %}');
-						background-attachment: fixed;
-						background-size: contain;
-					"
-				>
-					<ul class="nav">
-						<li class="nav-item nav-profile">
-							<a href="#" class="nav-link">
-								<div class="nav-profile-image">
-									<img
-										src="/static/female2.jpeg"
-										alt="Profile"
-									/>
-									<span class="login-status online"></span>
-									<!--change to offline or busy as needed-->
-								</div>
-								<div
-									class="nav-profile-text d-flex flex-column"
-								>
-									<span class="font-weight-bold mb-2"
-										>Hello !<br />{{username}}
-									</span>
-									<span
-										class="text-secondary text-small"
-									></span>
-								</div>
-								<i
-									class="mdi mdi-bookmark-check text-success nav-profile-badge"
-								></i>
-							</a>
-						</li>
-						<br />
-						<div
-							class="container shadow mb-5"
-							style="
-								z-index: 100;
-								border-radius: 5px;
-								width: 80%;
-								background-color: rgba(255, 255, 255, 0.8);
-							"
-						>
-							<li class="nav-item sidebar-actions px-4">
-								<span class="nav-link">
-									<div class="mt-2">
-										<ul class="gradient-bullet-list mt-2">
-											<a
-												class="nav-link"
-												href="/dashboard"
-											>
-												<li>Dashboard</li>
-											</a>
-											<a class="nav-link" href="/books">
-												<li>Books</li>
-											</a>
-											<a
-												class="nav-link"
-												href="/journals"
-											>
-												<li>Journals</li>
-											</a>
-										</ul>
-									</div>
-								</span>
-							</li>
-						</div>
-					</ul>
-				</nav>
-				<!-- partial -->
-				<div id="main-container">
+			<div class="container-fluid page-body-wrapper" style="padding-top: 0;">
+				<div id="">
 					{% block content %} {% endblock %}
 				</div>
 			</div>

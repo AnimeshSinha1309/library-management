@@ -12,7 +12,7 @@ def hello_world(request):
 
 def dashboard(request):
     book_cnt = Book.objects.count()
-    issue_cnt = Issue.objects.count()
+    issue_cnt = Issue.objects.filter(return_date__isnull=True).count()
     journal_cnt = Journal.objects.count()
     issue_dates = []
     return_dates = []

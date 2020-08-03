@@ -25,16 +25,19 @@ class _PeriodicalPageState extends State<PeriodicalPage> {
     for (var doc in snapshot.documents) {
       var data = doc.data;
       card.add(JournalModel(
-          name: data['name'],
-          title: doc['title'],
-          description: data['description'],
-          image: data['image'],
-          impactfactor: data['impactfactor'].toString(),
-          chiefeditor: data['chiefeditor'],
-          volume: data['volume'].toString(),
-          issue: data['issue'],
-          issn: data['issn'],
-          date: data['date']));
+        name: data['name'],
+        title: doc['title'],
+        description: data['description'],
+        image: data['image'],
+        impactfactor: data['impactfactor'].toString(),
+        chiefeditor: data['chiefeditor'],
+        volume: data['volume'].toString(),
+        issue: data['issue'],
+        issn: data['issn'],
+        date: data['date'],
+        charges: data['charges'],
+        subscription: data['subscription'],
+      ));
     }
     setState(() {
       cards = card;
@@ -49,7 +52,8 @@ class _PeriodicalPageState extends State<PeriodicalPage> {
   }
 
   List<Widget> cardgen() {
-    return cards.map((e) => AdminjournalCard(model: e)).toList(growable: false);
+    // return dummyJournals.map((e) => AdminjournalCard(model: e)).toList();
+    return cards.map((e) => AdminjournalCard(model: e)).toList();
   }
 
   @override

@@ -25,22 +25,31 @@ class _SchedulePageState extends State<SchedulePage> {
 
   Future loadData() async {
     List meeting = <Meeting>[];
-    fetchdata();
-    await Firestore.instance
+    var snapshot = await Firestore.instance
         .collection('periodical_subscriptions')
-        .getDocuments()
-        .then((querySnapshot) {
-      querySnapshot.documents.forEach((result) {
-        final DateTime today = DateTime.now();
-        var arr = result.data['purchased'].split('-');
-        final DateTime startTime = DateTime(
-            int.parse(arr[0]), int.parse(arr[1]), int.parse(arr[2]), 9, 0, 0);
-        final DateTime endTime = startTime.add(const Duration(hours: 2));
-        meeting.add(Meeting(result.data['name'], startTime, endTime,
-            const Color(0xFF0F8644), false));
-      });
-    });
-    setState(() {
+        .getDocuments();
+    for (var result in snapshot.documents) {
+      print(result.data);
+      final DateTime today = DateTime.now();
+      var arr = result.data['purchased'].split('-');
+      final DateTime startTime = DateTime(
+          int.parse(arr[0]), int.parse(arr[1]), int.parse(arr[2]), 9, 0, 0);
+      final DateTime endTime = startTime.add(const Duration(hours: 2));
+      meeting.add(Meeting(result.documentID, startTime, endTime,
+          const Color(0xFF0F8644), false));
+    }
+    //     .then((querySnapshot) {
+    //   querySnapshot.documents.forEach((result) {
+    //     final DateTime today = DateTime.now();
+    //     var arr = result.data['purchased'].split('-');
+    //     final DateTime startTime = DateTime(
+    //         int.parse(arr[0]), int.parse(arr[1]), int.parse(arr[2]), 9, 0, 0);
+    //     final DateTime endTime = startTime.add(const Duration(hours: 2));
+    //     meeting.add(Meeting(result.data['name'], startTime, endTime,
+    //         const Color(0xFF0F8644), false));
+    //   });
+    // });
+    await setState(() {
       isLoaded = true;
       meetings = meeting;
     });
@@ -124,9 +133,9 @@ class _SchedulePageState extends State<SchedulePage> {
     // });
     // final DateTime today = DateTime.now();
     // final DateTime startTime =
-    // DateTime(today.year, today.month, today.day, 9, 0, 0);
+    //     DateTime(today.year, today.month, today.day, 9, 0, 0);
     // final DateTime startTime2 =
-    // DateTime(today.year, today.month, today.day+5, 9, 0, 0);
+    //     DateTime(today.year, today.month, today.day + 5, 9, 0, 0);
     // final DateTime endTime = startTime.add(const Duration(hours: 2));
     // final DateTime endTime2 = startTime2.add(const Duration(hours: 2));
     // print(meetings.length);
@@ -134,8 +143,8 @@ class _SchedulePageState extends State<SchedulePage> {
     //     "Nature vol 8", startTime, endTime, const Color(0xFF0F8644), false));
     // meetings.add(Meeting(
     //     "Friction", startTime2, endTime2, const Color(0xFF0F8644), false));
-    // meetings.add(Meeting(
-    //     "Journal of Biomedical Sciences", startTime2, endTime2, const Color(0xFF0F8644), false));
+    // meetings.add(Meeting("Journal of Biomedical Sciences", startTime2, endTime2,
+    //     const Color(0xFF0F8644), false));
     // return meetings;
   }
 }

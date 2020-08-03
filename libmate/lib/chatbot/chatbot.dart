@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:libmate/datastore/model.dart';
 import 'package:libmate/datastore/state.dart';
 import 'package:libmate/utils/utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 String readUser() {
   return stdin.readLineSync();
@@ -32,9 +33,13 @@ void genMispells() {
   }
 }
 
+const String defImage =
+    "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg";
+
 class ChatBook {
   String name, author;
   String tag, isbn, description;
+  String image;
 
   ChatBook({this.name, this.author, this.tag, this.isbn, this.description});
 
@@ -46,8 +51,18 @@ class ChatBook {
     this.isbn =
         (json["isbn"] is String ? json["isbn"] : json["isbn"].toString());
 
+    this.image = json["image"] ?? defImage;
     this.tag = json["tag"];
     this.description = json["description"];
+  }
+
+  toBookModel() {
+    return BookModel(
+        name: name,
+        author: author,
+        isbn: isbn,
+        description: description,
+        image: image);
   }
 
   toJSON() {
@@ -159,10 +174,10 @@ class Chatbot {
 
     for (var x in response) {
       var bk = ChatBook.fromJSON(x);
+      print(bk);
 
       if (bk.name == null ||
           bk.description == null ||
-          bk.tag == null ||
           bk.author == null ||
           bk.isbn == null) continue;
       res.add(bk);
@@ -220,6 +235,41 @@ class Chatbot {
     return output;
   }
 
+  Future<int> saveCart(BookModel model) async {
+    final int maxBooks = 4;
+    final key = "issuecart";
+    final prefs = await SharedPreferences.getInstance();
+    List<String> issueCart = prefs.getStringList(key) ?? [];
+    if (issueCart.length > maxBooks) return 1;
+
+    String nBookName = model.name;
+    for (var issued in issueCart) {
+      var js = json.decode(issued);
+      if (BookModel.fromJSON(json: js).name == nBookName) {
+        return 3;
+      }
+    }
+
+    issueCart.add(jsonEncode(model.toJSON()));
+
+    return (await prefs.setStringList(key, issueCart)) ? 0 : 2;
+  }
+
+  Future<String> addBookCart(BookModel model) async {
+    int res = await saveCart(model);
+    if (res == 0) {
+      return "Added to cart";
+    } else if (res == 1) {
+      return "Exceeded max size of cart";
+    } else if (res == 2) {
+      return "Error saving cart";
+    } else if (res == 3) {
+      return "Book already present";
+    } else {
+      return "Unknown Error";
+    }
+  }
+
   int getOrdinal(String str) {
     List<String> ordinals = ["first", "second", "third", "fourth", "fifth"];
     int i = 0;
@@ -256,14 +306,16 @@ class Chatbot {
   Future<List<String>> issue(String str) async {
     List<String> out = [];
     int ord = getOrdinal(str);
+
     if (ord != -1) {
       var book = currBooks[ord];
-      await issueBook(book.isbn, user);
-      out.add("Book ${book.name} added to cart");
+      String res = await addBookCart(book.toBookModel());
+      out.add("Book ${book.name}: $res");
     } else {
       out.add(
           "Sorry I did not understand the book number to issue. Could you repeat?");
     }
+
     return out;
   }
 
@@ -289,7 +341,7 @@ class Chatbot {
           out = await recommender(userInput);
         }
       } else {
-        await issue(userInput);
+        out = await issue(userInput);
       }
     } else if (context == 0) {
       out = await recommender(userInput);

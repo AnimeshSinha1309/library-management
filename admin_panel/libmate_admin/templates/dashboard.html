@@ -11,27 +11,19 @@
 			"#ED2121",
 		]);
 		//converting string into json arr and making tupple to array by replacing
-		const dataTwo = JSON.parse(
+		var dataTwo = JSON.parse(
 			"{{ data1 | safe }}"
 				.replace(/\(/g, "[")
 				.replace(/\)/g, "]")
 				.replace(/'/g, '"')
 		);
-		// console.log(dataTwo);
-		// console.log(typeof dataTwo);
-		// for (const prop in dataTwo) {
-		// 	console.log(prop);
-		// 	console.log(dataTwo[prop]);
-		// }
 		dps = [];
-		for (const prop in dataTwo) {
+		for (var prop in dataTwo) {
 			dps.push({
 				label: prop,
 				y: dataTwo[prop],
 			});
 		}
-		console.log("kanis");
-		console.log(dps);
 		var chart = new CanvasJS.Chart("chartContainer", {
 			exportEnabled: true,
 			animationEnabled: true,
@@ -122,6 +114,20 @@
 		});
 		chart2.render();
 
+		var dataTwo = JSON.parse(
+			"{{ data1 | safe }}"
+				.replace(/\(/g, "[")
+				.replace(/\)/g, "]")
+				.replace(/'/g, '"')
+		);
+		dps = [];
+		for (var prop in dataTwo) {
+			dps.push({
+				label: prop,
+				y: dataTwo[prop],
+			});
+		}
+
 		var chart3 = new CanvasJS.Chart("chartContainer3", {
 			exportEnabled: true,
 			animationEnabled: true,
@@ -147,14 +153,7 @@
 					type: "column",
 					fillColor: "rgba(158, 224, 244 ,0.5)",
 					showInLegend: true,
-					dataPoints: [
-						{ label: "Monday", y: 40 },
-						{ label: "Tuesday", y: 35 },
-						{ label: "Wednesday", y: 43 },
-						{ label: "Thursday", y: 29 },
-						{ label: "Friday", y: 46 },
-						{ label: "Saturday", y: 25 },
-					],
+					dataPoints: dps,
 				},
 			],
 		});

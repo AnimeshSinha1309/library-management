@@ -31,12 +31,12 @@ def dashboard(request):
         isbns.append(obj.isbn)
         
     ans = caller(issue_dates, return_dates)
-    print(ans)
+    # print(ans)
     return render(request, 'dashboard.html', {'book_cnt': book_cnt, 'journal_cnt': journal_cnt, 'issue_cnt': issue_cnt,'data1':ans[0],'data2':ans[1],'data3':ans[2],'data4':ans[3],'data5':ans[4]})
 
 
 def journals(request):
-    items = Journal.objects.all()[:10]
+    items = Journal.objects.all()[:20]
     return render(request, 'journals.html', {'items': items})
 
 

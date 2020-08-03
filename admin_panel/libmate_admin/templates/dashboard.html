@@ -4,11 +4,21 @@
 	window.onload = function () {
 		CanvasJS.addColorSet("shades", [
 			//colorSet Array
-			"#39B2D7",
-			"#9414D0",
-			"#E11BBF",
-			"#E11B74",
-			"#ED2121",
+			// "#1594D2",
+
+			// "#39B2D7",
+			// "#9414D0",
+			// "#E11BBF",
+			// "#E11B74",
+			// "#ED2121",
+			"#396AB1",
+			"#DA7C30",
+			"#3E9651",
+			"#CC2529",
+			'#535154',
+			"#6B4C9A",
+			"#922428",
+			"#948B3D",
 		]);
 		//converting string into json arr and making tupple to array by replacing
 		var dataTwo = JSON.parse(
@@ -30,6 +40,7 @@
 			});
 		}
 		var chart = new CanvasJS.Chart("chartContainer", {
+			colorSet: "shades",
 			exportEnabled: true,
 			animationEnabled: true,
 			axisX: {
@@ -74,6 +85,7 @@
 			});
 		}
 		var chart2 = new CanvasJS.Chart("chartContainer2", {
+			colorSet: "shades",
 			exportEnabled: true,
 			animationEnabled: true,
 			axisX: {
@@ -114,6 +126,7 @@
 		}
 
 		var chart3 = new CanvasJS.Chart("chartContainer3", {
+			colorSet: "shades",
 			exportEnabled: true,
 			animationEnabled: true,
 			// dataPointWidth: 2,
@@ -154,6 +167,7 @@
 			});
 		}
 		var chart4 = new CanvasJS.Chart("chartContainer4", {
+			colorSet: "shades",
 			exportEnabled: true,
 			animationEnabled: true,
 			axisX: {
@@ -293,80 +307,80 @@
 		<div class="row justify-content-around">
 			<div class="card text-center stretch-card col-lg-5 col-sm-12" style="height: 650px; margin-top: 20px;">
 				<div class="card-header">
-				  <ul class="nav nav-tabs card-header-tabs">
-					<li class="nav-item">
-					  <a class="nav-link active" href="#">Histogram</a>
-					</li>
-				  </ul>
+					<ul class="nav nav-tabs card-header-tabs">
+						<li class="nav-item">
+							<a class="nav-link active" href="#">Histogram</a>
+						</li>
+					</ul>
 				</div>
 				<div class="card-body">
-				  <h5 class="card-title">Fine Frequency</h5>
-				  <p class="card-text">See bar chart of fine amount coming from different delay durations.</p>
-				  <div class="clearfix" id="chartContainer"></div>
+					<h5 class="card-title">Fine Frequency</h5>
+					<p class="card-text">See bar chart of fine amount coming from different delay durations.</p>
+					<div class="clearfix" id="chartContainer"></div>
 
 				</div>
 			</div>
 			<div class="card text-center col-lg-6 col-sm-12" style="height: 650px; margin-top: 20px;">
 				<div class="card-header">
-				  <ul class="nav nav-tabs card-header-tabs">
-					<li class="nav-item">
-					  <a class="nav-link active" href="#">Histogram</a>
-					</li>
-				  </ul>
+					<ul class="nav nav-tabs card-header-tabs">
+						<li class="nav-item">
+							<a class="nav-link active" href="#">Histogram</a>
+						</li>
+					</ul>
 				</div>
 				<div class="card-body">
-				  <h5 class="card-title">Number of Issues across the Month</h5>
-				  <p class="card-text">See bar chart of daily issue counts.</p>
-				  <div class="clearfix" id="chartContainer2"></div>
+					<h5 class="card-title">Number of Issues across the Month</h5>
+					<p class="card-text">See bar chart of daily issue counts.</p>
+					<div class="clearfix" id="chartContainer2"></div>
 
 				</div>
 			</div>
 			<div class="card text-center col-lg-5 col-sm-12" style="height: 650px; margin-top: 20px;">
 				<div class="card-header">
-				  <ul class="nav nav-tabs card-header-tabs">
-					<li class="nav-item">
-					  <a class="nav-link active" href="#">Histogram</a>
-					</li>
-				  </ul>
+					<ul class="nav nav-tabs card-header-tabs">
+						<li class="nav-item">
+							<a class="nav-link active" href="#">Histogram</a>
+						</li>
+					</ul>
 				</div>
 				<div class="card-body">
-				  <h5 class="card-title">Issues across the Week</h5>
-				  <p class="card-text">See bar chart of traffic in the library (Issues) across days of the week.</p>
-				  <div class="clearfix" id="chartContainer3"></div>
+					<h5 class="card-title">Issues across the Week</h5>
+					<p class="card-text">See bar chart of traffic in the library (Issues) across days of the week.</p>
+					<div class="clearfix" id="chartContainer3"></div>
 
 				</div>
 			</div>
 			<div class="card text-center col-lg-6 col-sm-12" style="height: 650px; margin-top: 20px;">
 				<div class="card-header">
-				  <ul class="nav nav-tabs card-header-tabs">
-					<li class="nav-item">
-					  <a class="nav-link active" href="#">Histogram</a>
-					</li>
-				  </ul>
+					<ul class="nav nav-tabs card-header-tabs">
+						<li class="nav-item">
+							<a class="nav-link active" href="#">Histogram</a>
+						</li>
+					</ul>
 				</div>
 				<div class="card-body">
-				  <h5 class="card-title">Return duration Frequency</h5>
-				  <p class="card-text">How long do people keep the books for.</p>
-				  <div class="clearfix" id="chartContainer4"></div>
+					<h5 class="card-title">Return duration Frequency</h5>
+					<p class="card-text">How long do people keep the books for.</p>
+					<div class="clearfix" id="chartContainer4"></div>
 
 				</div>
 			</div>
 			<div class="card text-center col-lg-4 col-sm-12" style="height: 650px; margin-top: 20px;">
 				<div class="card-header">
-				  <ul class="nav nav-tabs card-header-tabs">
-					<li class="nav-item">
-					  <a class="nav-link active" href="#">Pie</a>
-					</li>
-				  </ul>
+					<ul class="nav nav-tabs card-header-tabs">
+						<li class="nav-item">
+							<a class="nav-link active" href="#">Pie</a>
+						</li>
+					</ul>
 				</div>
 				<div class="card-body">
-				  <h5 class="card-title">Fine Duration Share</h5>
-				  <p class="card-text">Pie chart of normal delays vs. extreme delays.</p>
-				  <div class="clearfix" id="chartContainer5"></div>
+					<h5 class="card-title">Fine Duration Share</h5>
+					<p class="card-text">Pie chart of normal delays vs. extreme delays.</p>
+					<div class="clearfix" id="chartContainer5"></div>
 
 				</div>
 			</div>
-			  
+
 		</div>
 	</div>
 </div>

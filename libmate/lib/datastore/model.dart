@@ -224,7 +224,9 @@ class JournalModel {
   String description;
   String issn;
   String subscription;
-  String charges;
+  int charges;
+  DateTime expiry;
+  DateTime purchased;
 
   JournalModel(
       {@required this.name,
@@ -239,7 +241,7 @@ class JournalModel {
         this.description = "",
         this.issn = "",
         this.subscription = "",
-        this.charges = ""
+        this.charges = 0,
       });
 
   JournalModel.fromJSON(Map<String, dynamic> json) {

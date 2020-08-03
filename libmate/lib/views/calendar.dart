@@ -98,7 +98,9 @@ void fetchdata() async{                   //not used: testing
     meetings.add(Meeting(
         "Nature vol 8", startTime, endTime, const Color(0xFF0F8644), false));
     meetings.add(Meeting(
-        "The Atlantic", startTime2, endTime2, const Color(0xFF0F8644), false));
+        "Friction", startTime2, endTime2, const Color(0xFF0F8644), false));
+    meetings.add(Meeting(
+        "Journal of Biomedical Sciences", startTime2, endTime2, const Color(0xFF0F8644), false));
     return meetings;
   }
 }

@@ -15,6 +15,7 @@ import 'dart:async';
 
 class AdminjournalPage extends StatefulWidget {
   final JournalModel model;
+
   AdminjournalPage(this.model);
   @override
   _AdminjournalPageState createState() => _AdminjournalPageState();
@@ -23,20 +24,15 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
 
   int maxBooks = 20;
   String _docType;
+  int charges = 0;
+  DateTime expiry = DateTime.now();
 
-//  Future renew(name) async {
-//    Firestore.instance.collection('periodical-subscriptions').document(name).get().then((value){
-//      print(value.data);
-//    });
-//  }
   @override
   void initState() {
     super.initState();
     _docType = 'periodical_subscriptions';
 
-
   }
-
 
   Future renewPeriodicals(context,String name,String type) async {
     int months;
@@ -51,7 +47,7 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
       }
       break;
       case 'quaterly': {
-        months = 4;
+        months = 3;
       }
       break;
       case 'monthly': {
@@ -74,6 +70,9 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
       var purchase = DateTime.now().add(Duration(days: 30 * months));
       Firestore.instance.collection(_docType).document(name).updateData(
           {'purchased': DateFormat("yyyy-MM-DD-HH:MM:SS").format(purchase)});
+      setState(() {
+        purchase = purchase;
+      });
       showToast(context, "Renewed");
     }
   }
@@ -95,12 +94,9 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
         break;
       }
     }
-
     if (!found) readList.add(sBook);
-
     return (await prefs.setStringList("readingList", readList)) ? 0 : 2;
   }
-
 
   Future<String> addJournal(JournalModel model) async {
     int res = await saveReadingList(model);
@@ -115,7 +111,7 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
     }
   }
   List<String> _subscription = ['annually', 'semi-annually', 'quaterly', 'monthly']; // Option 2
-  String _currsubscription = 'annually';
+
 
   @override
   Widget build(BuildContext context) {
@@ -159,10 +155,35 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
                               ),
                               DropdownButton(
                                 hint: Text('Subscription type'), // Not necessary for Option 1
-                                value: _currsubscription,
+                                value: widget.model.subscription,
                                 onChanged: (newValue) {
                                   setState(() {
-                                    _currsubscription = newValue;
+                                    widget.model.subscription = newValue;
+                                    charges = widget.model.charges;
+                                    switch(widget.model.subscription)
+                                    {
+                                      case 'annually': {
+                                        charges = charges;
+                                      }
+                                      break;
+                                      case 'semi-annually': {
+                                        charges = (charges / 2).truncate().toInt();
+                                      }
+                                      break;
+                                      case 'quaterly': {
+                                        charges = (charges / 4).truncate().toInt();
+                                      }
+                                      break;
+                                      case 'monthly': {
+                                        charges = (charges / 10).truncate().toInt();
+                                      }
+                                      break;
+
+                                      default: {
+                                        charges = charges;
+                                      }
+                                      break;
+                                    }
                                   });
                                 },
                                 items: _subscription.map((subscription) {
@@ -180,7 +201,7 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
                                       TextSpan(
                                           text: "Charges: ",
                                           style: TextStyle(fontWeight: FontWeight.bold)),
-                                      TextSpan(text: widget.model.charges)
+                                      TextSpan(text: "$charges")
                                     ]),
                               ),
                               SizedBox(height: 10),
@@ -189,7 +210,7 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
                                     style: DefaultTextStyle.of(context).style,
                                     children: <TextSpan>[
                                       TextSpan(
-                                          text: "Expires: "+ "23-07-2020",
+                                          text: "Expires: "+ "$expiry",
                                           style: TextStyle(fontWeight: FontWeight.bold)),
                                     ]),
                               ),

@@ -218,7 +218,7 @@ class BookPage extends StatelessWidget {
                   SizedBox(height: 20),
                   Row(children: [
                     Image(
-                      image: NetworkImage(model.image),
+                      image: NetworkImage(model.image ?? defImage),
                       fit: BoxFit.fitWidth,
                       alignment: Alignment.topCenter,
                     ),
@@ -361,7 +361,7 @@ class JournalBookPage extends StatelessWidget {
                   SizedBox(height: 20),
                   Row(children: [
                     Image(
-                      image: NetworkImage(model.image),
+                      image: NetworkImage(model.image ?? defImage),
                       fit: BoxFit.fitWidth,
                       alignment: Alignment.topCenter,
                     )

@@ -47,8 +47,9 @@ class CheckoutState extends State<Checkout> {
   int checks = 0;
 
   recheck() async {
-    await Future.delayed(Duration(seconds: 30));
-    for (var book in widget.books) await issueBookModel(book, widget.user);
+    await Future.delayed(Duration(seconds: 40));
+    for (var book in widget.books)
+      await issueBook(book.isbn, widget.user, json: book.toJSON());
     for (var book in widget.returns)
       await returnBook(book.book.isbn, widget.user, book.accessionNumber);
     setState(() {

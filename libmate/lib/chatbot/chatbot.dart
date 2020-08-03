@@ -14,6 +14,24 @@ void printWrapped(String text) {
   pattern.allMatches(text).forEach((match) => print(match.group(0)));
 }
 
+var commonTags = ["math", "quantum", "network", "physics"];
+Map<String, String> correctSpell;
+
+void genMispells() {
+  correctSpell = Map();
+  for (var tag in commonTags) {
+    var orgTag = tag;
+    for (int i = 0; i < orgTag.length; i++) {
+      for (int c = 97; c <= 122; c++) {
+        var newtag = orgTag.substring(0, i) +
+            String.fromCharCode(c) +
+            orgTag.substring(i + 1);
+        correctSpell[newtag] = orgTag;
+      }
+    }
+  }
+}
+
 class ChatBook {
   String name, author;
   String tag, isbn, description;
@@ -28,6 +46,7 @@ class ChatBook {
     this.isbn =
         (json["isbn"] is String ? json["isbn"] : json["isbn"].toString());
 
+    this.tag = json["tag"];
     this.description = json["description"];
   }
 
@@ -61,6 +80,8 @@ class Chatbot {
     print(user.email);
     context = 0;
     currBooks = [];
+    genMispells();
+    print(correctSpell);
   }
 
   List<String> extractStuff(List<String> prec, String userInput) {
@@ -70,7 +91,11 @@ class Chatbot {
       print("$reg $userInput");
       var matches = reg.allMatches(userInput);
       for (var match in matches) {
-        author.add(match.group(1));
+        var use = match.group(1);
+        if (correctSpell.containsKey(use)) {
+          author.add(correctSpell[use]);
+        } else
+          author.add(use);
       }
     }
     return author.toSet().toList();
@@ -113,12 +138,12 @@ class Chatbot {
     Map<String, String> query = {"maxResults": "10"};
     if (author != null) query["author"] = author[0];
     if (subject != null) query["tag"] = subject[0];
-    print(query);
 
     print("Searching");
     print(author);
     print(subject);
     print(query);
+
     Uri url = Uri.http("54.83.31.83", "/query", query);
     final result = await http.get(url); // call api;
     if (result.statusCode != 200) {
@@ -175,18 +200,22 @@ class Chatbot {
 
     output.add(author + "; " + subjects);
 
-    var result = await search(aTokens, sTokens);
-    currBooks = result;
-
-    if (result.length == 0) {
-      output.add("Sorry, I could not find any books related to that criteria");
+    if (detectedSubjects.isEmpty && detectedSubjects.isEmpty) {
+      output.add("Please give me the subject or author name");
     } else {
-      for (var book in result) {
-        output.add("Title: ${book.name} by ${book.author}");
-      }
-    }
+      var result = await search(aTokens, sTokens);
+      currBooks = result;
 
-    context = 1;
+      if (result.length == 0) {
+        output
+            .add("Sorry, I could not find any books related to that criteria");
+      } else {
+        for (var book in result) {
+          output.add("Title: ${book.name} by ${book.author}");
+        }
+      }
+      context = 1;
+    }
 
     return output;
   }
@@ -198,6 +227,7 @@ class Chatbot {
       if (RegExp(ordinal, caseSensitive: false).hasMatch(str)) {
         return i;
       }
+      i++;
     }
     List<String> pos = ["one", "two", "three", "four", "five"];
     i = 0;
@@ -205,6 +235,7 @@ class Chatbot {
       if (RegExp(ordinal, caseSensitive: false).hasMatch(str)) {
         return i;
       }
+      i++;
     }
     return -1;
   }

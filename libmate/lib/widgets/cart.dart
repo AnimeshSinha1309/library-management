@@ -83,18 +83,19 @@ class BookCartState extends State<BookCartUI> {
               child: CustomScrollView(
                 slivers: [
                   SliverToBoxAdapter(
-                      child: Padding(
+                      child: Container(
                           padding: EdgeInsets.all(10),
                           child: Text('Books being Issued',
                               style: TextStyle(
                                   color: Colors.black87,
                                   fontSize: 25.0,
-                                  fontWeight: FontWeight.bold)))),
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.left))),
                   SliverGrid(
                     gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                       maxCrossAxisExtent: 200.0,
-                      mainAxisSpacing: 10.0,
-                      crossAxisSpacing: 10.0,
+                      // mainAxisSpacing: 10.0,
+                      // crossAxisSpacing: 10.0,
                       childAspectRatio: 0.75,
                     ),
                     delegate: SliverChildBuilderDelegate(
@@ -104,7 +105,7 @@ class BookCartState extends State<BookCartUI> {
                     ),
                   ),
                   SliverToBoxAdapter(
-                      child: Padding(
+                      child: Container(
                           padding: EdgeInsets.all(10),
                           child: Text('Books being Returned',
                               style: TextStyle(
@@ -114,8 +115,8 @@ class BookCartState extends State<BookCartUI> {
                   SliverGrid(
                     gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                       maxCrossAxisExtent: 400.0,
-                      mainAxisSpacing: 10.0,
-                      crossAxisSpacing: 10.0,
+                      // mainAxisSpacing: 10.0,
+                      // crossAxisSpacing: 10.0,
                       childAspectRatio: 2.25,
                     ),
                     delegate: SliverChildBuilderDelegate(

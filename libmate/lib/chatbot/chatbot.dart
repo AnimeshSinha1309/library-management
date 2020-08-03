@@ -227,7 +227,7 @@ class Chatbot {
     int ord = getOrdinal(str);
     if (ord != -1) {
       var book = currBooks[ord];
-      await issueBook(book.isbn, user, json: book.toJSON());
+      await issueBook(book.isbn, user);
       out.add("Book ${book.name} added to cart");
     } else {
       out.add(

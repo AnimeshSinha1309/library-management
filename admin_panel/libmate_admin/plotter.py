@@ -105,8 +105,12 @@ def plot_issue_month():
 
 
 def plot_return_duration():
-    return_duration = [((return_dates[i] - issue_dates[i]).days if return_dates[i] != 'null' else 0)
-                       for i in range(len(issue_dates))]
+    return_duration = []
+    for i in range(len(issue_dates)):
+        if(return_dates[i] != 'null'):
+            return_duration.append((return_dates[i] - issue_dates[i]).days)
+    # return_duration = [((return_dates[i] - issue_dates[i]).days if return_dates[i] != 'null' else 0)
+    #                    for i in range(len(issue_dates))]
     arr = np.array(return_duration)
     # print(return_duration)
     fine_payers = [0 for i in range(max(arr)+1)]
@@ -125,8 +129,12 @@ def plot_return_duration():
 
 
 def plot_fines():
-    return_duration = [((return_dates[i] - issue_dates[i]).days if return_dates[i] != 'null' else 0)
-                       for i in range(len(issue_dates))]
+    return_duration = []
+    for i in range(len(issue_dates)):
+        if(return_dates[i] != 'null'):
+            return_duration.append((return_dates[i] - issue_dates[i]).days)
+    # return_duration = [((return_dates[i] - issue_dates[i]).days if return_dates[i] != 'null' else 0)
+    #                    for i in range(len(issue_dates))]
     fines = []
     for rd in return_duration:
         if rd > borrow_time:
@@ -143,8 +151,12 @@ def plot_fines():
 
 
 def plot_fines_pie():
-    return_duration = [((return_dates[i] - issue_dates[i]).days if return_dates[i] != 'null' else 0)
-                       for i in range(len(issue_dates))]
+    return_duration = []
+    for i in range(len(issue_dates)):
+        if(return_dates[i] != 'null'):
+            return_duration.append((return_dates[i] - issue_dates[i]).days)
+    # return_duration = [((return_dates[i] - issue_dates[i]).days if return_dates[i] != 'null' else 0)
+    #                    for i in range(len(issue_dates))]
     fines = []
     non_finer = 0
     finer_count_one_week = 0
@@ -203,8 +215,12 @@ def write_to_csv():
 
 
 def fines_to_csv():
-    return_duration = [((return_dates[i] - issue_dates[i]).days if return_dates[i] != 'null' else 0)
-                       for i in range(len(issue_dates))]
+    return_duration = []
+    for i in range(len(issue_dates)):
+        if(return_dates[i] != 'null'):
+            return_duration.append((return_dates[i] - issue_dates[i]).days)
+    # return_duration = [((return_dates[i] - issue_dates[i]).days if return_dates[i] != 'null' else 0)
+    #                    for i in range(len(issue_dates))]
     fines = []
     for rd in return_duration:
         if rd > borrow_time:

@@ -8,18 +8,48 @@ import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
+
 class SchedulePage extends StatefulWidget {
   @override
   _SchedulePageState createState() => _SchedulePageState();
 }
 
-class _SchedulePageState extends State<SchedulePage > {
+class _SchedulePageState extends State<SchedulePage> {
   List<Meeting> meetings;
   JournalModel model;
   String _docType = 'periodical_subscriptions';
   List<String> periodicals = [];
   List<DateTime> timestamps = [];
 
+  bool isLoaded = false;
+
+  Future loadData() async {
+    List meetings = <Meeting>[];
+    fetchdata();
+    await Firestore.instance
+        .collection('periodical_subscriptions')
+        .getDocuments()
+        .then((querySnapshot) {
+      querySnapshot.documents.forEach((result) {
+        final DateTime today = DateTime.now();
+        var arr = result.data['purchased'].split('-');
+        final DateTime startTime = DateTime(
+            int.parse(arr[0]), int.parse(arr[1]), int.parse(arr[2]), 9, 0, 0);
+        final DateTime endTime = startTime.add(const Duration(hours: 2));
+        meetings.add(Meeting(result.data['name'], startTime, endTime,
+            const Color(0xFF0F8644), false));
+      });
+    });
+    setState(() {
+      isLoaded = true;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,26 +57,28 @@ class _SchedulePageState extends State<SchedulePage > {
         appBar: new AppBar(
           title: new Text('Upcoming periodicals'),
           centerTitle: true,
-
         ),
         drawer: AppDrawer(),
-        body: SfCalendar(
-          view: CalendarView.month,
-          dataSource: MeetingDataSource(_getDataSource()),
+        body: isLoaded == false
+            ? Text('loading..')
+            : SfCalendar(
+                view: CalendarView.month,
+                dataSource: MeetingDataSource(_getDataSource()),
 
-          // by default the month appointment display mode set as Indicator, we can
-          // change the display mode as appointment using the appointment display mode
-          // property
-          monthViewSettings: MonthViewSettings(
-              appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
-        ));
+                // by default the month appointment display mode set as Indicator, we can
+                // change the display mode as appointment using the appointment display mode
+                // property
+                monthViewSettings: MonthViewSettings(
+                    appointmentDisplayMode:
+                        MonthAppointmentDisplayMode.appointment),
+              ));
   }
-
 
   Future addDue() async {
     try {
-      final snapShot =
-      await Firestore.instance.collection('periodical_subscriptions').getDocuments();
+      final snapShot = await Firestore.instance
+          .collection('periodical_subscriptions')
+          .getDocuments();
       if (snapShot == null) return;
       var batch = Firestore.instance.batch();
       for (var document in snapShot.documents) {
@@ -56,53 +88,54 @@ class _SchedulePageState extends State<SchedulePage > {
         timestamps.add(now);
         print(periodicals);
       }
-    }
-    catch (e) {
+    } catch (e) {
       print(e.toString());
     }
-
   }
 
-void fetchdata() async{                   //not used: testing
-  var result = await  Firestore.instance
-      .collection("'periodical_subscriptions'")
-      .getDocuments();
-  result.documents.forEach((res) {
-    print(res.data);
-  });
-}
+  void fetchdata() async {
+    //not used: testing
+    var result = await Firestore.instance
+        .collection("'periodical_subscriptions'")
+        .getDocuments();
+    result.documents.forEach((res) {
+      print(res.data);
+    });
+  }
 
   List<Meeting> _getDataSource() {
-    List meetings = <Meeting>[];
-    fetchdata();
-    Firestore.instance.collection('periodical_subscriptions').getDocuments().then((querySnapshot) {
-
-      querySnapshot.documents.forEach((result) {
-        final DateTime today = DateTime.now();
-        var arr = result.data['purchased'].split('-');
-        final DateTime startTime =
-        DateTime(int.parse(arr[0]),int.parse(arr[1]), int.parse(arr[2]), 9, 0, 0);
-        final DateTime endTime = startTime.add(const Duration(hours: 2));
-        meetings.add(Meeting(
-            result.data['name'], startTime, endTime, const Color(0xFF0F8644), false));
-      });
-
-    });
-    final DateTime today = DateTime.now();
-    final DateTime startTime =
-    DateTime(today.year, today.month, today.day, 9, 0, 0);
-    final DateTime startTime2 =
-    DateTime(today.year, today.month, today.day+5, 9, 0, 0);
-    final DateTime endTime = startTime.add(const Duration(hours: 2));
-    final DateTime endTime2 = startTime2.add(const Duration(hours: 2));
-    print(meetings.length);
-    meetings.add(Meeting(
-        "Nature vol 8", startTime, endTime, const Color(0xFF0F8644), false));
-    meetings.add(Meeting(
-        "Friction", startTime2, endTime2, const Color(0xFF0F8644), false));
-    meetings.add(Meeting(
-        "Journal of Biomedical Sciences", startTime2, endTime2, const Color(0xFF0F8644), false));
     return meetings;
+    // List meetings = <Meeting>[];
+    // fetchdata();
+    // Firestore.instance
+    //     .collection('periodical_subscriptions')
+    //     .getDocuments()
+    //     .then((querySnapshot) {
+    //   querySnapshot.documents.forEach((result) {
+    //     final DateTime today = DateTime.now();
+    //     var arr = result.data['purchased'].split('-');
+    //     final DateTime startTime = DateTime(
+    //         int.parse(arr[0]), int.parse(arr[1]), int.parse(arr[2]), 9, 0, 0);
+    //     final DateTime endTime = startTime.add(const Duration(hours: 2));
+    //     meetings.add(Meeting(result.data['name'], startTime, endTime,
+    //         const Color(0xFF0F8644), false));
+    //   });
+    // });
+    // final DateTime today = DateTime.now();
+    // final DateTime startTime =
+    // DateTime(today.year, today.month, today.day, 9, 0, 0);
+    // final DateTime startTime2 =
+    // DateTime(today.year, today.month, today.day+5, 9, 0, 0);
+    // final DateTime endTime = startTime.add(const Duration(hours: 2));
+    // final DateTime endTime2 = startTime2.add(const Duration(hours: 2));
+    // print(meetings.length);
+    // meetings.add(Meeting(
+    //     "Nature vol 8", startTime, endTime, const Color(0xFF0F8644), false));
+    // meetings.add(Meeting(
+    //     "Friction", startTime2, endTime2, const Color(0xFF0F8644), false));
+    // meetings.add(Meeting(
+    //     "Journal of Biomedical Sciences", startTime2, endTime2, const Color(0xFF0F8644), false));
+    // return meetings;
   }
 }
 
@@ -146,6 +179,7 @@ class Meeting {
   Color background;
   bool isAllDay;
 }
+
 class Record {
   final String name;
   final DateTime date;

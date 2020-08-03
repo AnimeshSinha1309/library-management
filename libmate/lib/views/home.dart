@@ -99,8 +99,8 @@ class HomeState extends State<Home> {
               )),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) => IssuedBookCard(
-                        model: model.borrowedBooks[index], user: model),
+                    (BuildContext context, int index) =>
+                        IssuedBookCard(model: model.borrowedBooks[index]),
                     childCount: model.borrowedBooks.length),
               ),
             ],

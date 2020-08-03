@@ -334,55 +334,72 @@ class _AutoTaggerPageState extends State<AutoTaggerPage> {
                           padding: const EdgeInsets.symmetric(vertical: 16.0),
                           child: Row(
                             children: <Widget>[
-                              SizedBox(width: 10),
-                              RaisedButton(
-                                color: Colors.pinkAccent,
-                                onPressed: () async {
-                                  // Validate returns true if the form is valid, or false
-                                  // otherwise.
-                                  if (_formKey.currentState.validate()) {
-                                    showToast(context, "Sending Request..");
-                                    final String resp = await _sendRequest();
-                                    showToast(context, resp);
-                                  }
-                                },
-                                child: Text(
-                                  'Add Book',
-                                  style: TextStyle(color: Colors.white),
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.all(2),
+                                  child: ButtonTheme(
+                                    textTheme: ButtonTextTheme.primary,
+                                    child: RaisedButton(
+                                      color: Colors.pinkAccent,
+                                      onPressed: () async {
+                                        if (_formKey.currentState.validate()) {
+                                          showToast(
+                                              context, "Sending Request..");
+                                          final String resp =
+                                              await _sendRequest();
+                                          showToast(context, resp);
+                                        }
+                                      },
+                                      child: Text(
+                                        'Add Book',
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
-                              SizedBox(width: 20),
-                              RaisedButton(
-                                color: Colors.pinkAccent,
-                                onPressed: () async {
-                                  // Validate returns true if the form is valid, or false
-                                  // otherwise.
-                                  if (_formKey.currentState.validate()) {
-                                    showToast(context, "Fetching Info..");
-                                    final String resp = await _autofill();
-                                    showToast(context, resp);
-                                  }
-                                },
-                                child: Text(
-                                  'Auto Tag',
-                                  style: TextStyle(color: Colors.white),
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.all(2),
+                                  child: ButtonTheme(
+                                    textTheme: ButtonTextTheme.primary,
+                                    child: RaisedButton(
+                                      color: Colors.pinkAccent,
+                                      onPressed: () async {
+                                        if (_formKey.currentState.validate()) {
+                                          showToast(context, "Fetching Info..");
+                                          final String resp = await _autofill();
+                                          showToast(context, resp);
+                                        }
+                                      },
+                                      child: Text(
+                                        'Auto Tag',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
-                              SizedBox(width: 20),
-                              RaisedButton(
-                                color: Colors.pinkAccent,
-                                onPressed: () async {
-                                  // Validate returns true if the form is valid, or false
-                                  // otherwise.
-                                  if (_barcodefile != "") {
-                                    showToast(context, "Generating barcode..");
-                                    final String resp = await _getBarcode();
-                                    showToast(context, resp);
-                                  }
-                                },
-                                child: Text(
-                                  'Barcode',
-                                  style: TextStyle(color: Colors.white),
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.all(2),
+                                  child: ButtonTheme(
+                                    textTheme: ButtonTextTheme.primary,
+                                    child: RaisedButton(
+                                      color: Colors.pinkAccent,
+                                      onPressed: () async {
+                                        if (_barcodefile != "") {
+                                          showToast(
+                                              context, "Generating barcode..");
+                                          final String resp =
+                                              await _getBarcode();
+                                          showToast(context, resp);
+                                        }
+                                      },
+                                      child: Text(
+                                        'Barcode',
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ],

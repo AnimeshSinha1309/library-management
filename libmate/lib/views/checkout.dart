@@ -16,17 +16,27 @@ class Checkout extends StatefulWidget {
   String qrdata;
   String uid;
   List<BookModel> books;
+  List<BorrowBookModel> returns;
   UserModel user;
 
   // uid for checking issue status of books
-  Checkout(this.books, this.user) {
+  Checkout(this.books, this.returns, this.user) {
     uid = user.email;
-    List<dynamic> datalist = [];
-    datalist.add(user.email);
+    List<dynamic> booksList = [];
     for (var book in books) {
-      datalist.add(book.toJSON());
+      booksList.add(book.toJSON());
     }
-    qrdata = jsonEncode(datalist);
+    List<dynamic> returnList = [];
+    for (var book in returns) {
+      returnList.add(book.toJSON());
+    }
+    qrdata = jsonEncode({
+      'email': user.email,
+      'photo': user.photoUrl,
+      'name': user.name,
+      'issues': booksList,
+      'returns': returnList
+    });
     // printWrapped(qrdata);
   }
   @override
@@ -37,8 +47,10 @@ class CheckoutState extends State<Checkout> {
   int checks = 0;
 
   recheck() async {
-    await Future.delayed(Duration(seconds: 10));
-    for (var book in widget.books) await issueBookModel(book, widget.user);
+    await Future.delayed(Duration(seconds: 40));
+    for (var book in widget.books) await issueBook(book.isbn, widget.user);
+    for (var book in widget.returns)
+      await returnBook(book.book.isbn, widget.user, book.accessionNumber);
     setState(() {
       checks++;
       print("Rebuilding");
@@ -51,6 +63,7 @@ class CheckoutState extends State<Checkout> {
     await Future.delayed(Duration(seconds: 2));
     final prefs = await SharedPreferences.getInstance();
     prefs.remove("issuecart");
+    prefs.remove("returncart");
 
     gotoPage(context, null, clear: true, routeName: "/home");
   }
@@ -62,7 +75,7 @@ class CheckoutState extends State<Checkout> {
 
     List<Widget> children = [];
     if (issued) {
-      children = [Text("Issued! Redirecting to home page...")];
+      children = [Text("Issued and Returned! Redirecting to home page...")];
       redirect();
     } else {
       children = [

@@ -1,17 +1,16 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:libmate/datastore/model.dart';
-import 'package:libmate/datastore/state.dart';
 import 'package:libmate/utils/utils.dart';
 import 'package:libmate/views/drawer.dart';
 import 'package:libmate/views/razorpay.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class IssuedBookCard extends StatelessWidget {
   final BorrowBookModel model;
   final bool shouldOpenPage;
-  final UserModel user;
 
-  IssuedBookCard(
-      {@required this.model, this.shouldOpenPage = true, @required this.user})
+  IssuedBookCard({@required this.model, this.shouldOpenPage = true})
       : super(key: UniqueKey());
 
   @override
@@ -22,8 +21,7 @@ class IssuedBookCard extends StatelessWidget {
           splashFactory: InkRipple.splashFactory,
           splashColor: Colors.white,
           onTap: () {
-            if (shouldOpenPage)
-              gotoPage(context, BorrowBookPage(model: model, user: user));
+            if (shouldOpenPage) gotoPage(context, BorrowBookPage(model: model));
           },
           child: Row(children: [
             Expanded(
@@ -94,9 +92,44 @@ class IssuedBookCard extends StatelessWidget {
 
 class BorrowBookPage extends StatelessWidget {
   final BorrowBookModel model;
-  final UserModel user;
 
-  BorrowBookPage({@required this.model, @required this.user});
+  BorrowBookPage({@required this.model});
+
+  /// Takes care of saving the Books on return
+
+  final int maxBooks = 20;
+
+  Future<int> saveCart(BorrowBookModel model) async {
+    final key = "returncart";
+    final prefs = await SharedPreferences.getInstance();
+    List<String> returnCart = prefs.getStringList(key) ?? [];
+    if (returnCart.length > maxBooks) return 1;
+
+    String accNo = model.accessionNumber;
+    for (var issued in returnCart) {
+      var js = json.decode(issued);
+      if (BorrowBookModel.fromJSON(js).accessionNumber == accNo) {
+        return 3;
+      }
+    }
+    returnCart.add(jsonEncode(model.toJSON()));
+    return (await prefs.setStringList(key, returnCart)) ? 0 : 2;
+  }
+
+  Future<String> addBookCart(BorrowBookModel model) async {
+    int res = await saveCart(model);
+    if (res == 0) {
+      return "Added to cart";
+    } else if (res == 1) {
+      return "Exceeded max size of cart";
+    } else if (res == 2) {
+      return "Error saving cart";
+    } else if (res == 3) {
+      return "Book already present";
+    } else {
+      return "Unknown Error";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,12 +140,7 @@ class BorrowBookPage extends StatelessWidget {
         child: Builder(builder: (context) {
           return RaisedButton.icon(
               onPressed: () async {
-                showToast(context, "Initiating return");
-                print(model.book);
-                print(model.book.name);
-                print(model.book.genre);
-                await returnBook(model.book.isbn, user, model.accessionNumber);
-                showToast(context, "Successfully returned book");
+                showToast(context, await addBookCart(model));
               },
               icon: Icon(Icons.launch),
               label: Text('Return'));

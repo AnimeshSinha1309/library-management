@@ -15,6 +15,8 @@ Future<void> loadUser(UserModel currentUser) async {
         .document(currentUser.uid)
         .setData({"issueList": [], "role": "student"});
   } else {
+    currentUser.borrowedBooks = [];
+    currentUser.pastBooks = [];
     for (var borrow in user.data["issueList"]) {
       var el = BorrowBookModel.fromJSON(borrow);
       if (el.returnDate == null)
@@ -33,13 +35,35 @@ Future issueBookModel(BookModel model, UserModel user) {
 Future issueBook(String isbn, UserModel currentUser,
     [String accNo = ""]) async {
   var data = await Firestore.instance.collection("books").document(isbn).get();
+  print(isbn);
+  print(data.data);
   BookModel book = BookModel.fromJSON(json: data.data, isbn: isbn);
 
   if (accNo == "") {
+    print(book.issues);
+    if (book.issues.length == 0) {
+      book.issues = {
+        "1": "available",
+        "2": "available",
+        "3": "available",
+        "4": "available",
+        "5": "available"
+      };
+    }
     for (var key in book.issues.keys) {
       if (book.issues[key] == "issued") continue;
       accNo = key;
       break;
+    }
+
+    if (accNo == "") {
+      for (int i = 10; i < 100; i++) {
+        if (!book.issues.containsKey(i.toString())) {
+          book.issues[i.toString()] = "available";
+          accNo = i.toString();
+          break;
+        }
+      }
     }
   }
 

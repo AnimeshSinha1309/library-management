@@ -97,13 +97,13 @@ class BookModel {
 
   BookModel(
       {@required this.name,
-        this.author = "",
-        this.isbn = "",
-        this.image =
-        "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg",
-        this.subject = "",
-        this.genre = "",
-        this.description});
+      this.author = "",
+      this.isbn = "",
+      this.image =
+          "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg",
+      this.subject = "",
+      this.genre = "",
+      this.description});
 
   Map<String, BookModelBorrowState> copies;
   bool isSp;
@@ -126,8 +126,15 @@ class BookModel {
     if (jstheir != null) {
       var js = new Map<String, dynamic>.from(jstheir);
       this.issues = js;
-    } else
-      this.issues = Map<String, dynamic>();
+    } else {
+      this.issues = {
+        "1": "available",
+        "2": "available",
+        "3": "available",
+        "4": "available",
+        "5": "available"
+      };
+    }
 
     this.subject = json["subject"] ?? json["category"] ?? "";
     this.description = json["description"];
@@ -165,9 +172,9 @@ class BorrowBookModel {
 
   BorrowBookModel(
       {@required this.accessionNumber,
-        this.borrowDate,
-        @required this.book,
-        this.returnDate}) {
+      this.borrowDate,
+      @required this.book,
+      this.returnDate}) {
     this.borrowDate = this.borrowDate ?? DateTime.now();
     assert(this.book.isbn != null);
     assert(this.book != null);
@@ -186,22 +193,28 @@ class BorrowBookModel {
     Map<dynamic, dynamic> json,
   ) {
     accessionNumber = json["accNo"];
-    if (json["borrowDate"] != null)
-      borrowDate = (json["borrowDate"]).toDate();
-    else
+
+    if (json["borrowDate"] == null)
       borrowDate = DateTime.now();
+    else if (json["borrowDate"] is String)
+      borrowDate = DateTime.parse(json["borrowDate"]);
+    else if (json["borrowDate"] is Timestamp)
+      borrowDate = json["borrowDate"].toDate();
+
     if (json["returnDate"] is DateTime)
       returnDate = json["returnDate"];
     else if (json["returnDate"] is Timestamp)
       returnDate = json["returnDate"].toDate();
+    else if (json["returnDate"] is String)
+      returnDate = DateTime.parse(json["returnDate"]);
     book = cachedBooks[json["book"]];
   }
 
   Map<String, dynamic> toJSON() {
     return <String, dynamic>{
       "accNo": accessionNumber,
-      "borrowDate": borrowDate,
-      "returnDate": returnDate,
+      "borrowDate": borrowDate.toIso8601String(),
+      "returnDate": returnDate == null ? null : returnDate.toIso8601String(),
       "book": book.isbn,
     };
   }

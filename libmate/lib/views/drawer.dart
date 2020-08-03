@@ -40,17 +40,16 @@ class AppDrawer extends StatelessWidget {
   List<Widget> loggedInDrawerList(context) {
     return <Widget>[
       _DrawerViewItem(Icons.home, 'Home', '/home').build(context),
+<<<<<<< HEAD
       _DrawerViewItem(Icons.home, 'Admin', '/admin').build(context),
       _DrawerViewItem(Icons.library_books, 'Periodical Page', '/periodical').build(context),
       _DrawerViewItem(Icons.calendar_view_day, 'Upcoming periodicals', '/schedule').build(context),
+=======
+>>>>>>> master
       _DrawerViewItem(Icons.shop, 'Issue cart', '/cart').build(context),
-      _DrawerViewItem(Icons.camera, 'Admin Scan and issue', '/admin_scan')
-          .build(context),
       _DrawerViewItem(Icons.search, 'Search', '/search').build(context),
       _DrawerViewItem(Icons.location_on, 'Guide', '/guide').build(context),
-      _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute')
-          .build(context),
-      _DrawerViewItem(Icons.file_upload, 'Auto Tagger', '/autoTagger')
+      _DrawerViewItem(Icons.bookmark_border, 'Auto Tagger', '/autoTagger')
           .build(context),
       _DrawerViewItem(Icons.library_books, 'Reading List', '/goals')
           .build(context),
@@ -58,15 +57,21 @@ class AppDrawer extends StatelessWidget {
           .build(context),
       _DrawerViewItem(Icons.library_add, 'Request Books', '/request')
           .build(context),
-      _DrawerViewItem(Icons.library_add, 'Book Requests', '/requested')
+      Divider(color: Colors.grey, thickness: 0.5),
+      _DrawerViewItem(Icons.view_carousel, 'Book Requests', '/requested')
           .build(context),
       _DrawerViewItem(Icons.access_time, 'Get time slot', '/appointment')
+          .build(context),
+      _DrawerViewItem(Icons.center_focus_weak, 'Admin', '/admin')
+          .build(context),
+      _DrawerViewItem(Icons.camera, 'Admin Scan and issue', '/admin_scan')
           .build(context),
       _DrawerViewItem(
               Icons.calendar_view_day, 'Upcoming periodicals', '/schedule')
           .build(context),
       Divider(color: Colors.grey, thickness: 0.5),
-      _DrawerViewItem(Icons.people, 'Issue Book', '/issue').build(context),
+      _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute')
+          .build(context),
       _DrawerViewItem(Icons.account_circle, 'Accounts', '/accounts')
           .build(context),
       _DrawerViewItem(Icons.info, 'About', '/about').build(context),
@@ -78,16 +83,12 @@ class AppDrawer extends StatelessWidget {
       //(login doesnt work) for testing other features start:
       _DrawerViewItem(Icons.home, 'Home', '/home').build(context),
       _DrawerViewItem(Icons.home, 'Admin', '/admin').build(context),
-      _DrawerViewItem(Icons.location_on, 'Periodical Page', '/periodical').build(context),
-      _DrawerViewItem(Icons.calendar_view_day, 'Upcoming periodicals', '/schedule').build(context),
       _DrawerViewItem(Icons.shop, 'Issue cart', '/cart').build(context),
       _DrawerViewItem(Icons.camera, 'Admin Scan and issue', '/admin_scan')
           .build(context),
       _DrawerViewItem(Icons.search, 'Search', '/search').build(context),
       _DrawerViewItem(Icons.location_on, 'Guide', '/guide').build(context),
-      _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute')
-          .build(context),
-      _DrawerViewItem(Icons.file_upload, 'Auto Tagger', '/autoTagger')
+      _DrawerViewItem(Icons.bookmark_border, 'Auto Tagger', '/autoTagger')
           .build(context),
       _DrawerViewItem(Icons.library_books, 'Reading List', '/goals')
           .build(context),
@@ -99,20 +100,16 @@ class AppDrawer extends StatelessWidget {
           .build(context),
       _DrawerViewItem(Icons.access_time, 'Get time slot', '/appointment')
           .build(context),
-      _DrawerViewItem(
-          Icons.calendar_view_day, 'Upcoming periodicals', '/schedule')
-          .build(context),
       Divider(color: Colors.grey, thickness: 0.5),
-      _DrawerViewItem(Icons.people, 'Issue Book', '/issue').build(context),
-      _DrawerViewItem(Icons.account_circle, 'Accounts', '/accounts')
+      _DrawerViewItem(
+              Icons.calendar_view_day, 'Upcoming periodicals', '/schedule')
           .build(context),
-      _DrawerViewItem(Icons.info, 'About', '/about').build(context),
-      //end
-      _DrawerViewItem(Icons.search, 'Search', '/search').build(context),
+      _DrawerViewItem(Icons.location_on, 'Periodical Page', '/periodical').build(context),
+      Divider(color: Colors.grey, thickness: 0.5),
       _DrawerViewItem(Icons.file_upload, 'Contribute Info', '/contribute')
           .build(context),
-      Divider(color: Colors.grey, thickness: 0.5),
-
+      _DrawerViewItem(Icons.account_circle, 'Accounts', '/accounts')
+          .build(context),
       _DrawerViewItem(Icons.info, 'About', '/about').build(context),
     ];
   }

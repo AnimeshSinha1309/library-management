@@ -218,7 +218,7 @@ class BookPage extends StatelessWidget {
                   SizedBox(height: 20),
                   Row(children: [
                     Image(
-                      image: NetworkImage(model.image),
+                      image: NetworkImage(model.image ?? defImage),
                       fit: BoxFit.fitWidth,
                       alignment: Alignment.topCenter,
                     ),
@@ -254,6 +254,7 @@ class BookPage extends StatelessWidget {
                                 child: RaisedButton(
                                   onPressed: () {
                                     showToast(context, "NOT IMPLEMENTED");
+                                    // TODO: Implement routing this to contribute
                                   },
                                   child: Text("Edit Information"),
                                 ),
@@ -360,7 +361,7 @@ class JournalBookPage extends StatelessWidget {
                   SizedBox(height: 20),
                   Row(children: [
                     Image(
-                      image: NetworkImage(model.image),
+                      image: NetworkImage(model.image ?? defImage),
                       fit: BoxFit.fitWidth,
                       alignment: Alignment.topCenter,
                     )

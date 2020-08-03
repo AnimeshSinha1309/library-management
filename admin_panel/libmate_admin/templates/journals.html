@@ -225,10 +225,10 @@
                                     <th>Title</th>
                                     <th>Publication Title</th>
                                     <th>Author</th>
-                                    <th>Book Series Title</th>
+                                    <!-- <th>Book Series Title</th> -->
                                     <th>Journal Volume</th>
                                     <th>Journal Issue</th>
-                                    <th>Item DOI</th>
+                                    <!-- <th>Item DOI</th> -->
                                     <th>Publication Year</th>
                                     <th>URL</th>
                                     <th>Content Type</th>
@@ -238,12 +238,13 @@
                                     <TD>{{item.title}}</TD>
                                     <TD>{{item.Publication_Title}}</TD>
                                     <TD>{{item.author}}</TD>
-                                    <TD>{{item.Book_Series_Title}}</TD>
+                                    <!-- <TD>{{item.Book_Series_Title}}</TD> -->
                                     <TD>{{item.Journal_Volume}}</TD>
                                     <TD>{{item.Journal_Issue}}</TD>
-                                    <TD>{{item.Item_DOI}}</TD>
+                                    <!-- <TD>{{item.Item_DOI}}</TD> -->
                                     <TD>{{item.Publication_Year}}</TD>
-                                    <TD>{{item.URL}}</TD>
+                                    <TD>
+                                        <a href="{{item.URL}}">Link</a></TD>
                                     <TD>{{item.Content_Type}}</TD>
                                 </TR>
                                 {% endfor %}

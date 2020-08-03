@@ -70,6 +70,50 @@ class BookCartState extends State<BookCartUI> {
   Widget build(BuildContext context) {
     var booklist = books.toList();
     var returnList = returns.toList();
+
+    dynamic btnChild = ButtonTheme(
+        minWidth: 200,
+        textTheme: ButtonTextTheme.primary,
+        child: RaisedButton(
+            child: Text("Checkout"),
+            onPressed: () {
+              gotoPage(context, Checkout(booklist, returnList, widget.user));
+            }));
+
+    if (booklist.isEmpty && returnList.isEmpty) {
+      btnChild = Text("Please add something into your cart first");
+    }
+    dynamic issueBks = SliverGrid(
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 200.0,
+        // mainAxisSpacing: 10.0,
+        // crossAxisSpacing: 10.0,
+        childAspectRatio: 0.75,
+      ),
+      delegate: SliverChildBuilderDelegate(
+        (BuildContext context, int index) => BookCard(model: booklist[index]),
+        childCount: books == null ? 0 : booklist.length,
+      ),
+    );
+    if (booklist.isEmpty) {
+      issueBks = SliverToBoxAdapter(child: Text("No book issued"));
+    }
+    dynamic returnBks = SliverGrid(
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 400.0,
+        // mainAxisSpacing: 10.0,
+        // crossAxisSpacing: 10.0,
+        childAspectRatio: 2.25,
+      ),
+      delegate: SliverChildBuilderDelegate(
+        (BuildContext context, int index) =>
+            IssuedBookCard(model: returnList[index]),
+        childCount: returns == null ? 0 : returnList.length,
+      ),
+    );
+    if (returnList.isEmpty)
+      returnBks = SliverToBoxAdapter(child: Text("No book returned"));
+
     // print(booklist[0].name);
     return Scaffold(
         drawer: AppDrawer(),
@@ -91,19 +135,7 @@ class BookCartState extends State<BookCartUI> {
                                   fontSize: 25.0,
                                   fontWeight: FontWeight.bold),
                               textAlign: TextAlign.left))),
-                  SliverGrid(
-                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 200.0,
-                      // mainAxisSpacing: 10.0,
-                      // crossAxisSpacing: 10.0,
-                      childAspectRatio: 0.75,
-                    ),
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) =>
-                          BookCard(model: booklist[index]),
-                      childCount: books == null ? 0 : booklist.length,
-                    ),
-                  ),
+                  issueBks,
                   SliverToBoxAdapter(
                       child: Container(
                           padding: EdgeInsets.all(10),
@@ -112,31 +144,8 @@ class BookCartState extends State<BookCartUI> {
                                   color: Colors.black87,
                                   fontSize: 25.0,
                                   fontWeight: FontWeight.bold)))),
-                  SliverGrid(
-                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 400.0,
-                      // mainAxisSpacing: 10.0,
-                      // crossAxisSpacing: 10.0,
-                      childAspectRatio: 2.25,
-                    ),
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) =>
-                          IssuedBookCard(model: returnList[index]),
-                      childCount: returns == null ? 0 : returnList.length,
-                    ),
-                  ),
-                  SliverToBoxAdapter(
-                      child: ButtonTheme(
-                          minWidth: 200,
-                          textTheme: ButtonTextTheme.primary,
-                          child: RaisedButton(
-                              child: Text("Checkout"),
-                              onPressed: () {
-                                gotoPage(
-                                    context,
-                                    Checkout(
-                                        booklist, returnList, widget.user));
-                              })))
+                  returnBks,
+                  SliverToBoxAdapter(child: btnChild)
                 ],
               ),
             )));

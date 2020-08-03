@@ -66,6 +66,7 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
         .collection(_docType)
         .document(name)
         .get();
+
     print(snapshot.data['expiry']);
     var currDt = DateTime.now();
         if(currDt.isAfter(snapshot.data['expiry']))
@@ -73,12 +74,17 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
             showToast(context, "Already subscribed!");
           }
         else{
-          var purchase = DateTime.now().add(Duration(days: 30*months));
+          var purchase = DateTime.now();
+          var expiry = DateTime.now().add(Duration(days: 30*months));
           Firestore.instance
               .collection(_docType)
               .document(name)
               .updateData({'purchased': purchase});
-          showToast(context, "Renewed");
+          Firestore.instance
+              .collection(_docType)
+              .document(name)
+              .updateData({'expiry': expiry});
+          showToast(context, "Renewed, payment charged from your saved account details");
         }
   }
   Future<int> saveReadingList(JournalModel model) async {

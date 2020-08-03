@@ -24,7 +24,7 @@ class _SchedulePageState extends State<SchedulePage> {
   bool isLoaded = false;
 
   Future loadData() async {
-    List meetings = <Meeting>[];
+    List meeting = <Meeting>[];
     fetchdata();
     await Firestore.instance
         .collection('periodical_subscriptions')
@@ -36,12 +36,13 @@ class _SchedulePageState extends State<SchedulePage> {
         final DateTime startTime = DateTime(
             int.parse(arr[0]), int.parse(arr[1]), int.parse(arr[2]), 9, 0, 0);
         final DateTime endTime = startTime.add(const Duration(hours: 2));
-        meetings.add(Meeting(result.data['name'], startTime, endTime,
+        meeting.add(Meeting(result.data['name'], startTime, endTime,
             const Color(0xFF0F8644), false));
       });
     });
     setState(() {
       isLoaded = true;
+      meetings = meeting;
     });
   }
 

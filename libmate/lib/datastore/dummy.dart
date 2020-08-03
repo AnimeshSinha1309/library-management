@@ -7,7 +7,7 @@ List<JournalModel> dummyJournals = <JournalModel>[
       description:
           "Biochemical reactions are extremely rapid, but the methods for imaging the enzymes that catalyse them can take hours. To get round this problem, structures can be determined at temperatures around 100 K, literally freezing an enzyme's movements and allowing the intermediates in its reaction cycle to be observed. This has been done for bacteriorhodopsin in studies reported by Edman et al. in this issue (Nature 401, 822–826; 1999) and Genick et al. (Science 286, 255–260; 1999).",
       image:
-          "http://books.google.com/books/content?id=-s4DEy7o-a0C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+              "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg",
       title: "Frozen in Time",
       impactfactor: "47.5",
       chiefeditor: "Christopher Surridge ",
@@ -23,7 +23,7 @@ List<JournalModel> dummyJournals = <JournalModel>[
       description:
       "Journal of Biomedical Science is an open access, peer-reviewed journal that encompasses all fundamental and molecular aspects of basic medical sciences, with an emphasis on the molecular studies of biomedical problems and molecular mechanisms.",
       image:
-      "http://books.google.com/books/content?id=-s4DEy7o-a0C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+      "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg",
       title: "IncRNA",
       impactfactor: "5.762",
       chiefeditor: " Wen-Chang Chang ",
@@ -40,7 +40,7 @@ List<JournalModel> dummyJournals = <JournalModel>[
       description:
       "Biochemical reactions are extremely rapid, but the methods for imaging the enzymes that catalyse them can take hours. To get round this problem, structures can be determined at temperatures around 100 K, literally freezing an enzyme's movements and allowing the intermediates in its reaction cycle to be observed. This has been done for bacteriorhodopsin in studies reported by Edman et al. in this issue (Nature 401, 822–826; 1999) and Genick et al. (Science 286, 255–260; 1999).",
       image:
-      "http://books.google.com/books/content?id=-s4DEy7o-a0C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+      "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg",
       title: "Frozen in Time",
       impactfactor: "5.290",
       chiefeditor: "Jianbin Luo ",

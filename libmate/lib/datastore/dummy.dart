@@ -38,13 +38,13 @@ List<JournalModel> dummyJournals = <JournalModel>[
   JournalModel(
       name: "Friction",
       description:
-      "Biochemical reactions are extremely rapid, but the methods for imaging the enzymes that catalyse them can take hours. To get round this problem, structures can be determined at temperatures around 100 K, literally freezing an enzyme's movements and allowing the intermediates in its reaction cycle to be observed. This has been done for bacteriorhodopsin in studies reported by Edman et al. in this issue (Nature 401, 822–826; 1999) and Genick et al. (Science 286, 255–260; 1999).",
+      "Polymer gears are used extensively in various applications. However, durability issues have been emerging because of friction at gear tooth contact areas. To extend the lifetime of polymer gears, a low-frictional coating has been considered as a possible strategy.",
       image:
       "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg",
-      title: "Frozen in Time",
+      title: "Addect of friction on non-coated polymer gears",
       impactfactor: "5.290",
       chiefeditor: "Jianbin Luo ",
-      date: "21 October 1999",
+      date: "21 August 2019",
       volume: "8",
       issue: "3",
       issn: "2223-7704",

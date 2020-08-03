@@ -12,13 +12,18 @@
 		]);
 		//converting string into json arr and making tupple to array by replacing
 		var dataTwo = JSON.parse(
-			"{{ data1 | safe }}"
+			"{{ data4 | safe }}"
 				.replace(/\(/g, "[")
 				.replace(/\)/g, "]")
 				.replace(/'/g, '"')
 		);
 		dps = [];
+		flag = 0;
 		for (var prop in dataTwo) {
+			if (flag == 0) {
+				flag = 1;
+				continue;
+			}
 			dps.push({
 				label: prop,
 				y: dataTwo[prop],
@@ -32,7 +37,7 @@
 				fontFamily: "tahoma",
 			},
 			axisX: {
-				title: "Fine Value",
+				title: "Fine Value (in rupees)",
 				gridThickness: 0,
 			},
 			axisY: {
@@ -48,26 +53,30 @@
 					type: "column",
 					fillColor: "rgba(158, 224, 244 ,0.5)",
 					showInLegend: true,
-					dataPoints: [
-						{ label: "1", y: 84 },
-						{ label: "2", y: 82 },
-						{ label: "3", y: 66 },
-						{ label: "4", y: 52 },
-						{ label: "5", y: 41 },
-						{ label: "6", y: 25 },
-						{ label: "7", y: 13 },
-						{ label: "8", y: 15 },
-						{ label: "9", y: 15 },
-						{ label: "10", y: 4 },
-						{ label: "11", y: 1 },
-						{ label: "12", y: 1 },
-						{ label: "13", y: 1 },
-					],
+					dataPoints: dps,
 				},
 			],
 		});
 		chart.render();
 
+		var dataTwo = JSON.parse(
+			"{{ data2 | safe }}"
+				.replace(/\(/g, "[")
+				.replace(/\)/g, "]")
+				.replace(/'/g, '"')
+		);
+		dps = [];
+		flag = 0;
+		for (var prop in dataTwo) {
+			if (flag == 0) {
+				flag = 1;
+				continue;
+			}
+			dps.push({
+				label: prop,
+				y: dataTwo[prop],
+			});
+		}
 		var chart2 = new CanvasJS.Chart("chartContainer2", {
 			exportEnabled: true,
 			animationEnabled: true,
@@ -92,23 +101,7 @@
 					type: "column",
 					fillColor: "rgba(158, 224, 244 ,0.5)",
 					showInLegend: true,
-					dataPoints: [
-						{ label: "1", y: 40 },
-						{ label: "2", y: 35 },
-						{ label: "3", y: 43 },
-						{ label: "4", y: 29 },
-						{ label: "5", y: 46 },
-						{ label: "6", y: 25 },
-						{ label: "7", y: 45 },
-						{ label: "8", y: 33 },
-						{ label: "9", y: 31 },
-						{ label: "10", y: 37 },
-						{ label: "11", y: 21 },
-						{ label: "12", y: 27 },
-						{ label: "13", y: 27 },
-						{ label: "14", y: 28 },
-						{ label: "15", y: 38 },
-					],
+					dataPoints: dps,
 				},
 			],
 		});
@@ -159,6 +152,19 @@
 		});
 		chart3.render();
 
+		var dataTwo = JSON.parse(
+			"{{ data3 | safe }}"
+				.replace(/\(/g, "[")
+				.replace(/\)/g, "]")
+				.replace(/'/g, '"')
+		);
+		dps = [];
+		for (var prop in dataTwo) {
+			dps.push({
+				label: prop,
+				y: dataTwo[prop],
+			});
+		}
 		var chart4 = new CanvasJS.Chart("chartContainer4", {
 			exportEnabled: true,
 			animationEnabled: true,
@@ -183,55 +189,58 @@
 					type: "column",
 					fillColor: "rgba(158, 224, 244 ,0.5)",
 					showInLegend: true,
-					dataPoints: [
-						{ label: "1", y: 40 },
-						{ label: "2", y: 35 },
-						{ label: "3", y: 43 },
-						{ label: "4", y: 29 },
-						{ label: "5", y: 46 },
-						{ label: "6", y: 25 },
-						{ label: "7", y: 45 },
-						{ label: "8", y: 33 },
-						{ label: "9", y: 31 },
-						{ label: "10", y: 37 },
-						{ label: "11", y: 21 },
-						{ label: "12", y: 27 },
-						{ label: "13", y: 27 },
-						{ label: "14", y: 28 },
-						{ label: "15", y: 38 },
-					],
+					dataPoints: dps,
 				},
 			],
 		});
 		chart4.render();
 
-		// var i = 0;
-
-		// var char5 = new CanvasJS.Chart("chartContainer5", {
-		// 	colorSet: "shades",
-		// 	title: {
-		// 		text: "Fine paid for books",
-		// 		fontFamily: "tahoma",
-		// 	},
-		// 	legend: {
-		// 		cursor: "pointer",
-		// 	},
-		// 	data: [
-		// 		{
-		// 			type: "doughnut",
-		// 			indexLabelPlacement: "inside",
-		// 			indexLabel: " ",
-		// 			startAngle: 30,
-		// 			innerRadius: 88,
-		// 			showInLegend: true,
-		// 			// indexLabelFontSize: 17,
-
-		// 			toolTipContent: "<b>{label}:</b> {y} (#percent%)",
-		// 			dataPoints: dps,
-		// 		},
-		// 	],
-		// });
-		// chart5.render();
+		var dataTwo = JSON.parse(
+			"{{ data5 | safe }}"
+				.replace(/\(/g, "[")
+				.replace(/\)/g, "]")
+				.replace(/'/g, '"')
+		);
+		dps = [];
+		cnt = 0;
+		for (var prop in dataTwo) {
+			if (cnt == 0) {
+				st = "Returned on Time";
+			} else if (cnt == 1) {
+				st = "Returned in 8-14 days";
+			} else {
+				st = "Returned after 14 days";
+			}
+			cnt++;
+			dps.push({
+				label: st,
+				y: dataTwo[prop],
+				legendText: st,
+			});
+		}
+		var chart5 = new CanvasJS.Chart("chartContainer5", {
+			colorSet: "shades",
+			title: {
+				text: "Fine Paid",
+				fontFamily: "tahoma",
+			},
+			legend: {
+				cursor: "pointer",
+			},
+			data: [
+				{
+					type: "pie",
+					indexLabelPlacement: "inside",
+					indexLabel: " ",
+					startAngle: 30,
+					innerRadius: 88,
+					showInLegend: true,
+					toolTipContent: "<b>{label}:</b> {y} (#percent%)",
+					dataPoints: dps,
+				},
+			],
+		});
+		chart5.render();
 
 		function toggleDataSeries(e) {
 			if (
@@ -345,13 +354,13 @@
 			<div class="col-md-5 grid-margin stretch-card">
 				<div class="card" style="height: 470px;">
 					<div class="card-body">
-						<div class="clearfix" id="chartContainer2">
-							<img src="/static/plot_fines_pie.png" />
+						<div class="clearfix" id="chartContainer5">
+							<!-- <img src="/static/plot_fines_pie.png" /> -->
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="col-md-7 grid-margin stretch-card">
+			<!-- <div class="col-md-7 grid-margin stretch-card">
 				<div class="card" style="height: 470px;">
 					<div class="card-body">
 						<div class="clearfix" id="chartContainer">
@@ -359,7 +368,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</div> -->
 		</div>
 		<div class="row">
 			<div class="col-md-7 grid-margin stretch-card">

@@ -134,6 +134,8 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
                   SizedBox(height: 20),
                   Row(children: [
                     Image(
+                      width: 120,
+                      height: 200,
                       image: NetworkImage(widget.model.image),
                       fit: BoxFit.fitWidth,
                       alignment: Alignment.topCenter,

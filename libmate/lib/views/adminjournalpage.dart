@@ -32,11 +32,13 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
   @override
   void initState() {
     super.initState();
-    _docType = 'periodical-subscriptions';
+    _docType = 'periodical_subscriptions';
+
 
   }
 
-  Future renewPeriodicals(String name,String type) async {
+
+  Future renewPeriodicals(context,String name,String type) async {
     int months;
     switch(type) {
       case 'annually': {
@@ -62,30 +64,18 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
       }
       break;
     }
-    final snapshot = await Firestore.instance
-        .collection(_docType)
-        .document(name)
-        .get();
-
-    print(snapshot.data['expiry']);
+    var snapshot =
+    await Firestore.instance.collection(_docType).document(name).get();
     var currDt = DateTime.now();
-        if(currDt.isAfter(snapshot.data['expiry']))
-          {
-            showToast(context, "Already subscribed!");
-          }
-        else{
-          var purchase = DateTime.now();
-          var expiry = DateTime.now().add(Duration(days: 30*months));
-          Firestore.instance
-              .collection(_docType)
-              .document(name)
-              .updateData({'purchased': purchase});
-          Firestore.instance
-              .collection(_docType)
-              .document(name)
-              .updateData({'expiry': expiry});
-          showToast(context, "Renewed, payment charged from your saved account details");
-        }
+    var curDt = DateFormat("yyyy-MM-DD-HH:MM:SS").format(currDt);
+    if (curDt.compareTo(snapshot.data['expiry']) < 0) {
+      showToast(context, "Already subscribed!");
+    } else {
+      var purchase = DateTime.now().add(Duration(days: 30 * months));
+      Firestore.instance.collection(_docType).document(name).updateData(
+          {'purchased': DateFormat("yyyy-MM-DD-HH:MM:SS").format(purchase)});
+      showToast(context, "Renewed");
+    }
   }
   Future<int> saveReadingList(JournalModel model) async {
     final prefs = await SharedPreferences.getInstance();
@@ -126,6 +116,7 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
   }
   List<String> _subscription = ['annually', 'semi-annually', 'quaterly', 'monthly']; // Option 2
   String _currsubscription = 'annually';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -209,7 +200,7 @@ class _AdminjournalPageState extends State<AdminjournalPage> {
                                   onPressed: () async {
                                     showToast(context, "Please wait..");
                                     print(widget.model.name);
-                                    await renewPeriodicals(widget.model.name,'annually');
+                                    await renewPeriodicals(context,widget.model.name,'annually');
                                   },
                                   child: Text("Renew subscription"),
                                 ),

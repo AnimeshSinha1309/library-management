@@ -129,7 +129,8 @@ class IssueBookState extends State<IssueBook> {
                   textTheme: ButtonTextTheme.primary,
                   child: RaisedButton(
                       child: Text("Permit Transaction"),
-                      onPressed: () {
+                      onPressed: () async {
+                        await Future.delayed(Duration(seconds: 2));
                         gotoPage(context, null,
                             clear: true, routeName: "/home");
                       })))

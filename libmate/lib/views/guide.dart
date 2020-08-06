@@ -15,9 +15,7 @@ class GuidePage extends StatefulWidget {
   UserModel currentUser;
   Chatbot bot;
   GuidePage({@required this.currentUser}) {
-    var subjects = ["math"];
-    var authors = ["Enid Blyton"];
-    bot = Chatbot(subjects: subjects, authors: authors);
+    bot = Chatbot(currentUser);
   }
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -37,6 +35,14 @@ class _MyHomePageState extends State<GuidePage> {
 
   var i = 0;
 
+  botload() {
+    var welcomeMsgs = widget.bot.getWelcome();
+    for (var text in welcomeMsgs) {
+      messages.add(
+          ChatMessage(text: text, user: botUser, createdAt: DateTime.now()));
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -45,11 +51,7 @@ class _MyHomePageState extends State<GuidePage> {
       uid: "12345678",
       avatar: widget.currentUser.photoUrl,
     );
-    var welcomeMsgs = widget.bot.getWelcome();
-    for (var text in welcomeMsgs) {
-      messages.add(
-          ChatMessage(text: text, user: botUser, createdAt: DateTime.now()));
-    }
+    botload();
   }
 
   void systemMessage() {
@@ -81,28 +83,12 @@ class _MyHomePageState extends State<GuidePage> {
   }
 
   void onSend(ChatMessage message, {fromUser = true}) {
-    var json = message.toJson();
-    print(json);
     var text = message.text;
 
     setState(() {
       messages.add(message);
       if (fromUser) getBotResponse(text);
     });
-
-    /* setState(() {
-      messages = [...messages, message];
-      print(messages.length);
-    });
-
-    if (i == 0) {
-      systemMessage();
-      Timer(Duration(milliseconds: 600), () {
-        systemMessage();
-      });
-    } else {
-      systemMessage();
-    } */
   }
 
   @override
@@ -141,33 +127,6 @@ class _MyHomePageState extends State<GuidePage> {
             border: Border.all(width: 0.0),
             color: Colors.white,
           ),
-          // onQuickReply: (Reply reply) {
-          //   setState(() {
-          //     messages.add(ChatMessage(
-          //         text: reply.value, createdAt: DateTime.now(), user: user));
-
-          //     messages = [...messages];
-          //   });
-
-          //   Timer(Duration(milliseconds: 300), () {
-          //     _chatViewKey.currentState.scrollController
-          //       ..animateTo(
-          //         _chatViewKey
-          //             .currentState.scrollController.position.maxScrollExtent,
-          //         curve: Curves.easeOut,
-          //         duration: const Duration(milliseconds: 300),
-          //       );
-
-          //     if (i == 0) {
-          //       systemMessage();
-          //       Timer(Duration(milliseconds: 600), () {
-          //         systemMessage();
-          //       });
-          //     } else {
-          //       systemMessage();
-          //     }
-          //   });
-          // },
           onLoadEarlier: () {
             print("loading dash chat...");
           },
@@ -178,7 +137,6 @@ class _MyHomePageState extends State<GuidePage> {
               icon: Icon(Icons.photo),
               onPressed: () {
                 print("No idea what this does");
-                ;
               },
             )
           ],

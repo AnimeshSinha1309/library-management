@@ -93,7 +93,7 @@ class BookModel {
   String subject;
   String genre;
   String description;
-  Map<dynamic, dynamic> issues = Map<String, dynamic>();
+  Map<String, dynamic> issues = Map<String, dynamic>();
 
   BookModel(
       {@required this.name,
@@ -106,16 +106,59 @@ class BookModel {
       this.description});
 
   Map<String, BookModelBorrowState> copies;
+  bool isSp;
   int issueCount, starCount;
-  BookModel.fromJSON({Map<String, dynamic> json, String isbn}) {
+
+  BookModel.fromJSON(
+      {Map<String, dynamic> json, String isbn, this.isSp = false}) {
     this.name = json["name"] ?? json["title"];
     this.author = json["author"] ?? json["authors"] ?? "";
     this.genre = json["genre"] ?? json["category"] ?? "";
-    this.isbn = isbn;
+    this.isbn = json['isbn'] is String ? json['isbn'] : json['isbn'].toString();
+    this.author = json["author"] ?? (json["authors"] ?? "");
+    this.genre = json["genre"] ?? (json["category"] ?? "");
+    // isbn parameter is highest priority, don't remove
+    this.isbn = isbn ??
+        (json["isbn"] is String ? json["isbn"] : json["isbn"].toString());
     this.image = json["image"] ?? defImage;
-    this.issues = json["issues"] ?? Map();
+    var jstheir = json["issues"];
+
+    if (jstheir != null) {
+      var js = new Map<String, dynamic>.from(jstheir);
+      this.issues = js;
+    } else {
+      this.issues = {
+        "1": "available",
+        "2": "available",
+        "3": "available",
+        "4": "available",
+        "5": "available"
+      };
+    }
+
     this.subject = json["subject"] ?? json["category"] ?? "";
     this.description = json["description"];
+  }
+
+  BookModel.fromSaved(Map json) {
+    this.name = json["name"];
+    this.author = json["author"];
+    this.image = json["image"];
+    this.issues = Map();
+    this.subject = json["category"];
+    this.description = json["description"];
+  }
+
+  toJSON() {
+    return {
+      "name": name,
+      "author": author,
+      "isbn": isbn,
+      "image": image,
+      "subject": subject,
+      "genre": genre,
+      "description": description
+    };
   }
 }
 
@@ -133,6 +176,7 @@ class BorrowBookModel {
       @required this.book,
       this.returnDate}) {
     this.borrowDate = this.borrowDate ?? DateTime.now();
+    assert(this.book.isbn != null);
     assert(this.book != null);
   }
 
@@ -145,26 +189,38 @@ class BorrowBookModel {
     return (delay > 0 ? delay : 0) * fineRate;
   }
 
-  BorrowBookModel.fromJSON(Map<dynamic, dynamic> json) {
+  BorrowBookModel.fromJSON(
+    Map<dynamic, dynamic> json,
+  ) {
     accessionNumber = json["accNo"];
-    if (json["borrowDate"] != null)
-      borrowDate = (json["borrowDate"]).toDate();
-    else
+
+    if (json["borrowDate"] == null)
       borrowDate = DateTime.now();
+    else if (json["borrowDate"] is String)
+      borrowDate = DateTime.parse(json["borrowDate"]);
+    else if (json["borrowDate"] is Timestamp)
+      borrowDate = json["borrowDate"].toDate();
+
     if (json["returnDate"] is DateTime)
       returnDate = json["returnDate"];
     else if (json["returnDate"] is Timestamp)
       returnDate = json["returnDate"].toDate();
+    else if (json["returnDate"] is String)
+      returnDate = DateTime.parse(json["returnDate"]);
     book = cachedBooks[json["book"]];
   }
 
   Map<String, dynamic> toJSON() {
     return <String, dynamic>{
       "accNo": accessionNumber,
-      "borrowDate": borrowDate,
-      "returnDate": returnDate,
+      "borrowDate": borrowDate.toIso8601String(),
+      "returnDate": returnDate == null ? null : returnDate.toIso8601String(),
       "book": book.isbn,
     };
+  }
+
+  bool isReturned() {
+    return returnDate != null;
   }
 }
 

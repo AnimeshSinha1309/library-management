@@ -21,88 +21,85 @@ class _LibcardPageState extends State<LibcardPage> {
   Widget build(BuildContext context) {
     return Consumer<UserModel>(
         builder: (BuildContext context, UserModel model, Widget child) {
-          var statsGroup = SliverToBoxAdapter(
-            child: Padding(
-                padding: EdgeInsets.fromLTRB(30.0, 40.0, 30.0, 30.0),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+      var statsGroup = SliverToBoxAdapter(
+        child: Padding(
+            padding: EdgeInsets.fromLTRB(30.0, 40.0, 30.0, 30.0),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(children: [
+                    Text('Reader',
+                        style: TextStyle(
+                            color: Colors.black87,
+                            letterSpacing: 2.0,
+                            fontSize: 28.0,
+                            fontWeight: FontWeight.bold)),
+                    Spacer(),
+                    Column(children: [
+                      Text('BOOKS READ',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            letterSpacing: 2.0,
+                          )),
+                      Text('$booksRead',
+                          style: TextStyle(
+                              color: Colors.pinkAccent,
+                              letterSpacing: 2.0,
+                              fontSize: 28.0,
+                              fontWeight: FontWeight.bold)),
+                    ])
+                  ]),
+                  Row(children: <Widget>[
+                    Icon(
+                      Icons.book,
+                      color: Colors.grey[400],
+                    ),
+                    Text('Genres',
+                        style: TextStyle(
+                            color: Colors.grey[600],
+                            letterSpacing: 2.0,
+                            fontWeight: FontWeight.bold)),
+                  ]),
+                  Column(
                     children: <Widget>[
-                      Row(children: [
-                        Text('Reader',
-                            style: TextStyle(
-                                color: Colors.black87,
-                                letterSpacing: 2.0,
-                                fontSize: 28.0,
-                                fontWeight: FontWeight.bold)),
-                        Spacer(),
-                        Column(children: [
-                          Text('BOOKS READ',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                letterSpacing: 2.0,
-                              )),
-                          Text('$booksRead',
-                              style: TextStyle(
-                                  color: Colors.pinkAccent,
-                                  letterSpacing: 2.0,
-                                  fontSize: 28.0,
-                                  fontWeight: FontWeight.bold)),
-                        ])
-                      ]),
-                      Row(children: <Widget>[
-                        Icon(
-                          Icons.book,
-                          color: Colors.grey[400],
-                        ),
-                        Text('Genres',
-                            style: TextStyle(
-                                color: Colors.grey[600],
-                                letterSpacing: 2.0,
-                                fontWeight: FontWeight.bold)),
-                      ]),
+                      Text('Science Fiction 100',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            letterSpacing: 2.0,
+                          )),
+                      Text('Adventure 50',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            letterSpacing: 2.0,
+                          )),
+                    ],
+                  ),
+                ])),
+      );
 
-                      Column(
-                        children: <Widget>[
-                          Text('Science Fiction 100',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                letterSpacing: 2.0,
-                              )),
-                          Text('Adventure 50',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                letterSpacing: 2.0,
-                              )),
-                        ],
-                      ),
-                    ]
-                )
-            ),
-          );
+      var dueBooks = SliverList(
+        delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) =>
+                IssuedBookCard(model: model.borrowedBooks[index]),
+            childCount: model.borrowedBooks.length),
+      );
+      var pastBooks = SliverList(
+        delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) =>
+                IssuedBookCard(model: model.pastBooks[index]),
+            childCount: model.pastBooks.length),
+      );
 
-          var dueBooks = SliverList(
-            delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) =>
-                    IssuedBookCard(model: model.borrowedBooks[index]),
-                childCount: model.borrowedBooks.length),
-          );
-          var pastBooks = SliverList(
-            delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) =>
-                    IssuedBookCard(model: model.borrowedBooks[index]),
-                childCount: model.pastBooks.length),
-          );
-
-          return Scaffold(
-              backgroundColor: Colors.grey[100],
-              appBar: new AppBar(
-                title: new Text('Library Card'),
-                centerTitle: true,
-              ),
-              drawer: AppDrawer(),
-              body: CustomScrollView(
-                slivers: [statsGroup, dueBooks, pastBooks],
-              ));
-        });
+      return Scaffold(
+          backgroundColor: Colors.grey[100],
+          appBar: new AppBar(
+            title: new Text('Library Card'),
+            centerTitle: true,
+          ),
+          drawer: AppDrawer(),
+          body: CustomScrollView(
+            slivers: [statsGroup, dueBooks, pastBooks],
+          ));
+    });
   }
 }

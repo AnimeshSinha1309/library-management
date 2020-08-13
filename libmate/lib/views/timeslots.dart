@@ -79,6 +79,7 @@ class _TimePageState extends State<TimePage> {
 
   Future getSlots() async {
     DateFormat dateFormat = DateFormat("yyyy-MM-dd_HH:mm");
+    print(DateTime.now());
     if(day=='today')
       {
         DateTime now = DateTime.now();

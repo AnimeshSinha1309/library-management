@@ -103,7 +103,7 @@ Future returnBook(String isbn, UserModel currentUser, String accNo) async {
     }
   }
   Firestore.instance.collection("books").document(isbn).setData({
-    'issues': book.issues,
+    'gitissues': book.issues,
   }, merge: true);
   Firestore.instance.collection("users").document(currentUser.uid).setData({
     'issueList': issueList,

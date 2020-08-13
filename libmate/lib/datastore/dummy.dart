@@ -7,42 +7,50 @@ List<JournalModel> dummyJournals = <JournalModel>[
       description:
           "Biochemical reactions are extremely rapid, but the methods for imaging the enzymes that catalyse them can take hours. To get round this problem, structures can be determined at temperatures around 100 K, literally freezing an enzyme's movements and allowing the intermediates in its reaction cycle to be observed. This has been done for bacteriorhodopsin in studies reported by Edman et al. in this issue (Nature 401, 822–826; 1999) and Genick et al. (Science 286, 255–260; 1999).",
       image:
-          "http://books.google.com/books/content?id=-s4DEy7o-a0C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+              "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg",
       title: "Frozen in Time",
       impactfactor: "47.5",
       chiefeditor: "Christopher Surridge ",
       date: "21 October 1999",
       volume: "5",
       issue: "34",
-      issn: "1745-7270"
+      issn: "1745-7270",
+      subscription: "annually",
+      charges: 9000,
     ),
   JournalModel(
-      name: "Nature",
+      name: "Journal of Biomedical Science",
       description:
-      "Biochemical reactions are extremely rapid, but the methods for imaging the enzymes that catalyse them can take hours. To get round this problem, structures can be determined at temperatures around 100 K, literally freezing an enzyme's movements and allowing the intermediates in its reaction cycle to be observed. This has been done for bacteriorhodopsin in studies reported by Edman et al. in this issue (Nature 401, 822–826; 1999) and Genick et al. (Science 286, 255–260; 1999).",
+      "Journal of Biomedical Science is an open access, peer-reviewed journal that encompasses all fundamental and molecular aspects of basic medical sciences, with an emphasis on the molecular studies of biomedical problems and molecular mechanisms.",
       image:
-      "http://books.google.com/books/content?id=-s4DEy7o-a0C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
-      title: "Frozen in Time",
-      impactfactor: "47.5",
-      chiefeditor: "Christopher Surridge ",
-      date: "21 October 1999",
+      "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg",
+      title: "IncRNA",
+      impactfactor: "5.762",
+      chiefeditor: " Wen-Chang Chang ",
+      date: "2 August 2020",
       volume: "5",
-      issue: "34",
-      issn: "1745-7270"
+      issue: "3",
+      issn: "1423-0127",
+      subscription: "annually",
+      charges: 1000,
+
   ),
   JournalModel(
-      name: "Nature",
+      name: "Friction",
       description:
-      "Biochemical reactions are extremely rapid, but the methods for imaging the enzymes that catalyse them can take hours. To get round this problem, structures can be determined at temperatures around 100 K, literally freezing an enzyme's movements and allowing the intermediates in its reaction cycle to be observed. This has been done for bacteriorhodopsin in studies reported by Edman et al. in this issue (Nature 401, 822–826; 1999) and Genick et al. (Science 286, 255–260; 1999).",
+      "Polymer gears are used extensively in various applications. However, durability issues have been emerging because of friction at gear tooth contact areas. To extend the lifetime of polymer gears, a low-frictional coating has been considered as a possible strategy.",
       image:
-      "http://books.google.com/books/content?id=-s4DEy7o-a0C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
-      title: "Frozen in Time",
-      impactfactor: "47.5",
-      chiefeditor: "Christopher Surridge ",
-      date: "21 October 1999",
-      volume: "5",
-      issue: "34",
-      issn: "1745-7270"
+      "https://rmnetwork.org/newrmn/wp-content/uploads/2011/11/generic-book-cover.jpg",
+      title: "Addect of friction on non-coated polymer gears",
+      impactfactor: "5.290",
+      chiefeditor: "Jianbin Luo ",
+      date: "21 August 2019",
+      volume: "8",
+      issue: "3",
+      issn: "2223-7704",
+      subscription: "annually",
+      charges: 4000,
+
   ),
 
 

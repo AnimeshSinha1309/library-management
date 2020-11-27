@@ -236,22 +236,31 @@ class JournalModel {
   String issue;
   String description;
   String issn;
+  String subscription;
+  int charges;
+  DateTime expiry;
+  DateTime purchased;
 
   JournalModel(
       {@required this.name,
-      this.image =
-          "https://www.google.com/url?sa=i&url=https%3A%2F%2Fdejapong.com%2Fmaking-cover-art-for-nature%2F&psig=AOvVaw14M72qqXN5MBdAG-D5VkK1&ust=1596199113845000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCMCB3Kn_9OoCFQAAAAAdAAAAABAD",
-      this.title = "",
-      this.impactfactor = "",
-      this.chiefeditor = "",
-      this.date = "",
-      this.volume = "",
-      this.issue = "",
-      this.description = "",
-      this.issn = ""});
+        this.image =
+        defImage,
+        this.title = "",
+        this.impactfactor = "",
+        this.chiefeditor="",
+        this.date = "",
+        this.volume = "",
+        this.issue = "",
+        this.description = "",
+        this.issn = "",
+        this.subscription = "",
+        this.charges = 0,
+      });
 
   JournalModel.fromJSON(Map<String, dynamic> json) {
     name = json["title"];
+    subscription = json['subscription'];
+    charges = json['charges'];
     title = json["topic"] ?? "";
     impactfactor = json["impactfactor"] ?? "";
     chiefeditor = (json["chiefeditor"] ?? "");
@@ -260,7 +269,6 @@ class JournalModel {
     issue = (json["issue"] ?? "").toString();
     description = (json["description"] ?? "");
     issn = (json["issn"] ?? "");
-    image = json["image"] ??
-        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fdejapong.com%2Fmaking-cover-art-for-nature%2F&psig=AOvVaw14M72qqXN5MBdAG-D5VkK1&ust=1596199113845000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCMCB3Kn_9OoCFQAAAAAdAAAAABAD";
+    image = json["image"] ?? defImage;
   }
 }

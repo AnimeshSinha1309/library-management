@@ -22,11 +22,12 @@ import 'package:libmate/views/speech.dart';
 import 'package:provider/provider.dart';
 import 'package:libmate/views/guide.dart';
 import 'package:libmate/views/journals.dart';
-import 'package:libmate/views/schedule.dart';
+import 'package:libmate/views/calendar.dart';
 import 'package:libmate/views/appointment.dart';
 import 'package:libmate/views/ticket.dart';
 import 'package:libmate/widgets/cart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:libmate/views/admin_periodicalcard.dart';
 
 void main() => runApp(MyApp());
 
@@ -105,11 +106,15 @@ class _MyAppState extends State<MyApp> {
               ),
               initialRoute: "/home",
               routes: <String, WidgetBuilder>{
+
                 '/home': (BuildContext context) => new Home(),
+                //                admin pages
                 '/admin': (BuildContext context) => new AdminPage(),
+                '/schedule': (BuildContext context) => new SchedulePage(),
+                '/periodical':(BuildContext context) => new PeriodicalPage(),
+
                 '/libcard': (BuildContext context) => new LibcardPage(),
-                '/appointment': (BuildContext context) =>
-                    new AppointmentPage(user: model),
+                '/appointment': (BuildContext context) => new AppointmentPage(),
                 '/schedule': (BuildContext context) => new SchedulePage(),
                 '/search': (BuildContext context) => new SearchPage(),
                 '/speech': (BuildContext context) => new Speech(),
